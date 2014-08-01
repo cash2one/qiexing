@@ -1,0 +1,29 @@
+{% extends "base/base_home.html" %}
+{% load custom_tags %}
+{% load custom_filters %}
+
+{% block home_css %}
+<link rel="stylesheet" type="text/css" href="{{MEDIA_URL}}css/site/important.css?v={{MEDIA_VERSION}}" />
+{% block css %}{% endblock %}
+{% endblock %}
+
+{% block home_js %}
+<script type="text/javascript" src="{{MEDIA_URL}}js/site/important.js?v={{MEDIA_VERSION}}"></script>
+{% block javascript %}{% endblock %}
+{% endblock %}
+
+{% block container_content %}
+<div class="zx-container-main col-md-8">
+    {% block daily_main %}{% endblock %}
+</div>
+<div class="zx-container-right col-md-4 pl-50">
+    {#% include "question/_user_qa_info_right_nav_dispaly.html" %#}
+
+    <!-- 热门话题 -->
+    {% global_hot_topics %}
+
+    <!-- 二维码 -->
+    {% include 'include/_global_qrcode.html' %}
+</div>
+
+{% endblock container_content %}

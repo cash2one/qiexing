@@ -1,0 +1,38 @@
+{% extends "base/base_split.html" %}
+
+{% block split_css %}
+<link rel="stylesheet" type="text/css" href="{{MEDIA_URL}}css/site/static.css?v={{MEDIA_VERSION}}" />
+{% block css %}{% endblock %}
+{% endblock %}
+
+{% block split_js %}
+{% block javascript %}{% endblock %}
+{% endblock %}
+
+{% block split_left %}
+
+	<a class="list-group-item {% if '/s/agreement' == request.path %} active {% endif %}" href="/s/agreement">
+		服务协议
+	</a>
+	<a class="list-group-item {% if '/s/about' == request.path %} active {% endif %}" href="/s/about">
+		关于我们
+	</a>
+	<a class="list-group-item {% if '/s/disclaimer' == request.path %} active {% endif %}" href="/s/disclaimer">
+		免责声明
+	</a>
+	<a class="list-group-item {% if '/s/business' == request.path %} active {% endif %}" href="/s/business">
+		商务合作
+	</a>
+	<a class="list-group-item {% if '/s/links' == request.path %} active {% endif %}" href="/s/links">
+		友情链接
+	</a>
+	<a class="list-group-item {% if '/s/logs' == request.path %} active {% endif %}" href="/s/logs">
+		更新日志
+	</a>
+{% endblock %}
+
+{% block split_main %}
+	
+	{% block static_main %}{% endblock %}
+	
+{% endblock %}

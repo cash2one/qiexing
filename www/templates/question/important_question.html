@@ -1,0 +1,56 @@
+{% extends "question/base_important.html" %}
+{% load custom_tags %}
+{% load custom_filters %}
+{% block title %}每日精选{% endblock %}
+
+{% block css %}
+<style type="text/css">
+.hot-topics{
+    border-top: 0px;
+}
+</style>
+{% endblock %}
+
+{% block javascript %}{% endblock %}
+
+{% block daily_main %}
+{% if questions %}
+<ul class="list-group daily-main">
+    {% for question in questions %}
+    <li class="list-group-item no-l-r-bd bdc-eee pb-15 {% if not forloop.first %} pt-15 {% endif %} ">
+        <div class="row pl-0 pr-0">
+            <div class="col-md-4 col-ms-12 pl-5 pr-5">
+                <a href="{{question.get_url}}"><img class="w200 pl-3 pr-3 pt-3 pb-3" 
+                    src="{{question.img}}" alt="{{question.img_alt}}" title="{{question.img_alt}}"></a>
+            </div>
+            <div class="col-md-8 col-ms-12 pl-5 pr-5">
+                <div>
+                    <h4 class="mt-5">
+                        <a class="black-blue fb" href="{{question.get_url}}">{{question.iq_title|str_display:20}}</a>
+                    </h4>
+                </div>
+                <div class="f12 co8">
+                    <a class="zx-cardtips gray-gray" data-user_id="{{question.author.id}}" href="{{question.author.get_url}}">{{question.author.nick}}</a>
+                    <span class="pl-5">{{question.create_time|date:"m-d H:i"}}</span>
+                </div>
+                <div class='line-height-25 pt-5 f13 min-h80'>{{question.iq_summary|str_display:85|safe}}</div>
+                <ul class="list-inline pt-5 f12 min-h22">
+                    {% for topic in question.question_topics %}
+                    <li class="pl-0">
+                        <a class="" href="{{topic.get_url}}">{{topic.name}}</a>
+                    </li>
+                    {% endfor %}
+                    <span class="f12 co8 pull-right">{{question.answer_count}} 个回答</span>
+                </ul>
+            </div>
+        </div>
+    </li>
+    {% endfor %}
+</ul>
+{{page_params|paging:request}}
+{% else %}
+<div class="blank10"></div>
+<div class="alert alert-info box-shadow-224 border-radius-0 popmsg" id="divSuccess">暂无</div>
+{% endif %}
+
+{% endblock %}

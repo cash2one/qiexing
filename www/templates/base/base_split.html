@@ -1,0 +1,21 @@
+{% extends "base/base_home.html" %}
+
+{% block home_css %}
+<link rel="stylesheet" type="text/css" href="{{MEDIA_URL}}css/site/_split.css?v={{MEDIA_VERSION}}" />
+{% block split_css %}{% endblock %}
+{% endblock %}
+
+{% block home_js %}
+{% block split_js %}{% endblock %}
+{% endblock %}
+
+{% block container_content %}
+<div class="zx-split">
+	<div class="zx-split-left col-md-2">
+		{% block split_left %}{% endblock %}
+	</div>
+	<div class="zx-split-main col-md-10">
+		<div class="split-border">{% block split_main %}{% endblock %}</div>
+	</div>
+</div>
+{% endblock %}

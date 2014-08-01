@@ -1,0 +1,65 @@
+{% extends "base/base_welcome.html" %}
+
+{% block title %}注册{% endblock %}
+{% block css %}
+<link rel="stylesheet" type="text/css" href="{{MEDIA_URL}}css/regist.css?v={{MEDIA_VERSION}}" />
+{% endblock %}
+
+{% block javascript %}
+<script type="text/javascript">
+	$(document).ready(function(){
+		// 表单验证
+		$('.regist-main form').validate();
+	});
+</script>
+
+{% endblock %}
+
+{% block container %}
+<div class="regist-main">
+	<div class="col-md-4 col-md-offset-4">
+		<div class="text-center">
+			<h1>智选</h1>
+		</div>
+		<form class="form-horizontal" role="form" method="post" action="/regist">
+			{% if invitation %}
+			<div class="form-group">
+				<div class="col-md-offset-1">
+					<img class="avatar avatar-circle" alt="{{invitation.get_user.nick}}" src="{{invitation.get_user.get_avatar_65}}">
+					<a href="/p/{{invitation.get_user.id}}" class="zx-cardtips" data-user_id="{{invitation.get_user.id}}"><span class="inviter">{{invitation.get_user.nick}}</span></a>邀请你注册
+				</div>
+			</div>
+			{% endif %}
+			<div class="form-group">
+				<div class="col-md-offset-1">
+					<input type="email" required maxlength='50' class="form-control" placeholder="你的登录邮箱" name="email" value='{{email}}'></div>
+			</div>
+			<div class="form-group">
+				<div class="col-md-offset-1">
+					<input type="text" required minlength='2' maxlength='12' name="nick" class="form-control" placeholder="你的姓名或者昵称" value='{{nick}}'></div>
+			</div>
+			<div class="form-group">
+				<div class="col-md-offset-1">
+					<input type="password" required maxlength='20' name="password" class="form-control" placeholder="你的密码"></div>
+			</div>
+			<div class="form-group">
+				<div class="col-md-offset-1">
+					<button type="submit" class="btn btn-primary btn-lg btn-block">注册</button>
+				</div>
+			</div>
+			<div class="form-group">
+				<div class="col-md-offset-1 text-center">
+					点击注册表示你已阅读并同意
+					<a href="/s/agreement">《智选 服务协议》</a>
+				</div>
+			</div>
+
+		</form>
+		<div class="sign-nav">
+			<div class="text-center">
+				<a href="/login">已有帐号？立即登录 →</a>
+			</div>
+		</div>
+	</div>
+</div>
+{% endblock %}

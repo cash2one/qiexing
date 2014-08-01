@@ -1,0 +1,35 @@
+{% load custom_tags %}
+{% load custom_filters %}
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en-us">
+    <head>
+        <meta charset="utf-8" />
+        <title>百度绿色通道 - 智选</title>
+        <link rel="shortcut icon" href="/static/img/common/favicon.ico" />
+    </head>
+    <body>
+        <h2>最新问答</h2>
+        <ul>
+            {% for question in questions %}
+            <li><a href="{{question.get_url}}">{{question.title}}</a></li>
+            {% endfor %}
+            <li><a href="/question/">股票问答</a></li>
+        </ul>
+        <h2>股票动态</h2>
+        <ul>
+            {% for stock_feed in stock_feeds %}
+            <li><a href="{{stock_feed.get_url}}">{{stock_feed.question_content|str_display:50}}</a></li>
+            {% endfor %}
+            
+            <li><a href="/stock/">最新股票消息动态</a></li>
+            <li><a href="/stock/all">最新股票</a></li>
+        </ul>
+        <h2>营业部</h2>
+        <ul>
+            <li><a href="http://chengdu.{{SERVER_DOMAIN}}">成都股票开户</a></li>
+            <li><a href="http://chongqing.{{SERVER_DOMAIN}}">重庆股票开户</a></li>
+            <li><a href="http://chengdu.{{SERVER_DOMAIN}}/kaihu/article">成都理财资讯</a></li>
+            <li><a href="http://chongqing.{{SERVER_DOMAIN}}/kaihu/article">重庆理财资讯</a></li>
+        </ul>
+    </body>
+</html>

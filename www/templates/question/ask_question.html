@@ -1,0 +1,54 @@
+{% extends "question/base_question.html" %}
+
+{% load custom_tags %}
+{% block title %}我要提问{% endblock %}
+{% block javascript %}{% endblock %}
+{% block css %}{% endblock %}
+
+{% block ask_question %}
+<div class="mt-25"></div>
+{% endblock %}
+
+{% block question_main%}
+<div class="ask-title">
+    <h2>问个问题</h2>
+</div>
+
+<div class="ask-main mt-35">
+    <form class="ask-question-form" role="form" method='post' action='/question/ask_question'>
+        <div class="form-group" >
+            <span>选择你想提问的类型（必选）:</span>
+        </div>
+        <div class="form-group" id="div_types">
+            {% question_type_radio_display %}
+        </div>
+        <div class="form-group auto-hide" id="div_tags">
+            <div class="tag-title mb-5">将你的提问归类至话题（非必选）:</div>
+            <!-- 
+            <label class="checkbox-inline zx-check">
+                <input type="checkbox" id="inlineCheckbox1" value="option1"> 1
+            </label>
+            <label class="checkbox-inline zx-check">
+                <input type="checkbox" id="inlineCheckbox2" value="option2"> 2
+            </label>
+             -->
+        </div>
+        <div class="form-group">
+            <input type="text" class="form-control" name="question_title" placeholder="你有什么想问的？写下问题的标题" value='{{question_title}}' required minlength='10' maxlength='128'></div>
+        <div class="form-group">
+            <textarea id="ask_editor"  name="question_content" class="form-control zx-textarea" style="height: 260px"></textarea>
+        </div>
+        <div class="form-group">
+            <div class="col-md-6 checkbox">
+                <label>
+                    <input type="checkbox" name="is_hide_user">匿名提问
+                    <span class="glyphicon glyphicon-question-sign cl_gray zx-tooltip" data-toggle="tooltip" data-placement="right" data-original-title="勾选此项后，问题展现的时候将隐藏你的名字" data-trigger="hover" title=""></span>
+                </label>
+            </div>
+            <div class="col-md-6 text-right ask-btn pr-0">
+                <button type="submit" class="btn btn-primary">我要提问</button>
+            </div>
+        </div>
+    </form>
+</div>
+{% endblock %}
