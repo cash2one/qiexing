@@ -35,10 +35,12 @@ body {
 .ml-0{margin-left: 0;}
 .ml-5{margin-left: 5px;}
 .mt--2{margin-top: -2px;}
+.mt-5{margin-top: 5px;}
 .mt-15{margin-top: 15px;}
 .mb-15{margin-bottom: 15px;}
 
 .pt-0{padding-top: 0;}
+.pt-2{padding-top: 2px;}
 .pt-3{padding-top: 3px;}
 .pt-5{padding-top: 5px;}
 .pt-10{padding-top: 10px;}
@@ -57,7 +59,9 @@ body {
 .pl-35{padding-left: 35px;}
 .pl-40{padding-left: 40px;}
 .pl-50{padding-left: 50px;}
+.pl-60{padding-left: 60px;}
 .pl-70{padding-left: 70px;}
+.pl-75{padding-left: 75px;}
 .pr-0{padding-right: 0;}
 .pr-3{padding-right: 3px;}
 .pr-5{padding-right: 5px;}
@@ -67,6 +71,7 @@ body {
 .pr-26{padding-right: 26px;}
 .pr-35{padding-right: 35px;}
 .pr-50{padding-right: 50px;}
+.pb-2{padding-bottom: 2px;}
 .pb-3{padding-bottom: 3px;}
 .pb-5{padding-bottom: 5px;}
 .pb-10{padding-bottom: 10px;}
@@ -105,12 +110,26 @@ body {
 
 .of-hidden{overflow: hidden;}
 
+.h{height: 100%;}
+.h155{height: 155px;}
+
 .w{width: 100%;}
 .w140{width: 140px;}
+.w200{width: 200px;}
 
 .avatar-25{
 	width: 25px;
 	height: 25px;
+}
+
+.avatar-45{
+	width: 45px;
+	height: 45px;
+}
+
+.avatar-55{
+	width: 55px;
+	height: 55px;
 }
 
 /*****************************************************/
@@ -193,4 +212,49 @@ body {
 }
 
 a{color: #3F484F;}
-a:hover{color: #f36119;};
+a:hover{color: #f36119;}
+
+
+a.border-block-blue{
+    border: solid 1px #9ECEFA;
+    color: #428bca;
+    border-radius: 50px;
+    text-align: center;
+    text-decoration: none;
+    transition: background-color 0.5s, color 0.5s, border-color 0.5s;
+}
+a.border-block-blue:hover{
+    background-color: #428bca;
+    border-color: #428bca;
+    color: white;
+}
+a.border-block-blue.active{
+  background-color: #428bca;
+  border-color: #428bca;
+  color: white;
+}
+
+a.border-block-red{
+    border: solid 1px #d44137;
+    color: #d44137;
+    border-radius: 50px;
+    text-align: center;
+    text-decoration: none;
+    transition: background-color 0.5s, color 0.5s, border-color 0.5s;
+}
+a.border-block-red:hover{
+    background-color: #d44137;
+    border-color: #d44137;
+    color: white;
+}
+a.border-block-red.active{
+  background-color: #d44137;
+  border-color: #d44137;
+  color: white;
+}
+
+.btn-danger{
+	color: #fff;
+	background-color: #f36119;
+	border-color: #f36119;
+}
