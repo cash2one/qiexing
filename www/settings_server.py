@@ -63,7 +63,7 @@ DATABASES = {
     },
 }
 
-DATABASE_ROUTERS = ['www.account.router.AccountRouter', 'www.question.router.QuestionRouter', ]
+DATABASE_ROUTERS = ['www.account.router.AccountRouter', ]
 
 
 TIME_ZONE = 'Asia/Shanghai'
@@ -120,9 +120,9 @@ TEMPLATE_DIRS = (
 INSTALLED_APPS = (
     'www.custom_tags',
     'www.account',
-    'www.question',
     'www.message',
-    'www.timeline',
+    # 'www.question',
+    # 'www.timeline',
     'www.admin',
 )
 
