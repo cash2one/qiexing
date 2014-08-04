@@ -1,0 +1,11 @@
+User-agent: *
+Allow: /
+Disallow: /p/*
+Disallow: /message/*
+Disallow: /account/*
+Disallow: /n/*
+Disallow: /admin/*
+Disallow: /500
+Disallow: /search
+Disallow: /logout
+Sitemap: <http://www.zhixuan.com/sitemap.xml>
