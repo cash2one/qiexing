@@ -11,14 +11,17 @@ def config(request):
     """
     @attention: Adds settings-related context variables to the context.
     """
+    import datetime
     from django.conf import settings
-    from common import cache
+    from www.misc import consts
 
     return {
         'DEBUG': settings.DEBUG,
         'LOCAL_FLAG': settings.LOCAL_FLAG,
-        'MEDIA_VERSION': cache.Cache(cache.CACHE_STATIC).get('media_version') or '000',  # 从缓存中取版本号
+        'MEDIA_VERSION': '000',
         'SERVER_DOMAIN': settings.SERVER_DOMAIN,
         'MAIN_DOMAIN': settings.MAIN_DOMAIN,
-        'IMG0_DOMAIN': settings.IMG0_DOMAIN
+        'IMG0_DOMAIN': settings.IMG0_DOMAIN,
+        "YEAR": datetime.datetime.now().strftime("%Y"),
+        "ARTICLE_TYPE_LIST": consts.ARTICLE_TYPE_LIST,
     }

@@ -33,7 +33,7 @@ def vnick(value, min_len=2, max_len=12, check_ban=True):
     @attention: 验证昵称
     """
     if check_ban:
-        ban_keywords = [u'测试', u'test', u'开户', u'佣金', u'手续费', u'智选']
+        ban_keywords = [u'测试', u'test', u'开户', u'佣金', u'手续费']
         for key in ban_keywords:
             if key in value:
                 raise VerifyError, u"昵称不能含有关键字 %s ！" % key

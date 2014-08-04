@@ -16,15 +16,6 @@ class UserMiddware(object):
         setattr(request, "_process_start_timestamp", time.time())
 
         sub_domain = utils.get_sub_domain_from_http_host(request.META.get('HTTP_HOST', ''))
-        path = request.path
-
-        if sub_domain not in ("127", "192"):
-            if sub_domain not in ('www', 'wwwinside', 'static') and (path not in ('', '/', '/message/get_unread_count_total', '/question/get_topic_info_by_id')
-                                                                     and not path.startswith('/static') and not path.startswith('/kaihu')):
-                raise Http404
-
-            if sub_domain in ('www', 'wwwinside', 'static') and path.startswith('/kaihu'):
-                raise Http404
         request.sub_domain = sub_domain
 
     def process_response(self, request, response):
@@ -42,5 +33,4 @@ class UserMiddware(object):
         title = u'%s error in %s' % (settings.SERVER_NAME, request.get_full_path())
         content = debug.get_debug_detail(exception)
         if settings.SERVER_NAME != 'DEVELOPER':
-            from www.tasks import async_send_email
-            async_send_email(settings.NOTIFICATION_EMAIL, title, content)
+            utils.send_email(settings.NOTIFICATION_EMAIL, title, content)

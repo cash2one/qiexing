@@ -1,3 +1,0 @@
-{% for aqt in aqts %}
-<li {% if request.path == aqt.get_url %} class="active"{% endif %}><a href="{{aqt.get_url}}">{{aqt.name}}</a></li>
-{% endfor %}

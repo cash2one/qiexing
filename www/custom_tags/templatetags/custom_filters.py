@@ -63,13 +63,16 @@ def get_page_url(url, page=1):
     """
     @attention: 获取分页对应的url
     """
-    if url.find('?') == -1:
-        return u'%s?page=%s' % (url, page)
-    if url.find('page=') == -1:
-        return u'%s&page=%s' % (url, page)
-    re_pn = re.compile('page=\d+', re.IGNORECASE)
-    url = re_pn.sub('page=%s' % page, url)
-    return url
+    urls = url.split("?")
+    url = urls[0]
+    suffix = ("?" + urls[1]) if len(urls) > 1 else ""
+
+    re_pn = re.compile('\/\d+$', re.IGNORECASE)
+    if re_pn.search(url):
+        url = re_pn.sub('/%s' % page, url)
+    else:
+        url += '/%s' % page
+    return url + suffix
 
 
 @register.filter('paging')
@@ -77,7 +80,6 @@ def paging(value, request, get_page_onclick=None, page_onclick_params={}):
     """
     @attention: 根据总页数和页码分页
     """
-#    try:
     if not value:
         return u'paging params can not be null'
 
@@ -122,30 +124,6 @@ def paging(value, request, get_page_onclick=None, page_onclick_params={}):
     next_url = get_page_url(url, page + 1)
     page_items_with_url = [(p, get_page_url(url, p) if p != '...' else '') for p in page_items]
     return mark_safe(render_to_response('include/_paging.html', locals()).content)
-
-    # s, s_pre, s_next = '', '', ''
-    # if page > 1:
-    #     if not get_page_onclick:
-    #         s_pre = u'<li title="上一页"><a href="%s">&laquo;</a></li>' % (get_page_url(url, page - 1))
-    #     else:
-    #         s_pre = u'<li title="上一页"><a href="javascript:void(0);" onclick="%s">&laquo;</a></li>' % (get_page_onclick(page - 1, **page_onclick_params))
-    # if page < total_page:
-    #     if not get_page_onclick:
-    #         s_next = u'<li title="下一页"><a href="%s">&raquo;</a></li>' % (get_page_url(url, page + 1))
-    #     else:
-    #         s_next = u'<li title="下一页"><a href="javascript:void(0);" onclick="%s">&raquo;</a></li>' % (get_page_onclick(page + 1, **page_onclick_params))
-
-    # for p in page_items:
-    #     if p == page:
-    #         s += u'<li class="active"><a>%s</a></li>' % (p)
-    #     elif p == '...':
-    #         s += u'<li class="disabled"><a href="%s">%s</a></li>' % ('javascript:void(0);', p)
-    #     else:
-    #         if not get_page_onclick:
-    #             s += u'<li><a href="%s">%s</a></li>' % (get_page_url(url, p), p)
-    #         else:
-    #             s += u'<li><a href="javascript:void(0);" onclick="%s">%s</a></li>' % (get_page_onclick(p, **page_onclick_params), p)
-    # return mark_safe('<div class="pagination pagination-right"><ul>%s%s%s</ul></div>' % (s_pre, s, s_next))
 
 
 @register.filter
