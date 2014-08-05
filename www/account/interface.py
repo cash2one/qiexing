@@ -9,8 +9,7 @@ from common import utils, debug, validators, cache
 from www.misc.decorators import cache_required
 from www.misc import consts
 from www.tasks import async_send_email
-from www.account.models import User, Profile, UserCount
-from www.account.models import LastActive
+from www.account.models import User, Profile, UserCount, LastActive
 
 dict_err = {
     10100: u'邮箱重复',
@@ -30,7 +29,7 @@ dict_err = {
 }
 dict_err.update(consts.G_DICT_ERROR)
 
-ACCOUNT_DB = settings.ACCOUNT_DB
+ACCOUNT_DB = 'account'
 
 
 class UserBase(object):
@@ -129,7 +128,7 @@ class UserBase(object):
         return 0, dict_err.get(0)
 
     @transaction.commit_manually(using=ACCOUNT_DB)
-    def regist_user(self, email, nick, password, ip, mobilenumber=None, username=None,
+    def regist_user(self, email, nick, password, re_password, ip, mobilenumber=None, username=None,
                     source=0, gender=0, invitation_code=None):
         '''
         @note: 注册
@@ -138,6 +137,10 @@ class UserBase(object):
             if not (email and nick and password):
                 transaction.rollback(using=ACCOUNT_DB)
                 return 99800, dict_err.get(99800)
+
+            if password != re_password:
+                transaction.rollback(using=ACCOUNT_DB)
+                return 10105, dict_err.get(10105)
 
             errcode, errmsg = self.check_user_info(email, nick, password, mobilenumber)
             if errcode != 0:

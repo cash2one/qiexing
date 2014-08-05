@@ -97,7 +97,7 @@ def get_next_url(request):
                         if referrer.find(key) == -1:
                             # referrer的query参数会丢失
                             next_url = referrer + '?' + list(urlparse(referrer))[4]
-    return next_url or '/home'
+    return next_url or '/'
 
 
 def filter_script(htmlstr):
