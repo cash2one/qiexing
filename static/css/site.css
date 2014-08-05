@@ -5,6 +5,8 @@ body {
 	color: #222;
 }
 
+.pointer{cursor: pointer;}
+
 .fb{font-weight: bold;}
 
 .f12{font-size: 12px;}
@@ -58,6 +60,7 @@ body {
 .pl-10{padding-left: 10px;}
 .pl-15{padding-left: 15px;}
 .pl-20{padding-left: 20px;}
+.pl-25{padding-left: 25px;}
 .pl-35{padding-left: 35px;}
 .pl-40{padding-left: 40px;}
 .pl-50{padding-left: 50px;}
@@ -91,6 +94,7 @@ body {
 .w250{width: 250px;}
 .h215{height: 215px;}
 
+.border-5{border: solid 5px;}
 .border-left-0{border-left: 0;}
 .border-right-0{border-right: 0;}
 .border-top-0{border-top: 0;}
@@ -118,6 +122,7 @@ body {
 .w{width: 100%;}
 .w140{width: 140px;}
 .w200{width: 200px;}
+.w270{width: 270px;}
 .min-w500{min-width: 500px;}
 
 .avatar-25{

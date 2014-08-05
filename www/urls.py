@@ -20,6 +20,7 @@ urlpatterns = patterns('',
                        url(r'^account/', include('www.account.urls')),
                        url(r'^journey/', include('www.journey.urls')),
                        url(r'^activity/', include('www.activity.urls')),
+                       url(r'^sight/', include('www.sight.urls')),
 
                        url(r'^500$', 'www.misc.views.test500'),
                        url(r'^static/(?P<path>.*)$', 'django.views.static.serve', {'document_root': settings.MEDIA_ROOT, 'show_indexes': False}),
