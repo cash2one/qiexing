@@ -59,8 +59,8 @@
                         </li>
                     </ul>
 
-                    <ul class="nav navbar-nav navbar-right login-user">
-                        
+                    <ul class="nav navbar-nav navbar-right mt-20">
+                        {% if request.user.is_authenticated %}
                         <li class="user-menu dropdown">
                             <a href="/p/{{request.user.id}}" class="dropdown-toggle user w140" data-toggle="dropdown"  title="{{request.user.nick}}" style="padding-top: 12px; padding-bottom: 13px;">
                                 <img alt="" class="avatar-25 img-circle user" src="http://img0.zhixuan.com/avatar_17ee2dd6ae3f11e3867d00163e003240!25m25">
@@ -91,7 +91,14 @@
                                 </li>
                             </ul>
                         </li>
-                        
+                        {% else %}
+                        <li>
+                            <div class="un-login-user">
+                                <a class="co5" href="/regist" rel="nofollow">免费注册</a>
+                                <a class="pl-5" href="/login" rel="nofollow">立即登录</a>
+                            </div>
+                        </li>
+                        {% endif %}
                     </ul>
                 </div>
             </div>
@@ -109,6 +116,7 @@
         <!-- // <script type="text/javascript" src="{{MEDIA_URL}}js/jquery/jquery.easing.1.3.min.js"></script> -->
         <script type="text/javascript" src="{{MEDIA_URL}}js/jquery/jquery.placeholder.js"></script>
         <!-- // <script type="text/javascript" src="{{MEDIA_URL}}js/jquery/jquery.cookie.js"></script> -->
+        <script type="text/javascript" src="{{MEDIA_URL}}js/jquery/jquery.validate.min.js"></script>
         <script type="text/javascript" src="{{MEDIA_URL}}js/kindeditor/kindeditor-min.js"></script>
 
         <script type="text/javascript" src="{{MEDIA_URL}}js/common.js?v={{MEDIA_VERSION}}"></script>
