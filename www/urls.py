@@ -12,13 +12,16 @@ urlpatterns = patterns('',
                        url(r'^logout$', 'www.account.views.logout'),
                        url(r'^regist$', 'www.account.views.regist'),
                        url(r'^forget_password$', 'www.account.views.forget_password'),
+                       url(r'^qiniu_img_return$', 'www.misc.views.qiniu_img_return'),
+                       url(r'^save_img$', 'www.misc.views.save_img'),
+                       url(r'^crop_img$', 'www.misc.views.crop_img'),
 
                        url(r'^$', 'www.journey.views.home'),
                        url(r'^account/', include('www.account.urls')),
                        url(r'^journey/', include('www.journey.urls')),
                        url(r'^activity/', include('www.activity.urls')),
 
-                       url(r'^500$', 'www.article.views.test500'),
+                       url(r'^500$', 'www.misc.views.test500'),
                        url(r'^static/(?P<path>.*)$', 'django.views.static.serve', {'document_root': settings.MEDIA_ROOT, 'show_indexes': False}),
                        # url(r'^admin/', include(admin.site.urls)),
                        )

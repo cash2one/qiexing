@@ -70,11 +70,9 @@ def send_email(emails, title, content, type='text'):
         return
 
     if not isinstance(emails, (list, tuple)):
-        # if 'mrzhixuan' in emails:
-        #     return
         emails = [emails, ]
 
-    emails = [email for email in emails if not 'mrzhixuan' in email]
+    emails = [email for email in emails if not 'mriqiexing' in email]
     if type != 'html':
         send_mail(title, content, settings.EMAIL_FROM, emails, fail_silently=True)
     else:
@@ -148,9 +146,6 @@ def render_email_template(template_name='', context={}):
     context.update(MAIN_DOMAIN=settings.MAIN_DOMAIN)
 
     return render_to_string(template_name, context)
-    # t = template.loader.get_template(template_name)
-    # c = template.Context(context)
-    # return t.render(c)
 
 
 # 判断user是否为user对象获取user id
