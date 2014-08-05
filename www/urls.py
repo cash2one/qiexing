@@ -14,6 +14,7 @@ urlpatterns = patterns('',
                        url(r'^forget_password$', 'www.account.views.forget_password'),
 
                        url(r'^$', 'www.journey.views.home'),
+                       url(r'^account/', include('www.account.urls')),
                        url(r'^journey/', include('www.journey.urls')),
                        url(r'^activity/', include('www.activity.urls')),
 
