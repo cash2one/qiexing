@@ -1,7 +1,6 @@
 # -*- coding: utf-8 -*-
 
 import datetime
-import time
 from django.db import transaction
 from django.utils.encoding import smart_unicode
 from django.conf import settings
@@ -10,8 +9,8 @@ from common import utils, debug, validators, cache
 from www.misc.decorators import cache_required
 from www.misc import consts
 from www.tasks import async_send_email
-from www.account.models import User, Profile, ExternalToken, Invitation, InvitationUser, UserCount
-from www.account.models import RecommendUser, LastActive
+from www.account.models import User, Profile, UserCount
+from www.account.models import LastActive
 
 dict_err = {
     10100: u'邮箱重复',
@@ -136,8 +135,6 @@ class UserBase(object):
         @note: 注册
         '''
         try:
-            from www.message.interface import UnreadCountBase
-
             if not (email and nick and password):
                 transaction.rollback(using=ACCOUNT_DB)
                 return 99800, dict_err.get(99800)
@@ -155,17 +152,6 @@ class UserBase(object):
             profile = Profile.objects.create(id=id, nick=nick, ip=ip, source=source, gender=gender)
             self.set_profile_login_att(profile, user)
 
-            if invitation_code:
-                invitation = InvitationBase().add_invitation_user(invitation_code, profile.id)
-                if invitation:
-                    # 发送系统通知
-                    content = u'成功邀请一个注册用户 <a href="%s">%s</a>' % (profile.get_url(), profile.nick)
-                    UnreadCountBase().add_system_message(user_id=invitation.user_id, content=content)
-
-                    # 自动关注邀请者
-                    from www.timeline.interface import UserFollowBase
-                    UserFollowBase().follow_people(profile.id, invitation.user_id)
-
             transaction.commit(using=ACCOUNT_DB)
 
             # todo发送验证邮件
@@ -174,62 +160,6 @@ class UserBase(object):
             debug.get_debug_detail(e)
             transaction.rollback(using=ACCOUNT_DB)
             return 99900, dict_err.get(99900)
-
-    def get_user_by_external_info(self, source, access_token, external_user_id,
-                                  refresh_token, nick, ip, expire_time,
-                                  user_url='', gender=0):
-        assert all((source, access_token, external_user_id, nick))
-        et = self.get_external_user(source, access_token, external_user_id, refresh_token)
-        if et:
-            return True, self.get_user_by_id(et.user_id)
-        else:
-            email = '%s_%s@mrzhixuan.com' % (source, int(time.time() * 1000))
-            nick = self.generate_nick_by_external_nick(nick)
-            if not nick:
-                return False, u'生成名称异常'
-            expire_time = time.strftime('%Y-%m-%d %H:%M:%S', time.localtime(int(time.time()) + int(expire_time)))
-            errcode, result = self.regist_user(email=email, nick=nick, password=email, ip=ip, source=1, gender=gender)
-            if errcode == 0:
-                user = result
-                ExternalToken.objects.create(source=source, external_user_id=external_user_id,
-                                             access_token=access_token, refresh_token=refresh_token, user_url=user_url,
-                                             nick=nick, user_id=user.id, expire_time=expire_time
-                                             )
-                return True, user
-            else:
-                return False, result
-
-    def generate_nick_by_external_nick(self, nick):
-        if not self.get_user_by_nick(nick):
-            return nick
-        else:
-            for i in xrange(3):
-                new_nick = '%s_%s' % (nick, i)
-                if not self.get_user_by_nick(new_nick):
-                    return new_nick
-            for i in xrange(10):
-                return '%s_%s' % (nick,  str(int(time.time() * 1000))[-3:])
-
-    def get_external_user(self, source, access_token, external_user_id, refresh_token):
-        assert all((source, access_token, external_user_id))
-
-        et = None
-        ets = list(ExternalToken.objects.filter(source=source, external_user_id=external_user_id))
-        if ets:
-            et = ets[0]
-            if et.access_token != access_token:
-                et.access_token = access_token
-                et.refresh_token = refresh_token
-                et.save()
-        else:
-            ets = list(ExternalToken.objects.filter(source=source, access_token=access_token))
-            if ets:
-                et = ets[0]
-                if et.external_user_id != external_user_id:
-                    et.external_user_id = external_user_id
-                    et.refresh_token = refresh_token
-                    et.save()
-        return et
 
     def change_profile(self, user, nick, gender, birthday, des=None, state=None):
         '''
@@ -446,12 +376,6 @@ class UserBase(object):
         '''
         format_user = self.get_user_by_id(user_id)
 
-        # 判断是否已经是推荐用户了
-        if RecommendUser.objects.filter(user_id=user_id).count() > 0:
-            format_user.is_recommend = True
-        else:
-            format_user.is_recommend = False
-
         # 统计信息
         format_user.user_count = UserCountBase().get_user_count_info(user_id)
 
@@ -504,38 +428,6 @@ class UserBase(object):
         if not nick:
             return []
         return Profile.objects.filter(nick__icontains=nick)[:200]
-
-
-class InvitationBase(object):
-
-    def format_invitation_user(self, invitation_users):
-        for iu in invitation_users:
-            iu.user = UserBase().get_user_by_id(iu.user_id)
-        return invitation_users
-
-    def get_invitation_by_user_id(self, user_id):
-        try:
-            invitation = Invitation.objects.create(user_id=user_id, code=utils.get_random_code())
-        except:
-            invitation = Invitation.objects.get(user_id=user_id)
-        return invitation
-
-    def get_invitation_by_code(self, code):
-        try:
-            return Invitation.objects.get(code=code)
-        except Invitation.DoesNotExist:
-            return None
-
-    def add_invitation_user(self, code, user_id):
-        invitation = self.get_invitation_by_code(code)
-        try:
-            InvitationUser.objects.create(user_id=user_id, invitation=invitation)
-        except:
-            pass
-        return invitation
-
-    def get_invitation_user(self, user_id):
-        return InvitationUser.objects.select_related('invitation').filter(invitation__user_id=user_id)
 
 
 def user_profile_required(func):
@@ -618,122 +510,3 @@ class UserCountBase(object):
         '''
         '''
         return UserCount.objects.all().order_by("-" + sort)
-
-
-class RecommendUserBase(object):
-
-    def __init__(self):
-        pass
-
-    def format_recommend_user(self, recommend_users):
-        '''
-        格式化
-        '''
-        for recommend_user in recommend_users:
-            recommend_user.user = UserBase().get_user_by_id(recommend_user.user_id)
-            recommend_user.user_count = UserCountBase().get_user_count_info(recommend_user.user_id)
-
-        return recommend_users
-
-    # @cache_required(cache_key='recommend_user_%s', expire=3600)
-    def get_recommend_users(self, user_id, random=False):
-        from www.timeline.interface import UserFollowBase
-        exclude_user_ids = [f.to_user_id for f in UserFollowBase().get_following_by_user_id(user_id)]
-        exclude_user_ids.append(user_id)
-        if not random:
-            rusers = RecommendUser.objects.exclude(user_id__in=exclude_user_ids)
-        else:
-            rusers = RecommendUser.objects.exclude(user_id__in=exclude_user_ids).order_by('?')
-        return rusers[:4]
-
-    def get_all_recommend_users(self):
-        '''
-        获取所有的推荐用户信息(admin)
-        '''
-
-        return self.format_recommend_user(RecommendUser.objects.all())
-
-    def set_recommend_user_sort(self, user_id, sort_num):
-        '''
-        设置推荐用户排序
-
-        user_id: 用户id
-        sort_num: 排序数值
-        '''
-        if not user_id or not sort_num:
-            return 99800, dict_err.get(99800)
-
-        recommend_user = RecommendUser.objects.filter(user_id=user_id)
-        if recommend_user:
-            try:
-                recommend_user = recommend_user[0]
-                recommend_user.sort_num = sort_num
-                recommend_user.save()
-                return 0, dict_err.get(0)
-            except Exception, e:
-                debug.get_debug_detail(e)
-                return 99900, smart_unicode(e)
-
-        return 10113, dict_err.get(10113)
-
-    def un_recommend_user(self, user_id):
-        '''
-        取消推荐用户设置
-
-        user_id: 用户id
-        '''
-        if not user_id:
-            return 99800, dict_err.get(99800)
-
-        recommend_user = RecommendUser.objects.filter(user_id=user_id)
-        if recommend_user:
-            try:
-                recommend_user = recommend_user[0]
-                recommend_user.delete()
-                return 0, dict_err.get(0)
-            except Exception, e:
-                debug.get_debug_detail(e)
-                return 99900, smart_unicode(e)
-
-        return 10113, dict_err.get(10113)
-
-    def set_recommend_user(self, user_id):
-        '''
-        设置推荐用户
-
-        user_id: 用户id
-        '''
-        if not user_id:
-            return 99800, dict_err.get(99800)
-
-        recommend_user = RecommendUser.objects.filter(user_id=user_id)
-        if not recommend_user:
-            try:
-                RecommendUser.objects.create(user_id=user_id)
-                return 0, dict_err.get(0)
-            except Exception, e:
-                debug.get_debug_detail(e)
-                return 99900, smart_unicode(e)
-
-        return 10113, dict_err.get(10113)
-
-    def get_user_by_nick(self, user_nick):
-        '''
-        '''
-        if not user_nick:
-            return None
-
-        user = UserBase().get_user_by_nick(user_nick)
-
-        if user:
-            # 判断是否已经是推荐用户了
-            if RecommendUser.objects.filter(user_id=user.id).count() > 0:
-                user.is_recommend = True
-            else:
-                user.is_recommend = False
-
-            # 补充统计信息
-            user.user_count = UserCountBase().get_user_count_info(user.id)
-            return user
-
-        return None

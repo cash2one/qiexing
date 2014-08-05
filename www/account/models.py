@@ -126,6 +126,24 @@ class LastActive(models.Model):
         ordering = ["-last_active_time"]
 
 
+class BlackList(models.Model):
+    type_choices = ((0, u'全部'), (1, u'禁止登陆'), (2, u'禁止发帖'))
+    user_id = models.CharField(max_length=32, db_index=True)
+    type = models.IntegerField(default=0, choices=type_choices)
+    state = models.BooleanField(default=True)
+    expire_time = models.DateTimeField()
+    create_time = models.DateTimeField(auto_now_add=True)
+
+
+class UserCount(models.Model):
+    user_id = models.CharField(max_length=32, unique=True)
+    user_question_count = models.IntegerField(default=0, db_index=True)
+    user_answer_count = models.IntegerField(default=0, db_index=True)
+    user_liked_count = models.IntegerField(default=0, db_index=True)
+    following_count = models.IntegerField(default=0, db_index=True)
+    follower_count = models.IntegerField(default=0, db_index=True)
+
+"""
 class ExternalToken(models.Model):
     user_id = models.CharField(max_length=32, db_index=True)
     source = models.CharField(max_length=16, db_index=True)
@@ -168,24 +186,6 @@ class InvitationUser(models.Model):
         ordering = ["-id"]
 
 
-class BlackList(models.Model):
-    type_choices = ((0, u'全部'), (1, u'禁止登陆'), (2, u'禁止发帖'))
-    user_id = models.CharField(max_length=32, db_index=True)
-    type = models.IntegerField(default=0, choices=type_choices)
-    state = models.BooleanField(default=True)
-    expire_time = models.DateTimeField()
-    create_time = models.DateTimeField(auto_now_add=True)
-
-
-class UserCount(models.Model):
-    user_id = models.CharField(max_length=32, unique=True)
-    user_question_count = models.IntegerField(default=0, db_index=True)
-    user_answer_count = models.IntegerField(default=0, db_index=True)
-    user_liked_count = models.IntegerField(default=0, db_index=True)
-    following_count = models.IntegerField(default=0, db_index=True)
-    follower_count = models.IntegerField(default=0, db_index=True)
-
-
 class RecommendUser(models.Model):
     user_id = models.CharField(max_length=32, unique=True)
     sort_num = models.IntegerField(default=0, db_index=True)
@@ -193,3 +193,4 @@ class RecommendUser(models.Model):
 
     class Meta:
         ordering = ["-sort_num", "id"]
+"""
