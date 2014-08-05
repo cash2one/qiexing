@@ -54,8 +54,8 @@
                         <li {% if "/activity" in request.path %}class="active"{% endif %}>
                             <a class="co1 fb pl-35 pr-35 f16" href="/activity">活动</a>
                         </li>
-                        <li {% if "/activity" in request.path %}class="active"{% endif %}>
-                            <a class="co1 fb pl-35 pr-35 f16" href="/activity">景点</a>
+                        <li {% if "/sight" in request.path %}class="active"{% endif %}>
+                            <a class="co1 fb pl-35 pr-35 f16" href="/sight">景点</a>
                         </li>
                     </ul>
 
@@ -106,7 +106,7 @@
         {% endblock header %}
         
         {% block base_container %}
-        <div class="container pt-0 pb-20" style="min-height:500px;">
+        <div class="container pt-0 pb-20 pr" style="min-height:500px;">
             {% block container %}{% endblock container %}
         </div>
         {% endblock base_container%}
@@ -117,12 +117,19 @@
         <script type="text/javascript" src="{{MEDIA_URL}}js/jquery/jquery.placeholder.js"></script>
         <!-- // <script type="text/javascript" src="{{MEDIA_URL}}js/jquery/jquery.cookie.js"></script> -->
         <script type="text/javascript" src="{{MEDIA_URL}}js/jquery/jquery.validate.min.js"></script>
+        <script type="text/javascript" src="{{MEDIA_URL}}js/raphael/raphael-min.js"></script>
+        <script type="text/javascript" src="{{MEDIA_URL}}js/raphael/china-map-path.js"></script>
         <script type="text/javascript" src="{{MEDIA_URL}}js/kindeditor/kindeditor-min.js"></script>
 
         <script type="text/javascript" src="{{MEDIA_URL}}js/common.js?v={{MEDIA_VERSION}}"></script>
         <script type="text/javascript" src="{{MEDIA_URL}}js/site.js?v={{MEDIA_VERSION}}"></script>
         <script type="text/javascript">
-            var MEDIA_URL = '{{MEDIA_URL|default:''}}';
+            var MEDIA_URL = '{{MEDIA_URL|default:''}}',
+                CURRENT_USER_ID = "{{request.user.id|default:''}}",
+                ERROR_MSG = '{{error_msg|default:''}}',
+                SUCCESS_MSG = '{{success_msg|default:''}}',
+                INFO_MSG = '{{info_msg|default:''}}',
+                WARNING_MSG = '{{warning_msg|default:''}}';
         </script>
         {% block base_js %}{% endblock %}
 

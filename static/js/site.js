@@ -351,4 +351,24 @@ $(document).ready(function(){
         .bind('mouseleave', function(){hideDropdown('.user-menu')});
     }
 
+
+    // 提示信息框
+    try {
+        if(ERROR_MSG){
+            $.QXNotice.ErrorTopNotice(ERROR_MSG);
+        }
+        if(SUCCESS_MSG){
+            $.QXNotice.SuccessTopNotice(SUCCESS_MSG);
+        }
+        if(INFO_MSG){
+            $.QXNotice.InfoTopNotice(INFO_MSG);
+        }
+        if(WARNING_MSG){
+            $.QXNotice.WarningTopNotice(WARNING_MSG);
+        }
+    }
+    catch(e) {
+        alert(e);
+    }
+
 });
