@@ -36,7 +36,7 @@ def login(request, template_name='account/login.html'):
             request.session.update(dict(next_url=''))
             return HttpResponseRedirect(next_url)
         else:
-            error_msg = u'用户名或者密码错误'
+            warning_msg = u'用户名或者密码错误'
     else:
         # 从REUQEST中或者HTTP_REFERER中获取
         next_url = utils.get_next_url(request)
@@ -69,9 +69,9 @@ def regist(request, invitation_code=None, template_name='account/regist.html'):
                 request.session.update(dict(next_url='', invitation_code=''))
                 return HttpResponseRedirect(next_url)
             else:
-                error_msg = result
+                warning_msg = result
         else:
-            error_msg = u"请输入正确的验证码"
+            warning_msg = u"请输入正确的验证码"
     return render_to_response(template_name, locals(), context_instance=RequestContext(request))
 
 
