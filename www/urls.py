@@ -8,6 +8,11 @@ from django.conf import settings
 # admin.autodiscover()
 
 urlpatterns = patterns('',
+                       url(r'^login$', 'www.account.views.login'),
+                       url(r'^logout$', 'www.account.views.logout'),
+                       url(r'^regist$', 'www.account.views.regist'),
+                       url(r'^forget_password$', 'www.account.views.forget_password'),
+
                        url(r'^$', 'www.journey.views.home'),
                        url(r'^journey/', include('www.journey.urls')),
                        url(r'^activity/', include('www.activity.urls')),

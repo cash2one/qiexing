@@ -9,15 +9,14 @@ from django.shortcuts import render_to_response
 
 from common import utils, user_agent_parser, page
 from www.misc import qiniu_client
-from www.account import interface
+# from www.account import interface
 from www.misc.decorators import member_required
-from www.account.interface import user_profile_required
-from www.timeline.interface import UserFollowBase
+# from www.account.interface import user_profile_required
+# from www.timeline.interface import UserFollowBase
 from www.tasks import async_clear_count_info_by_code
-
-ub = interface.UserBase()
-ib = interface.InvitationBase()
-ufb = UserFollowBase()
+# ub = interface.UserBase()
+# ib = interface.InvitationBase()
+# ufb = UserFollowBase()
 
 
 def show_index(request):
@@ -29,7 +28,7 @@ def show_index(request):
         return question_home(request)
 
 
-def login(request, template_name='account/login_bg.html'):
+def login(request, template_name='account/login.html'):
     email = request.POST.get('email', '').strip()
     password = request.POST.get('password', '').strip()
 
@@ -60,15 +59,7 @@ def regist(request, invitation_code=None, template_name='account/regist.html'):
     email = request.POST.get('email', '').strip()
     nick = request.POST.get('nick', '').strip()
     password = request.POST.get('password', '').strip()
-    invitation = None
-    invitation_code = invitation_code or request.session.get('invitation_code', '')
-    if invitation_code:
-        invitation = ib.get_invitation_by_code(invitation_code)
-        if invitation:
-            request.session['invitation_code'] = invitation.code
-    if not invitation:
-        # return HttpResponse(u'网站内测中，只能通过邀请注册，邀请码获取可以联系QQ: 2659790310')
-        return render_to_response('account/alpha_regist.html', locals(), context_instance=RequestContext(request))
+
     if request.POST:
         errcode, result = ub.regist_user(email, nick, password, ip=utils.get_clientip(request),
                                          invitation_code=request.session.get('invitation_code'))
@@ -132,7 +123,7 @@ def get_user_by_nick(request, nick):
 
 
 @member_required
-@user_profile_required
+# @user_profile_required
 def user_questions(request, user_id, template_name='account/user_questions.html'):
     '''
     提问 - 个人主页
@@ -160,7 +151,7 @@ def user_questions(request, user_id, template_name='account/user_questions.html'
 
 
 @member_required
-@user_profile_required
+# @user_profile_required
 def user_answers(request, user_id, template_name='account/user_answers.html'):
     '''
     回答 - 个人主页
@@ -187,7 +178,7 @@ def user_answers(request, user_id, template_name='account/user_answers.html'):
 
 
 @member_required
-@user_profile_required
+# @user_profile_required
 def user_following(request, user_id, template_name='account/user_following.html'):
     '''
     关注 - 个人主页
@@ -207,7 +198,7 @@ def user_following(request, user_id, template_name='account/user_following.html'
 
 
 @member_required
-@user_profile_required
+# @user_profile_required
 def user_followers(request, user_id, template_name='account/user_followers.html'):
     '''
     粉丝 - 个人主页
