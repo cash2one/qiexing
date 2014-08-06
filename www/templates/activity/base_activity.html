@@ -1,0 +1,23 @@
+{% extends "base/base.html" %}
+
+{% block base_css %}
+	{% block css %}{% endblock css %}
+{% endblock %}
+
+{% block base_js %}
+	{% block javascript %}{% endblock javascript %}
+{% endblock %}
+
+{% block container %}
+<div class="col-md-8">
+	{% block left %}{% endblock left %}
+</div>
+
+<div class="col-md-4 pl-70">
+	{% block right %}
+	<a href="/journey/write_journey">
+		<button type="button" class="btn btn-danger btn-lg btn-block">+ 写 游 记</button>
+	</a>
+	{% endblock right %}
+</div>
+{% endblock container %}

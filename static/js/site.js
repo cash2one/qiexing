@@ -19,6 +19,18 @@ if (!String.format) {
 
 (function($){
 
+    /*
+        给指定元素生成一个唯一id, 主要使用场景ajax需要一个id，防止多次点击
+
+        用例：
+        $('.someclass').setUUID();
+    */
+    $.fn.setUUID = function(){
+        return this.each(function(){
+            return $(this).attr('id', new Date().getTime());
+        });
+    }
+    
 	$.QXUtils = {
         version: '1.0.0',
         author: 'stranger',
