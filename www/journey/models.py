@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 
 from django.db import models
+from django.conf import settings
 
 
 class Journey(models.Model):
@@ -39,6 +40,9 @@ class Journey(models.Model):
     def get_user(self):
         from www.account.interface import UserBase
         return UserBase().get_user_by_id(self.user_id)
+
+    def get_cover(self):
+        return '%s/img/default_journey_cover.jpeg' % settings.MEDIA_URL
 
 
 class Like(models.Model):
