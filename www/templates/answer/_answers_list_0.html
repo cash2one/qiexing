@@ -1,0 +1,42 @@
+{% load custom_tags %}
+{% load custom_filters %}
+
+{% block javascript %}
+<script type="text/javascript">
+</script>
+{% endblock %}
+
+<div class="pt-20">
+	<div class="f16 border-bottom bdc-ddd"><h4>共 {{answers_count}} 条回复</h4></div>
+	<ul class="list-group">
+		{% for answer in answers %}
+		<li class="list-group-item bdc-eee border-left-0 pl-0 border-right-0 f13">
+			<a href="{{answer.from_user.get_url}}"><img class="img-rounded avatar-45 pa" alt="{{answer.from_user.nick}}" src="{{answer.from_user.get_avatar_65}}"></a>
+			<div class="pl-60">
+				<div class=""><a href="{{answer.from_user.get_url}}">{{answer.from_user.nick}}</a><span class="co2 pl-5">({{answer.from_user.des|default:"暂无简介"}})</span></div>
+				<div class="pt-10  line-height-25">{{answer.content|safe}}</div>
+				<div class="pt-10">
+					<span class="co2">{{answer.create_time}}</span>
+					<span class="f12 pl-5">
+						<a href="javascript:void(0);" class="co2 say-to" data-user_name="{{answer.from_user.nick}}"><span class="fa fa-mail-forward pr-3"></span>回复</a>
+					</span>
+				</div>
+			</div>
+		</li>
+		{% endfor %}
+	</ul>
+</div>
+
+<!-- 回复文本框 -->
+<div class="answer-main">
+	<form class="answer-form" role="form" method="post" action="/answer/create_answer">
+        <div class="form-group mb-0">
+            <textarea id="answer_editor" name="answer_content" class="form-control" style="height: 200px;">{{request.answer_content}}</textarea>
+        </div>
+        <div class="form-group pull-right">
+            <button type="submit" class="btn btn-danger">提交你的回答</button>
+            <input type="hidden" name="obj_id" value="{{obj_id}}" />
+            <input type="hidden" name="obj_type" value="{{obj_type}}" />
+        </div>
+    </form>
+</div>

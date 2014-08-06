@@ -134,7 +134,7 @@ $(document).ready(function(){
 
 {% block left %}
 <div class="row pl-15 pr-15 pt-25">
-	<img class="img-rounded avatar-55 pa" src="http://static.doyouhike.net/files/faces/46/user9246.jpg">
+	<a href="{{journey.user.get_url}}"><img class="img-rounded avatar-55 pa" src="{{journey.user.get_avatar_65}}" alt="{{journey.user.nick}}"></a>
 	<div class="pl-75">
 		<div class="f16 fb title">{{journey.title}}</div>
 		<div class="pt-10">
@@ -177,8 +177,10 @@ $(document).ready(function(){
 				</button>
 			</div>
 			<div class="col-md-8 text-right f12 pt-25">
-				<a href="#" class="co2" data-toggle="modal" data-target="#edit_journey_modal" data-backdrop="static"><span class="fa fa-edit pr-3"></span>修改</a>
+				{% if request.user.id == journey.user.id or request.user.is_staff %}
+				<a href="javascript:void(0);" class="co2" data-toggle="modal" data-target="#edit_journey_modal" data-backdrop="static"><span class="fa fa-edit pr-3"></span>修改</a>
 				<a href="javascript:void(0);" class="co2 pl-10 delete-journey" data-journey_id="{{journey.id}}"><span class="fa fa-trash-o pr-3"></span>删除</a>
+				{% endif %}
 				<a class="border-block-blue ml-5 pl-5 pr-5 pt-2 pb-2 share-qq" href="javascript: void(0);">
                     分享到QQ
                 </a>
@@ -188,63 +190,9 @@ $(document).ready(function(){
 			</div>
 		</div>
 
-		<!-- 评论区 -->
-		<div class="pt-20">
-			<div class="f16 border-bottom bdc-ddd"><h4>共 18 条回复</h4></div>
-			<ul class="list-group">
-				<li class="list-group-item bdc-eee border-left-0 pl-0 border-right-0 f13">
-					<img class="img-rounded avatar-45 pa" src="http://img0.zhixuan.com/newest_avatar_436e7296f75911e3b4cd00163e003240!65m65">
-					<div class="pl-60">
-						<div class=""><a href="#">随便玩玩</a><span class="co2 pl-5">(你是我的小呀小苹果，怎么爱你都嫌多!)</span></div>
-						<div class="pt-10  line-height-25">谢谢李老师的文章……看得想哭了。觉得有什么东西梗在心里说不上来。翻武志红老师的博客，也有说法是「拖延是无法与当前在做的事建立联结」，也深以为然。许多事只是个要完成的任务，完成了我们仿佛就成了理想中的那个人，但这任务本身可厌可憎，我们不以它为乐，大概是这种感觉，很难过</div>
-						<div class="pt-10">
-							<span class="co2">2014-05-05 12:45:45</span>
-							<span class="f12 pl-5">
-								<a href="javascript:void(0);" class="co2 say-to" data-user_name="呵呵"><span class="fa fa-mail-forward pr-3"></span>回复</a>
-							</span>
-						</div>
-					</div>
-				</li>
-				<li class="list-group-item bdc-eee border-left-0 pl-0 border-right-0 f13">
-					<img class="img-rounded avatar-45 pa" src="http://img0.zhixuan.com/newest_avatar_436e7296f75911e3b4cd00163e003240!65m65">
-					<div class="pl-60">
-						<div class=""><a href="#">随便玩玩</a><span class="co2 pl-5">(你是我的小呀小苹果，怎么爱你都嫌多!)</span></div>
-						<div class="pt-10  line-height-25">谢谢李老师的文章……看得想哭了。觉得有什么东西梗在心里说不上来。翻武志红老师的博客，也有说法是「拖延是无法与当前在做的事建立联结」，也深以为然。许多事只是个要完成的任务，完成了我们仿佛就成了理想中的那个人，但这任务本身可厌可憎，我们不以它为乐，大概是这种感觉，很难过</div>
-						<div class="pt-10">
-							<span class="co2">2014-05-05 12:45:45</span>
-							<span class="f12 pl-5">
-								<a href="javascript:void(0);" class="co2 say-to" data-user_name="嘿嘿"><span class="fa fa-mail-forward pr-3"></span>回复</a>
-							</span>
-						</div>
-					</div>
-				</li>
-				<li class="list-group-item bdc-eee border-left-0 pl-0 border-right-0 f13">
-					<img class="img-rounded avatar-45 pa" src="http://img0.zhixuan.com/newest_avatar_436e7296f75911e3b4cd00163e003240!65m65">
-					<div class="pl-60">
-						<div class=""><a href="#">随便玩玩</a><span class="co2 pl-5">(你是我的小呀小苹果，怎么爱你都嫌多!)</span></div>
-						<div class="pt-10  line-height-25">谢谢李老师的文章……看得想哭了。觉得有什么东西梗在心里说不上来。翻武志红老师的博客，也有说法是「拖延是无法与当前在做的事建立联结」，也深以为然。许多事只是个要完成的任务，完成了我们仿佛就成了理想中的那个人，但这任务本身可厌可憎，我们不以它为乐，大概是这种感觉，很难过</div>
-						<div class="pt-10">
-							<span class="co2">2014-05-05 12:45:45</span>
-							<span class="f12 pl-5">
-								<a href="javascript:void(0);" class="co2 say-to" data-user_name="嘻嘻"><span class="fa fa-mail-forward pr-3"></span>回复</a>
-							</span>
-						</div>
-					</div>
-				</li>
-			</ul>
-		</div>
+		<!-- 回复区 -->
+		{{answers_list_params|answers_list:request}}
 
-		<!-- 回复文本框 -->
-		<div class="answer-main">
-			<form class="answer-form" role="form" method="post" action="/journey/create_answer/{{journey.id}}">
-	            <div class="form-group mb-0">
-	                <textarea id="answer_editor" name="answer_content" class="form-control" style="height: 200px;"></textarea>
-	            </div>
-	            <div class="form-group pull-right">
-	                <button type="submit" class="btn btn-danger">提交你的回答</button>
-	            </div>
-	        </form>
-		</div>
 	</div>
 </div>
 {% endblock %}

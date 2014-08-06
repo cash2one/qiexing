@@ -42,7 +42,7 @@ def journey_detail(request, journey_id, template_name='journey/journey_detail.ht
 
     sort = request.REQUEST.get('sort', 'like_count')
 
-    # good_answers = ab.format_answers(ab.get_good_answers_by_journey_id(journey_id, "-" + sort), request.user, need_answer_likes=True)
+    answers_list_params = "%s$%s" % (journey.id, "0")  # 用于前端提取回复列表
 
     # 从session中获取提示信息
     if request.session.has_key('error_msg'):
@@ -52,7 +52,7 @@ def journey_detail(request, journey_id, template_name='journey/journey_detail.ht
         success_msg = request.session['success_msg']
         del request.session['success_msg']
     if request.session.has_key('answer_content'):
-        answer_content = request.session['answer_content']
+        request.answer_content = request.session['answer_content']
         del request.session['answer_content']
     if request.session.has_key('guide'):
         guide = request.session['guide']

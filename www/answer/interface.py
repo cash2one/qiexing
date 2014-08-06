@@ -10,6 +10,7 @@ from www.misc import consts
 from www.tasks import async_send_email
 from www.message.interface import UnreadCountBase
 from www.account.interface import UserBase, UserCountBase
+from www.journey.interface import JourneyBase
 from www.answer.models import Answer, AtAnswer
 
 
@@ -19,7 +20,7 @@ dict_err = {
     40102: u'内容过于简单，稍微详述一下',
     40103: u'内容过于冗长，稍微提炼一下',
 
-    40800: u'问题不存在或者已删除',
+    40800: u'对象不存在或者已删除',
     40801: u'回答不存在或者已删除',
     40802: u'绝对不会让你得逞的，因为你没得权限',
 }
@@ -28,33 +29,24 @@ dict_err.update(consts.G_DICT_ERROR)
 ANSWER_DB = 'default'
 
 
-def question_required(func):
-    def _decorator(self, question_id_or_object, *args, **kwargs):
-        question = question_id_or_object
-        if not isinstance(question_id_or_object, Question):
+def obj_required(func):
+    def _decorator(self, obj_id_or_object, obj_type, *args, **kwargs):
+        obj = obj_id_or_object
+        if isinstance(obj_id_or_object, (int, long, str, unicode)):
             try:
-                question = Question.objects.get(id=question_id_or_object, state=True)
-            except Question.DoesNotExist:
+                obj = AnswerBase().get_obj(obj_id_or_object, obj_type)
+            except:
                 return 40800, dict_err.get(40800)
-        return func(self, question, *args, **kwargs)
-    return _decorator
-
-
-def question_admin_required(func):
-    def _decorator(self, question, user, *args, **kwargs):
-        flag, question = QuestionBase().get_question_admin_permission(question, user)
-        if not flag:
-            return 40802, dict_err.get(40802)
-        return func(self, question, user, *args, **kwargs)
+        return func(self, obj, obj_type, *args, **kwargs)
     return _decorator
 
 
 def answer_required(func):
     def _decorator(self, answer_id_or_object, *args, **kwargs):
         answer = answer_id_or_object
-        if not isinstance(answer_id_or_object, Question):
+        if not isinstance(answer_id_or_object, Answer):
             try:
-                answer = Answer.objects.select_related('question').get(id=answer_id_or_object, state=True)
+                answer = Answer.objects.get(id=answer_id_or_object, state=True)
             except Answer.DoesNotExist:
                 return 40801, dict_err.get(40801)
         return func(self, answer, *args, **kwargs)
@@ -72,42 +64,44 @@ def answer_admin_required(func):
 
 class AnswerBase(object):
 
-    def format_answers(self, answers, request_user=None, need_answer_likes=False):
-        request_user_like_answer_ids = []
-        request_user_bads = []
-        if request_user and answers:
-            request_user_likes = LikeBase().get_likes_by_question(answers[0].question, request_user.id)
-            request_user_like_answer_ids = [l.answer_id for l in request_user_likes]    # 用户是否赞了该问题
-            request_user_bads = [ab.answer_id for ab in AnswerBad.objects.filter(user_id=request_user.id)]
-
-        lb = LikeBase()
+    def format_answers(self, answers):
         for answer in answers:
             answer.from_user = answer.get_from_user()
             answer.content = utils.replace_at_html(answer.content)
-
-            answer.is_request_user_like = (answer.id in request_user_like_answer_ids)   # 当前登录用户是否喜欢了改问题
-            answer.is_request_user_bad = (answer.id in request_user_bads)   # 用户是否认为该问题无帮助
-            if need_answer_likes:
-                answer.likes = lb.format_likes(lb.get_likes_by_answer(answer)[:3])    # 赞了该回答的用户
         return answers
 
-    @question_required
-    @transaction.commit_manually(using=ANSWER_DB)
-    def create_answer(self, question, from_user_id, content, ip=None):
+    def get_obj(self, obj_id, obj_type):
+        from www.journey.models import Journey
+
+        obj_type = str(obj_type)
         try:
+            if obj_type == "0":
+                return Journey.objects.get(id=obj_id)
+            else:
+                pass
+        except Journey.DoesNotExist:
+            pass
+        raise Exception, u"obj does not exist"
+
+    @obj_required
+    @transaction.commit_manually(using=ANSWER_DB)
+    def create_answer(self, obj, obj_type, from_user_id, content, ip=None):
+        try:
+            obj_type = str(obj_type)
+
             content = utils.filter_script(content)
-            if not all((question, from_user_id, content)):
+            if not all((obj, obj_type, from_user_id, content)):
                 transaction.rollback(using=ANSWER_DB)
                 return 99800, dict_err.get(99800)
 
-            errcode, errmsg = QuestionBase().validate_content(content)
+            errcode, errmsg = JourneyBase().validate_content(content)
             if not errcode == 0:
                 transaction.rollback(using=ANSWER_DB)
                 return errcode, errmsg
 
-            to_user_id = question.user_id
+            to_user_id = obj.user_id
             answer = Answer.objects.create(from_user_id=from_user_id, to_user_id=to_user_id, content=content,
-                                           question=question, ip=ip)
+                                           obj_id=obj.id, obj_type=obj_type, ip=ip)
 
             from_user = UserBase().get_user_by_id(from_user_id)
             # 添加at信息
@@ -140,9 +134,9 @@ class AnswerBase(object):
             UserCountBase().update_user_count(user_id=from_user_id, code='user_answer_count')
 
             # 更新回答数冗余信息
-            question.answer_count += 1
-            question.last_answer_time = datetime.datetime.now()
-            question.save()
+            obj.answer_count += 1
+            obj.last_answer_time = datetime.datetime.now()
+            obj.save()
 
             transaction.commit(using=ANSWER_DB)
             return 0, answer
@@ -158,7 +152,7 @@ class AnswerBase(object):
             if not content:
                 return 99800, dict_err.get(99800)
 
-            errcode, errmsg = QuestionBase().validate_content(content)
+            errcode, errmsg = JourneyBase().validate_content(content)
             if not errcode == 0:
                 return errcode, errmsg
 
@@ -173,20 +167,8 @@ class AnswerBase(object):
             debug.get_debug_detail(e)
             return 99900, dict_err.get(99900)
 
-    def get_answers_by_question_id(self, question_id):
-        return Answer.objects.select_related('question').filter(question=question_id, state=True)
-
-    def get_good_answers_by_question_id(self, question_id, sort=None):
-        objs = Answer.objects.select_related('question').filter(question=question_id, state=True, is_bad=False)
-
-        if sort:
-            objs = objs.order_by(sort, 'id')
-        else:
-            objs = objs.order_by('id')
-        return objs
-
-    def get_bad_answers_by_question_id(self, question_id):
-        return Answer.objects.select_related('question').filter(question=question_id, state=True, is_bad=True)
+    def get_answers_by_obj_id(self, obj_id, obj_type):
+        return Answer.objects.filter(obj_id=obj_id, obj_type=obj_type, state=True)
 
     def get_user_received_answer(self, user_id):
         return Answer.objects.select_related('question').filter(to_user_id=user_id, state=True)\
@@ -197,9 +179,6 @@ class AnswerBase(object):
 
     def get_at_answers(self, user_id):
         return [aa.answer for aa in AtAnswer.objects.select_related('answer', 'answer__question').filter(user_id=user_id)]
-
-    def get_user_sended_answers_count(self, user_id):
-        return self.get_user_sended_answer(user_id).count()
 
     @answer_required
     def get_answer_admin_permission(self, answer, user):
@@ -213,13 +192,15 @@ class AnswerBase(object):
             answer.state = False
             answer.save()
 
-            answer.question.answer_count -= 1
-            answer.question.save()
-
             AtAnswer.objects.filter(user_id=user.id).delete()
 
             # 更新用户回答统计总数
             UserCountBase().update_user_count(user_id=answer.from_user_id, code='user_answer_count', operate='minus')
+
+            # 更新回答数冗余信息
+            obj = self.get_obj(answer.obj_id, answer.obj_type)
+            obj.answer_count -= 1
+            obj.save()
 
             transaction.commit(using=ANSWER_DB)
             return 0, dict_err.get(0)

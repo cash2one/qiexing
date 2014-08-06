@@ -33,17 +33,17 @@ initial_letter_filter.needs_autoescape = False
 
 
 @register.filter
-def str_display(str_in, str_parms):
+def str_display(str_in, str_params):
     """
     @attention: 截断输入字符串,超过最大长度加... 中文算2个字符
     @note: maxlength最长字符数
     """
     from django.utils.encoding import smart_unicode
     str_in = smart_unicode(str_in)
-    parms = str(str_parms).split(':')
-    suffix = parms[1] if len(parms) > 1 else u'...'
+    params = str(str_params).split(':')
+    suffix = params[1] if len(params) > 1 else u'...'
 
-    maxlength = int(parms[0]) * 2
+    maxlength = int(params[0]) * 2
     str_out = []
     str_count = 0
     for c in str_in:
@@ -154,3 +154,18 @@ def change_http_data(content):
 # 格式化时间输出
 from common.utils import time_format
 register.filter('time_format', time_format)
+
+
+@register.filter
+def answers_list(answers_list_params, request):
+    """
+    @note: 通用回答展示
+    """
+    from www.answer.interface import AnswerBase
+    ab = AnswerBase()
+
+    obj_id, obj_type = answers_list_params.split("$")
+    answers = ab.format_answers(ab.get_answers_by_obj_id(obj_id, obj_type))
+    answers_count = answers.count()
+
+    return mark_safe(render_to_response('answer/_answers_list_0.html', locals()).content)

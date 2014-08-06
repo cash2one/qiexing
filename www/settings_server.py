@@ -115,6 +115,7 @@ INSTALLED_APPS = (
     'www.message',
     'www.journey',
     'www.activity',
+    'www.answer',
     'www.admin',
 )
 
