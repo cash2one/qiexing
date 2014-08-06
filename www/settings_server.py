@@ -113,8 +113,8 @@ INSTALLED_APPS = (
     'www.custom_tags',
     'www.account',
     'www.message',
-    # 'www.question',
-    # 'www.timeline',
+    'www.journey',
+    'www.activity',
     'www.admin',
 )
 
