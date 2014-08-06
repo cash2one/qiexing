@@ -62,6 +62,7 @@ body {
 .pl-20{padding-left: 20px;}
 .pl-25{padding-left: 25px;}
 .pl-35{padding-left: 35px;}
+.pl-30{padding-left: 30px;}
 .pl-40{padding-left: 40px;}
 .pl-50{padding-left: 50px;}
 .pl-60{padding-left: 60px;}
@@ -74,6 +75,7 @@ body {
 .pr-15{padding-right: 15px;}
 .pr-20{padding-right: 20px;}
 .pr-26{padding-right: 26px;}
+.pr-30{padding-right: 30px;}
 .pr-35{padding-right: 35px;}
 .pr-50{padding-right: 50px;}
 .pb-2{padding-bottom: 2px;}
@@ -235,6 +237,15 @@ body {
 	color: #fff;
 }
 
+.black-blue{
+  color: #222;
+}
+
+.black-blue:hover{
+  text-decoration: none;
+  color: #f36119;
+}
+
 .qx-logo{
 	font-size: 30px;
 	font-weight: bold;
@@ -305,3 +316,25 @@ label.error{
 }
 
 .placeholder { color: #aaa; }
+
+
+.qx-nav-pills{
+    border-bottom: 2px solid #d9d9d9;
+}
+.qx-nav-pills>li>a{
+    border-radius: 0px;
+    margin-bottom: -2px;
+}
+.qx-nav-pills>li>a:hover{
+    background-color: transparent;
+    border-bottom: 2px solid #f36119;
+}
+.qx-nav-pills>li.active>a:hover{
+    color: #f36119;
+    background-color: transparent;
+}
+.qx-nav-pills>li.active>a{
+    background-color: transparent;
+    color: #f36119;
+    border-bottom: 2px solid #f36119;
+}

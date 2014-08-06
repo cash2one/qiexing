@@ -31,6 +31,7 @@ if (!String.format) {
         });
     }
 
+
 	$.QXUtils = {
         version: '1.0.0',
         author: 'stranger',
@@ -120,6 +121,57 @@ if (!String.format) {
             });
 
         return temp;
+    };
+
+    /*
+        自动补零
+        始终返回两位字符串，不够自动补零
+
+        用例:
+        $.QXUtils.addZero('0');
+    */
+    $.QXUtils.addZero = function(data){
+        var temp = data + '';
+        if(temp.length === 0){
+            return '00'
+        } else if(temp.length === 1){
+            return  '0' + temp;
+        } else{
+            return data;
+        }
+    };
+
+    /*
+        格式化日期
+        返回字符串  可带格式 y-m-d、h:m:s、y-m-d h:m:s
+
+        用例:
+        $.QXUtils.formatDate(new Date());
+        $.QXUtils.formatDate(new Date(), 'y-m-d');
+    */
+    $.QXUtils.formatDate = function(date, format){
+
+        var str = "",
+            year = $.QXUtils.addZero(date.getFullYear()),
+            month = $.QXUtils.addZero(date.getMonth()+1), 
+            day = $.QXUtils.addZero(date.getDate()),
+            hours = $.QXUtils.addZero(date.getHours()),
+            minutes = $.QXUtils.addZero(date.getMinutes()),
+            seconds = $.QXUtils.addZero(date.getSeconds());
+
+        switch(format){
+            case 'y-m-d': 
+                str = String.format('{0}-{1}-{2}', year, month, day);
+                break;
+            case 'h:m:s':
+                str = String.format('{0}:{1}:{2}', hours. minutes, seconds);
+                break;
+            default:
+                str = String.format('{0}-{1}-{2} {3}:{4}:{5}', year, month, day, hours, minutes, seconds);
+                break;
+        }
+        return str;
+
     };
 
 

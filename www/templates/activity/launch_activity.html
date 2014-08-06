@@ -1,11 +1,23 @@
-{% extends "journey/base_journey.html" %}
+{% extends "activity/base_activity.html" %}
 
-{% block title %}写游记{% endblock title %}
+{% block title %}发起活动{% endblock title %}
 
 {% block javascript %}
 <script type="text/javascript">
 $(document).ready(function(){
-	var editor = createEditor('#write_editor');
+    $('.date').datetimepicker({
+        format: 'yyyy-mm-dd',
+        language: 'zh-CN',
+        minView: 2,
+        autoclose: true
+    });
+
+    $('.start-date').val($.QXUtils.formatDate(new Date(), 'y-m-d'));
+    $('.end-date').val($.QXUtils.formatDate(new Date(), 'y-m-d'));
+    $('.stop-date').val($.QXUtils.formatDate(new Date(), 'y-m-d'));
+    $('.assemble-date').val($.QXUtils.formatDate(new Date(), 'y-m-d'));
+
+	var editor = createEditor('#editor');
 });
 </script>
 {% endblock %}
@@ -13,13 +25,48 @@ $(document).ready(function(){
 {% block left %}
 <form class="form-horizontal" role="form" method="post" action="/login">
 	<div class="form-group pt-5">
-        <input type="text" class="form-control" name="journey_title" placeholder="游记标题" value='{{journey_title}}' required minlength='10' maxlength='128'>
+        <label class="col-md-2 control-label">活动标题</label>
+        <div class="col-md-10">
+            <input type="text" class="form-control" name="journey_title" placeholder="活动标题" value='{{journey_title}}' required minlength='10' maxlength='128'>
+        </div>
     </div>
     <div class="form-group pt-5">
-        <textarea id="write_editor"  name="content" class="form-control" style="height: 260px"></textarea>
+        <label class="col-md-2 control-label">活动时间</label>
+        <div class="col-md-3 pr pr-30">
+            <input type="text" name="birthday" class="form-control date start-date" value="" readonly="">
+            <span class="pa" style="top: 5px; right: -10px;">到</span>
+        </div>
+        <div class="col-md-3 pl-30">
+            <input type="text" name="birthday" class="form-control date end-date" value="" readonly="">
+        </div>
+    </div>
+    <div class="form-group pt-5">
+        <label class="col-md-2 control-label">活动地点</label>
+        <div class="col-md-10">
+            <input type="text" class="form-control" name="journey_title" placeholder="活动地点" value='{{journey_title}}' required minlength='10' maxlength='128'>
+        </div>
+    </div>
+    <div class="form-group pt-5">
+        <label class="col-md-2 control-label">集合时间</label>
+        <div class="col-md-3 pr pr-30">
+            <input type="text" name="birthday" class="form-control date assemble-date" value="" readonly="">
+        </div>
+        <label class="col-md-2 control-label">报名截止时间</label>
+        <div class="col-md-3 pr pr-30">
+            <input type="text" name="birthday" class="form-control date stop-date" value="" readonly="">
+        </div>
+    </div>
+    <div class="form-group pt-5">
+        <label class="col-md-2 control-label">集合地点</label>
+        <div class="col-md-10">
+            <input type="text" class="form-control" name="journey_title" placeholder="集合地点" value='{{journey_title}}' required minlength='10' maxlength='128'>
+        </div>
+    </div>
+    <div class="form-group pt-5">
+        <div class="col-md-12"><textarea id="editor"  name="content" class="form-control" style="height: 260px"></textarea></div>
     </div>
     <div class="form-group pull-right">
-        <button type="submit" class="btn btn-danger">发表游记</button>
+        <button type="submit" class="btn btn-danger">发 起 活 动</button>
     </div>
 </form>
 {% endblock left %}
