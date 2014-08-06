@@ -4,112 +4,105 @@
 
 {% block base_js %}
 <script type="text/javascript">
-	$(document).ready(function(){
-		
-		var R = Raphael("map", 600, 500);
-		//调用绘制地图方法
-		paintMap(R);
-		
-		var textAttr = {
-			"fill": "#000",
-			"font-size": "12px",
-			"cursor": "pointer"
-		};
-				
-			   
-		for (var state in china) {
-			china[state]['path'].color = Raphael.getColor(0.9);
-					
-			(function (st, state) {
-				
-				//获取当前图形的中心坐标
-				var xx = st.getBBox().x + (st.getBBox().width / 2);
-				var yy = st.getBBox().y + (st.getBBox().height / 2);
-				
-				//***修改部分地图文字偏移坐标
-				switch (china[state]['name']) {
-					case "江苏":
-						xx += 5;
-						yy -= 10;
-						break;
-					case "河北":
-						xx -= 10;
-						yy += 20;
-						break;
-					case "天津":
-						xx += 10;
-						yy += 10;
-						break;
-					case "上海":
-						xx += 10;
-						break;
-					case "广东":
-						yy -= 10;
-						break;
-					case "澳门":
-						yy += 10;
-						break;
-					case "香港":
-						xx += 20;
-						yy += 5;
-						break;
-					case "甘肃":
-						xx -= 40;
-						yy -= 30;
-						break;
-					case "陕西":
-						xx += 5;
-						yy += 10;
-						break;
-					case "内蒙古":
-						xx -= 15;
-						yy += 65;
-						break;
-					default:
-				}
-				//写入文字
-				//china[state]['text'] = R.text(xx, yy, china[state]['name']).attr(textAttr);
-				st[0].style.cursor = "pointer";
+    $(document).ready(function(){
+        
+        var R = Raphael("map", 600, 500);
+        //调用绘制地图方法
+        paintMap(R);
+               
+        for (var state in china) {
+            china[state]['path'].color = Raphael.getColor(0.9);
+                    
+            (function (st, state) {
+                
+                //获取当前图形的中心坐标
+                var xx = st.getBBox().x + (st.getBBox().width / 2);
+                var yy = st.getBBox().y + (st.getBBox().height / 2);
+                
+                //***修改部分地图文字偏移坐标
+                switch (china[state]['name']) {
+                    case "江苏":
+                        xx += 5;
+                        yy -= 10;
+                        break;
+                    case "河北":
+                        xx -= 10;
+                        yy += 20;
+                        break;
+                    case "天津":
+                        xx += 10;
+                        yy += 10;
+                        break;
+                    case "上海":
+                        xx += 10;
+                        break;
+                    case "广东":
+                        yy -= 10;
+                        break;
+                    case "澳门":
+                        yy += 10;
+                        break;
+                    case "香港":
+                        xx += 20;
+                        yy += 5;
+                        break;
+                    case "甘肃":
+                        xx -= 40;
+                        yy -= 30;
+                        break;
+                    case "陕西":
+                        xx += 5;
+                        yy += 10;
+                        break;
+                    case "内蒙古":
+                        xx -= 15;
+                        yy += 65;
+                        break;
+                    default:
+                }
+                //写入文字
+                //china[state]['text'] = R.text(xx, yy, china[state]['name']).attr(textAttr);
+                st[0].style.cursor = "pointer";
 
-				st[0].onmouseover = function () {
-					st.animate({fill: st.color, stroke: "#eee"}, 300);
-					//china[state]['text'].toFront();
-					R.safari();
-				};
-				st[0].onmouseout = function () {
-					st.animate({fill: "#97d6f5", stroke: "#eee"}, 300);
-					//china[state]['text'].toFront();
-					R.safari();
-				};
-				st[0].onclick = function(){
-					console.log(china, state)
-					$('.info').fadeIn('fast')
-				}
-				
-			 })(china[state]['path'], state);
-		};
+                st[0].onmouseover = function () {
+                    st.animate({fill: st.color, stroke: "#eee"}, 300);
+                    //china[state]['text'].toFront();
+                    R.safari();
+                };
+                st[0].onmouseout = function () {
+                    st.animate({fill: "#97d6f5", stroke: "#eee"}, 300);
+                    //china[state]['text'].toFront();
+                    R.safari();
+                };
+                st[0].onclick = function(){
+                    console.log(china, state)
+                    $('.info').fadeIn('fast')
+                }
+                
+             })(china[state]['path'], state);
+        };
 
 
-		$('.close').bind("click", function(){
-			$('.info').fadeOut('fast');
-		})
-		
-	});
+        $('.close').bind("click", function(){
+            $('.info').fadeOut('fast');
+        })
+        
+    });
 </script>
 {% endblock %}
 
 {% block container %}
 <div id="map" class="text-center"></div>
 <div class="pa info bgc-fff bdc-ddd border-5" style="left: 440px; top: 200px; display: none;">
-	<div class="pt-10 pl-15 f16">四川<span class="fa fa-times co2 pull-right pr-10 pointer close"></span></div>
-	<ul class="list-inline row pl-25 pr-15 pt-15 f12 w270">
-		<li class="col-md-6 pb-5"><a href="#">成都</a></li>
-		<li class="col-md-6 pb-5"><a href="#">都江堰</a></li>
-		<li class="col-md-6 pb-5"><a href="#">武侯祠</a></li>
-		<li class="col-md-6 pb-5"><a href="#">青城山</a></li>
-		<li class="col-md-6 pb-5"><a href="#">乐山大佛</a></li>
-		<li class="col-md-6 pb-5"><a href="#">峨眉山</a></li>
-		<li class="col-md-6 pb-5"><a href="#">宽窄巷子</a></li>
-	</ul>
+    <div class="pt-10 pl-15 f16">四川<span class="fa fa-times co2 pull-right pr-10 pointer close"></span></div>
+    <ul class="list-inline row pl-25 pr-15 pt-15 f12 w270">
+        <li class="col-md-6 pb-5"><a href="#">成都</a></li>
+        <li class="col-md-6 pb-5"><a href="#">都江堰</a></li>
+        <li class="col-md-6 pb-5"><a href="#">武侯祠</a></li>
+        <li class="col-md-6 pb-5"><a href="#">青城山</a></li>
+        <li class="col-md-6 pb-5"><a href="#">乐山大佛</a></li>
+        <li class="col-md-6 pb-5"><a href="#">峨眉山</a></li>
+        <li class="col-md-6 pb-5"><a href="#">宽窄巷子</a></li>
+    </ul>
 </div>
 {% endblock container %}

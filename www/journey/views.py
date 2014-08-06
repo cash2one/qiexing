@@ -66,7 +66,7 @@ def journey_detail(request, journey_id, template_name='journey/journey_detail.ht
 
 
 @member_required
-def create_journey(request, template_name='journey/ask_journey.html'):
+def write_journey(request, template_name='journey/write_journey.html'):
     if request.POST:
         journey_title = request.POST.get('journey_title', '').strip()
         journey_content = request.POST.get('journey_content', '').strip()
