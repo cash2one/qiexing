@@ -19,3 +19,8 @@ def journey_list(request, template_name='journey/journey_list.html'):
 def journey_detail(request, journey_id=None, template_name='journey/journey_detail.html'):
 
     return render_to_response(template_name, locals(), context_instance=RequestContext(request))
+
+
+def write_journey(request, journey_id=None, template_name='journey/write_journey.html'):
+
+    return render_to_response(template_name, locals(), context_instance=RequestContext(request))

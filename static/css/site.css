@@ -288,13 +288,17 @@ a.border-block-red.active{
   color: white;
 }
 
-.btn-danger{
-	color: #fff;
-	background-color: #f36119;
-	border-color: #f36119;
-}
-
 label.error{
     color: #863114;
     font-size: 12px;
+}
+
+.btn-danger{
+    background-color: #f36119;
+    border-color: #f36119;
+}
+
+.btn-danger:hover{
+    background-color: #C4490C;
+    border-color: #C4490C;
 }

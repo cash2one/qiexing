@@ -1,8 +1,8 @@
-{% extends "base/base.html" %}
+{% extends "journey/base_journey.html" %}
 
 {% block title %}游记{% endblock title %}
 
-{% block base_js %}
+{% block javascript %}
 <script type="text/javascript">
 $(document).ready(function(){
 	$('.share-qq').bind('click', function(){
@@ -19,13 +19,38 @@ $(document).ready(function(){
 		$.QXShare.sinaWeibo(url, title, '');
 	});
 
-	var answerEditor = createEditor('#answer_editor');
+	var answerEditor = createEditor('#answer_editor'),
+		journeyEditor = createEditor('#journey_editor');
+
+	// 回复事件
+	$('.say-to').bind('click', function(){
+		var target = $(this);
+
+		// 滚动到输入框的位置框
+	    $('html,body').animate({
+	        scrollTop: $('.answer-main').offset().top 
+	            + ($.browser.msie ? document.documentElement.scrollTop : 0) 
+	            - 5
+	    });
+	    answerEditor.focus();
+	    answerEditor.html('');
+	    answerEditor.appendHtml("<span>@" + target.data('user_name') + " </span>");
+	});
+
+	// 删除游记事件
+	$('.delete-journey').bind('click', function(){
+		if(confirm('确定要删除此游记吗？')){
+			$.QXNotice.SuccessTopNotice('删除游记成功');
+		}
+		
+	});
+	
 });
 </script>
-{% endblock base_js %}
+{% endblock %}
 
-{% block container %}
-<div class="row pl-15 pr-15 col-md-9 pt-25">
+{% block left %}
+<div class="row pl-15 pr-15 pt-25">
 	<img class="img-rounded avatar-55 pa" src="http://static.doyouhike.net/files/faces/46/user9246.jpg">
 	<div class="pl-75">
 		<div class="f16 fb title">叶伴我行，后会有期（资深会员冉小妹手记）</div>
@@ -49,13 +74,42 @@ $(document).ready(function(){
 				夏日正浓，秋风还会远吗？等到金风送爽时，Lafuma会员俱乐部将再次起航！西安、北京、长春，三站活动将会带来怎样的精彩，请大家发挥想象并保持期待。
 			</p>
 		</div>
+
+		<!-- 弹出层 -->
+		<div class="modal fade" id="edit_journey_modal">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <form role="form" method='post' action='/question/modify_question/{{question.id}}'>
+                        <div class="modal-header">
+                            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                            <h4 class="modal-title">修改游记</h4>
+                        </div>
+                        <div class="modal-body">
+                            <div class="form-group">
+                                <input type="text" class="form-control" name="title" placeholder="游记标题" 
+                                    value=''></div>
+                            <div class="form-group">
+                                <textarea id="journey_editor" name="content" class="form-control" style="height: 260px">111111</textarea>
+                            </div>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+                            <button type="submit" class="btn btn-danger">保存</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+
 		<div class="pt-15 row">
 			<div class="col-md-4">
 				<button type="button" class="btn btn-danger">
 					<span class="f20 fa fa-thumbs-o-up pr-5"></span>1325 人赞过
 				</button>
 			</div>
-			<div class="col-md-8 text-right f12">
+			<div class="col-md-8 text-right f12 pt-25">
+				<a href="#" class="co2" data-toggle="modal" data-target="#edit_journey_modal" data-backdrop="static"><span class="fa fa-edit pr-3"></span>修改</a>
+				<a href="javascript:void(0);" class="co2 pl-10 delete-journey"><span class="fa fa-trash-o pr-3"></span>删除</a>
 				<a class="border-block-blue ml-5 pl-5 pr-5 pt-2 pb-2 share-qq" href="javascript: void(0);">
                     分享到QQ
                 </a>
@@ -74,7 +128,12 @@ $(document).ready(function(){
 					<div class="pl-60">
 						<div class=""><a href="#">随便玩玩</a><span class="co2 pl-5">(你是我的小呀小苹果，怎么爱你都嫌多!)</span></div>
 						<div class="pt-10  line-height-25">谢谢李老师的文章……看得想哭了。觉得有什么东西梗在心里说不上来。翻武志红老师的博客，也有说法是「拖延是无法与当前在做的事建立联结」，也深以为然。许多事只是个要完成的任务，完成了我们仿佛就成了理想中的那个人，但这任务本身可厌可憎，我们不以它为乐，大概是这种感觉，很难过</div>
-						<div class="pt-10"><span class="co2">2014-05-05 12:45:45</span></div>
+						<div class="pt-10">
+							<span class="co2">2014-05-05 12:45:45</span>
+							<span class="f12 pl-5">
+								<a href="javascript:void(0);" class="co2 say-to" data-user_name="呵呵"><span class="fa fa-mail-forward pr-3"></span>回复</a>
+							</span>
+						</div>
 					</div>
 				</li>
 				<li class="list-group-item bdc-eee border-left-0 pl-0 border-right-0 f13">
@@ -82,7 +141,12 @@ $(document).ready(function(){
 					<div class="pl-60">
 						<div class=""><a href="#">随便玩玩</a><span class="co2 pl-5">(你是我的小呀小苹果，怎么爱你都嫌多!)</span></div>
 						<div class="pt-10  line-height-25">谢谢李老师的文章……看得想哭了。觉得有什么东西梗在心里说不上来。翻武志红老师的博客，也有说法是「拖延是无法与当前在做的事建立联结」，也深以为然。许多事只是个要完成的任务，完成了我们仿佛就成了理想中的那个人，但这任务本身可厌可憎，我们不以它为乐，大概是这种感觉，很难过</div>
-						<div class="pt-10"><span class="co2">2014-05-05 12:45:45</span></div>
+						<div class="pt-10">
+							<span class="co2">2014-05-05 12:45:45</span>
+							<span class="f12 pl-5">
+								<a href="javascript:void(0);" class="co2 say-to" data-user_name="嘿嘿"><span class="fa fa-mail-forward pr-3"></span>回复</a>
+							</span>
+						</div>
 					</div>
 				</li>
 				<li class="list-group-item bdc-eee border-left-0 pl-0 border-right-0 f13">
@@ -90,23 +154,28 @@ $(document).ready(function(){
 					<div class="pl-60">
 						<div class=""><a href="#">随便玩玩</a><span class="co2 pl-5">(你是我的小呀小苹果，怎么爱你都嫌多!)</span></div>
 						<div class="pt-10  line-height-25">谢谢李老师的文章……看得想哭了。觉得有什么东西梗在心里说不上来。翻武志红老师的博客，也有说法是「拖延是无法与当前在做的事建立联结」，也深以为然。许多事只是个要完成的任务，完成了我们仿佛就成了理想中的那个人，但这任务本身可厌可憎，我们不以它为乐，大概是这种感觉，很难过</div>
-						<div class="pt-10"><span class="co2">2014-05-05 12:45:45</span></div>
+						<div class="pt-10">
+							<span class="co2">2014-05-05 12:45:45</span>
+							<span class="f12 pl-5">
+								<a href="javascript:void(0);" class="co2 say-to" data-user_name="嘻嘻"><span class="fa fa-mail-forward pr-3"></span>回复</a>
+							</span>
+						</div>
 					</div>
 				</li>
 			</ul>
 		</div>
 
 		<!-- 回复文本框 -->
-		<div>
+		<div class="answer-main">
 			<form class="answer-form" role="form" method="post" action="/question/create_answer/{{question.id}}">
 	            <div class="form-group mb-0">
 	                <textarea id="answer_editor" name="answer_content" class="form-control" style="height: 200px;"></textarea>
 	            </div>
 	            <div class="form-group pull-right">
-	                <button type="submit" class="btn btn-primary">提交你的回答</button>
+	                <button type="submit" class="btn btn-danger">提交你的回答</button>
 	            </div>
 	        </form>
 		</div>
 	</div>
 </div>
-{% endblock container %}
+{% endblock %}
