@@ -1,122 +1,90 @@
-{% extends "journey/base_journey.html" %}
+{% extends "activity/base_activity.html" %}
 
-{% block title %}游记{% endblock title %}
+{% block title %}活动详情{% endblock title %}
 
 {% block javascript %}
 <script type="text/javascript">
 $(document).ready(function(){
-	$('.share-qq').bind('click', function(){
-		var url = window.location.origin + window.location.pathname,
-			title = $('.title').html();
-
-		$.QXShare.qq(url, title, title);
-	});
-
-	$('.share-sina').bind('click', function(){
-		var url = window.location.origin + window.location.pathname,
-			title = $('.title').html();
-
-		$.QXShare.sinaWeibo(url, title, '');
-	});
-
-	var answerEditor = createEditor('#answer_editor'),
-		journeyEditor = createEditor('#journey_editor');
-
-	// 回复事件
-	$('.say-to').bind('click', function(){
-		var target = $(this);
-
-		// 滚动到输入框的位置框
-	    $('html,body').animate({
-	        scrollTop: $('.answer-main').offset().top 
-	            + ($.browser.msie ? document.documentElement.scrollTop : 0) 
-	            - 5
-	    });
-	    answerEditor.focus();
-	    answerEditor.html('');
-	    answerEditor.appendHtml("<span>@" + target.data('user_name') + " </span>");
-	});
-
-	// 删除游记事件
-	$('.delete-journey').bind('click', function(){
-		if(confirm('确定要删除此游记吗？')){
-			$.QXNotice.SuccessTopNotice('删除游记成功');
-		}
-		
-	});
-	
+	var answerEditor = createEditor('#answer_editor');
 });
 </script>
 {% endblock %}
 
 {% block left %}
-<div class="row pl-15 pr-15 pt-25">
-	<img class="img-rounded avatar-55 pa" src="http://static.doyouhike.net/files/faces/46/user9246.jpg">
-	<div class="pl-75">
-		<div class="f16 fb title">叶伴我行，后会有期（资深会员冉小妹手记）</div>
+<div class="row pt-25">
+	<div class="col-md-6">
+		<img class="w pl-3 pr-3 pt-3 pb-3" src="http://file.517huwai.com/Public/Thumb/?w=324&h=227&t=f&url=./Public/Uploads/2014/07/30/53d8e690cf232.jpg"></div>
+	<div class="col-md-6">
+		<h4 class="mt-5 fb">周末两玩：徒步老掌沟至坝上草原骑马</h4>
 		<div class="pt-10">
-			<a href="#" class="f12">随便搞搞</a>
-			<span class="co2 f12 pl-5">(你是我的小呀小苹果，怎么爱你都嫌多!)</span>
-			<span class="co2 f12 pull-right">发表于 2014-05-05 12:23:45</span>
+			<span class="fb pr-10">活动发起人:</span>
+			<a href="#">精灵公子</a>
 		</div>
-		<div class="pt-15 line-height-25">
+		<div class="pt-5">
+			<span class="fb pr-10">活动时间:</span>
+			2014-08-08 到 2014-08-10
+		</div>
+		<div class="pt-5">
+			<span class="fb pr-10">活动地点:</span>
+			承德 河北丰宁县
+		</div>
+		<div class="pt-5">
+			<span class="fb pr-10">报名截止时间:</span>
+			2014-08-07 18:00
+		</div>
+		<div class="pt-5">
+			<span class="fb pr-10">集合时间:</span>
+			2014-08-08 20:20
+		</div>
+		<div class="pt-5">
+			<span class="fb pr-10">集合地点:</span>
+			健德门桥的东北角马兰拉面馆西侧马路边
+		</div>
+		<div class="pt-5">
+			<span class="fb pr-10">参加人数:</span>
+			<span class="co5">28 人</span>
+		</div>
+	</div>
+</div>
+
+<ul class="nav nav-pills pt-15 qx-nav-pills">
+	<li class="active">
+		<a href="#activity_detail" class="black-blue" data-toggle="pill">活动详情</a>
+	</li>
+	<li>
+		<a href="#person_list" class="black-blue" data-toggle="pill">报名列表</a>
+	</li>
+	<li class="pull-right pr-5">
+		<button type="submit" class="btn btn-danger">我 要 报 名</button>
+	</li>
+</ul>
+<div class="tab-content">
+	<!-- 活动详情 -->
+	<div class="tab-pane fade pt-15 in active" id="activity_detail">
+		<div>
 			<p>
-				7月1日是富士山开山第一日。富士山去年申报世界文化遗产成功，要收登山协力料金（自愿）。交了1000日元，发了个协力徽章。电视台摄像机马上凑过来采访，一开口，语言不通，记者马上找了一个翻译（看样子是日方聘请的常年在五合目为中国人服务的中国人）。记者问，为什么要缴纳登山协力料金？以什么样的心情来登富士山？采访了十几分钟，才开始登山。
-				<br>
-				<br>
-				<img class="w" src="http://static.doyouhike.net/files/2014/07/07/5/55bfefb9f91822254f3c748075370e21_b.jpg" alt="" border="0" style="display: inline;">
-				<img class="w" src="http://static.doyouhike.net/files/2014/07/07/8/800b1cc771179b56398ccc7614e5eb21_b.jpg" alt="" border="0" style="display: inline;">
-				<img class="w" src="http://static.doyouhike.net/files/2014/07/07/e/ea2d5f9a4d8d22fa019bfe34e0e5113b_b.jpg" alt="" border="0" style="display: inline;"></p>
-			<p>
-				转眼间，春夏季节的三站活动就结束了，路上的劳累和汗水都成了过去式，话说回来，哪一种拼搏是轻松的呢？正是这些汗水，让我们收获了欢乐、收获了友情，收获了健康，更收获了回忆，本想煽情煽情煽情，但户外人不兴这么文艺，特改词一首，聊表思念：
+				【 <b>行程安排</b>
+				】
 			</p>
 			<p>
-				夏日正浓，秋风还会远吗？等到金风送爽时，Lafuma会员俱乐部将再次起航！西安、北京、长春，三站活动将会带来怎样的精彩，请大家发挥想象并保持期待。
+				8月8日晚20.20集合，30准时出发！
+				<br>
+				8月9日凌晨到达老掌沟，扎营或车上睡觉。
+				<br>
+				早7：30出发；
+				<br>
+				下午15：00左右到达目的地东四合泉；
+				<br>
+				晚上篝火狂欢。
+				<br>
+				8月10日早7:00早饭，早饭后骑马；
+				<br>
+				中午14:00上车回北京；
+				<br>
+				晚19：00左右到京。
+				<br>
+				注：以上行程仅供参考，实际计划可能会因活动参加的人数、体能状况、新老驴比例、天气等因素而适当变动，以活动领队决定为准！！！（注意：如果活动前遇到下雨等极端恶劣天气，请及时联系领队了解活动安排）请在出发前一天查阅或收听收看天气预报，天气变化无常雨具必带。
 			</p>
-		</div>
-
-		<!-- 弹出层 -->
-		<div class="modal fade" id="edit_journey_modal">
-            <div class="modal-dialog">
-                <div class="modal-content">
-                    <form role="form" method='post' action='/journey/modify_journey/{{journey.id}}'>
-                        <div class="modal-header">
-                            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-                            <h4 class="modal-title">修改游记</h4>
-                        </div>
-                        <div class="modal-body">
-                            <div class="form-group">
-                                <input type="text" class="form-control" name="title" placeholder="游记标题" 
-                                    value=''></div>
-                            <div class="form-group">
-                                <textarea id="journey_editor" name="content" class="form-control" style="height: 260px">111111</textarea>
-                            </div>
-                        </div>
-                        <div class="modal-footer">
-                            <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
-                            <button type="submit" class="btn btn-danger">保存</button>
-                        </div>
-                    </form>
-                </div>
-            </div>
-        </div>
-
-		<div class="pt-15 row">
-			<div class="col-md-4">
-				<button type="button" class="btn btn-danger">
-					<span class="f20 fa fa-thumbs-o-up pr-5"></span>1325 人赞过
-				</button>
-			</div>
-			<div class="col-md-8 text-right f12 pt-25">
-				<a href="#" class="co2" data-toggle="modal" data-target="#edit_journey_modal" data-backdrop="static"><span class="fa fa-edit pr-3"></span>修改</a>
-				<a href="javascript:void(0);" class="co2 pl-10 delete-journey"><span class="fa fa-trash-o pr-3"></span>删除</a>
-				<a class="border-block-blue ml-5 pl-5 pr-5 pt-2 pb-2 share-qq" href="javascript: void(0);">
-                    分享到QQ
-                </a>
-                <a class="border-block-red ml-5 pl-5 pr-5 pt-2 pb-2 share-sina" href="javascript: void(0);">
-                    分享到微博
-                </a>
-			</div>
 		</div>
 
 		<!-- 评论区 -->
@@ -164,7 +132,6 @@ $(document).ready(function(){
 				</li>
 			</ul>
 		</div>
-
 		<!-- 回复文本框 -->
 		<div class="answer-main">
 			<form class="answer-form" role="form" method="post" action="/journey/create_answer/{{journey.id}}">
@@ -177,5 +144,37 @@ $(document).ready(function(){
 	        </form>
 		</div>
 	</div>
+
+	<!-- 报名人列表 -->
+	<div class="tab-pane fade pt-15 in" id="person_list">
+		<table class="table table-hover">
+			<thead>
+				<tr>
+					<th>#</th>
+					<th>头像</th>
+					<th>用户</th>
+					<th>性别</th>
+					<th>人数</th>
+					<th>报名日期</th>
+					<th>姓名</th>
+					<th>联系电话</th>
+				</tr>
+			</thead>
+			<tbody>
+				<tr>
+					<td>1</td>
+					<td><img class="img-rounded" src="http://img0.zhixuan.com/newest_avatar_817c7c1a147611e486cf00163e003240!25m25"></td>
+					<td>随便玩玩</td>
+					<td>男</td>
+					<td>2</td>
+					<td>2014-08-08 12:56</td>
+					<td>习大大</td>
+					<td>13585958654</td>
+				</tr>
+			</tbody>
+		</table>
+	</div>
+
+
 </div>
 {% endblock %}

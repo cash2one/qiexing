@@ -1,7 +1,51 @@
-{% extends "base/base.html" %}
+{% extends "activity/base_activity.html" %}
+{% load custom_tags %}
+{% load custom_filters %}
+{% block title %}活动列表{% endblock title %}
 
-{% block title %}活动{% endblock title %}
-
-{% block container %}
-活动
-{% endblock container %}
+{% block left %}
+<ul class="list-group">
+	<li class="list-group-item bdc-eee pl-0 border-left-0 border-right-0">
+		<div class="row pl-5 pr-5">
+			<div class="col-md-4">
+				<a href="/activity/1">
+					<img class="w h155 pl-3 pr-3 pt-3 pb-3" src="http://file.517huwai.com/Public/Thumb/?w=324&h=227&t=f&url=./Public/Uploads/2014/07/30/53d8e690cf232.jpg">
+				</a>
+			</div>
+			<div class="col-md-8">
+				<div class="">
+					<h4 class="mt-5">
+						<a href="#" class="fb">周末两玩：徒步老掌沟至坝上草原骑马</a>
+					</h4>
+				</div>
+				<div class="pt-0">活动发起人: <a href="#">精灵公子</a></div>
+				<div class="pt-5">活动时间: 08-08</div>
+				<div class="pt-5">活动地点: 承德 河北丰宁县</div>
+				<div class="pt-5">报名截止时间: 08-07 18:00</div>
+				<div class="pt-5">参加人数: 28 人</div>
+			</div>
+		</div>
+	</li>
+	<li class="list-group-item bdc-eee pl-0 border-left-0 border-right-0">
+		<div class="row pl-5 pr-5">
+			<div class="col-md-4">
+				<a href="/activity/1">
+					<img class="w h155 pl-3 pr-3 pt-3 pb-3" src="http://file.517huwai.com/Public/Thumb/?w=324&h=227&t=f&url=./Public/Uploads/2014/07/30/53d8e690cf232.jpg">
+				</a>
+			</div>
+			<div class="col-md-8">
+				<div class="">
+					<h4 class="mt-5">
+						<a href="#" class="fb">周末两玩：徒步老掌沟至坝上草原骑马</a>
+					</h4>
+				</div>
+				<div class="pt-0">活动发起人: <a href="#">精灵公子</a></div>
+				<div class="pt-5">活动时间: 08-08</div>
+				<div class="pt-5">活动地点: 承德 河北丰宁县</div>
+				<div class="pt-5">报名结束时间: 08-07</div>
+				<div class="pt-5">参加人数: 28 人</div>
+			</div>
+		</div>
+	</li>
+</ul>
+{% endblock left %}
