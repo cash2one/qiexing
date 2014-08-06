@@ -137,7 +137,7 @@ class BlackList(models.Model):
 
 class UserCount(models.Model):
     user_id = models.CharField(max_length=32, unique=True)
-    user_question_count = models.IntegerField(default=0, db_index=True)
+    user_journey_count = models.IntegerField(default=0, db_index=True)
     user_answer_count = models.IntegerField(default=0, db_index=True)
     user_liked_count = models.IntegerField(default=0, db_index=True)
     following_count = models.IntegerField(default=0, db_index=True)

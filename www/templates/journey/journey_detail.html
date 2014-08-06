@@ -1,6 +1,7 @@
 {% extends "journey/base_journey.html" %}
-
-{% block title %}游记{% endblock title %}
+{% load custom_tags %}
+{% load custom_filters %}
+{% block title %}{{journey.title}}{% endblock title %}
 
 {% block javascript %}
 <script type="text/javascript">
@@ -53,27 +54,13 @@ $(document).ready(function(){
 <div class="row pl-15 pr-15 pt-25">
 	<img class="img-rounded avatar-55 pa" src="http://static.doyouhike.net/files/faces/46/user9246.jpg">
 	<div class="pl-75">
-		<div class="f16 fb title">叶伴我行，后会有期（资深会员冉小妹手记）</div>
+		<div class="f16 fb title">{{journey.title}}</div>
 		<div class="pt-10">
-			<a href="#" class="f12">随便搞搞</a>
-			<span class="co2 f12 pl-5">(你是我的小呀小苹果，怎么爱你都嫌多!)</span>
-			<span class="co2 f12 pull-right">发表于 2014-05-05 12:23:45</span>
+			<a href="{{journey.user.get_url}}" class="f12">{{journey.user.nick}}</a>
+			<span class="co2 f12 pl-5">({{journey.user.des|default:"暂无简介"}})</span>
+			<span class="co2 f12 pull-right">发表于 {{journey.create_time}}</span>
 		</div>
-		<div class="pt-15 line-height-25">
-			<p>
-				7月1日是富士山开山第一日。富士山去年申报世界文化遗产成功，要收登山协力料金（自愿）。交了1000日元，发了个协力徽章。电视台摄像机马上凑过来采访，一开口，语言不通，记者马上找了一个翻译（看样子是日方聘请的常年在五合目为中国人服务的中国人）。记者问，为什么要缴纳登山协力料金？以什么样的心情来登富士山？采访了十几分钟，才开始登山。
-				<br>
-				<br>
-				<img class="w" src="http://static.doyouhike.net/files/2014/07/07/5/55bfefb9f91822254f3c748075370e21_b.jpg" alt="" border="0" style="display: inline;">
-				<img class="w" src="http://static.doyouhike.net/files/2014/07/07/8/800b1cc771179b56398ccc7614e5eb21_b.jpg" alt="" border="0" style="display: inline;">
-				<img class="w" src="http://static.doyouhike.net/files/2014/07/07/e/ea2d5f9a4d8d22fa019bfe34e0e5113b_b.jpg" alt="" border="0" style="display: inline;"></p>
-			<p>
-				转眼间，春夏季节的三站活动就结束了，路上的劳累和汗水都成了过去式，话说回来，哪一种拼搏是轻松的呢？正是这些汗水，让我们收获了欢乐、收获了友情，收获了健康，更收获了回忆，本想煽情煽情煽情，但户外人不兴这么文艺，特改词一首，聊表思念：
-			</p>
-			<p>
-				夏日正浓，秋风还会远吗？等到金风送爽时，Lafuma会员俱乐部将再次起航！西安、北京、长春，三站活动将会带来怎样的精彩，请大家发挥想象并保持期待。
-			</p>
-		</div>
+		<div class="pt-15 line-height-25">{{journey.content|safe}}</div>
 
 		<!-- 弹出层 -->
 		<div class="modal fade" id="edit_journey_modal">
@@ -104,7 +91,7 @@ $(document).ready(function(){
 		<div class="pt-15 row">
 			<div class="col-md-4">
 				<button type="button" class="btn btn-danger">
-					<span class="f20 fa fa-thumbs-o-up pr-5"></span>1325 人赞过
+					<span class="f20 fa fa-thumbs-o-up pr-5"></span>{{journey.like_count}} 人赞过
 				</button>
 			</div>
 			<div class="col-md-8 text-right f12 pt-25">

@@ -417,7 +417,7 @@ class UserBase(object):
         @note: 给用户设置上统计数字信息
         """
         user_count_info = UserCountBase().get_user_count_info(user.id)
-        user.user_question_count = user_count_info['user_question_count']
+        user.user_journey_count = user_count_info['user_journey_count']
         user.user_answer_count = user_count_info['user_answer_count']
         user.user_liked_count = user_count_info['user_liked_count']
         user.following_count = user_count_info['following_count']
@@ -460,7 +460,7 @@ def user_profile_required(func):
             request.is_follow = ufb.check_is_follow(request.user.id, user.id)
 
         user_count_info = UserCountBase().get_user_count_info(user_id)
-        request.user_question_count = user_count_info['user_question_count']
+        request.user_journey_count = user_count_info['user_journey_count']
         request.user_answer_count = user_count_info['user_answer_count']
         request.user_liked_count = user_count_info['user_liked_count']
         request.following_count = user_count_info['following_count']
@@ -479,11 +479,11 @@ class UserCountBase(object):
     def get_user_count_info(self, user_id, must_update_cache=False):
         try:
             uc = UserCount.objects.get(user_id=user_id)
-            return dict(user_question_count=uc.user_question_count, user_answer_count=uc.user_answer_count,
+            return dict(user_journey_count=uc.user_journey_count, user_answer_count=uc.user_answer_count,
                         user_liked_count=uc.user_liked_count, following_count=uc.following_count,
                         follower_count=uc.follower_count)
         except UserCount.DoesNotExist:
-            return dict(user_question_count=0, user_answer_count=0, user_liked_count=0,
+            return dict(user_journey_count=0, user_answer_count=0, user_liked_count=0,
                         following_count=0, follower_count=0)
 
     def update_user_count(self, user_id, code, operate="add"):

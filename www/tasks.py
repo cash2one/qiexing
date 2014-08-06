@@ -27,9 +27,9 @@ def async_clear_count_info_by_code(user_id, code):
 
 
 @task(queue='one_by_one_worker', name='one_by_one_worker.add_question_view_count')
-def async_add_question_view_count(question_id):
+def async_add_journey_view_count(journey_id):
     '''
     @note: 异步更新浏览次数
     '''
-    from www.question.interface import QuestionBase
-    QuestionBase().add_question_view_count(question_id)
+    from www.journey.interface import JourneyBase
+    JourneyBase().add_journey_view_count(journey_id)
