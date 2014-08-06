@@ -44,31 +44,6 @@ $(document).ready(function(){
 		}
 		
 	});
-
-	$('.like').bind('click', function(){
-		var target = $(this);
-
-		// 设置ajax元素id,防止多次点击
-        g_ajax_processing_obj_id = target.setUUID().attr('id');
-
-        ajaxSend(
-            "/journey/like_journey", 
-            {'journey_id': target.data('journey_id')}, 
-            function(data){
-                if(data['errcode'] != '0'){
-                    $.ZXMsg.alert('提示', data['errmsg']);
-                    return;
-                }
-
-                // 操作成功执行动画
-                $.QXNotice.SuccessTopNotice('赞成功');
-
-                var count = parseInt($('.like-count').html());
-                $('.like-count').html(count + 1);
-            }
-        );
-
-	});
 	
 });
 </script>
@@ -128,8 +103,8 @@ $(document).ready(function(){
 
 		<div class="pt-15 row">
 			<div class="col-md-4">
-				<button type="button" class="btn btn-danger like" data-journey_id="{{journey.id}}">
-					<span class="f20 fa fa-thumbs-o-up pr-5"></span><span class="like-count">1325</span> 人赞过
+				<button type="button" class="btn btn-danger">
+					<span class="f20 fa fa-thumbs-o-up pr-5"></span>1325 人赞过
 				</button>
 			</div>
 			<div class="col-md-8 text-right f12 pt-25">
