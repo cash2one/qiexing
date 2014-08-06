@@ -313,13 +313,14 @@ class LikeBase(object):
                     return 20104, dict_err.get(20104)
 
             # 不支持自赞
-            to_user_id = journey.from_user_id
+            to_user_id = journey.user_id
             if from_user_id == to_user_id:
                 transaction.rollback(JOURNEY_DB)
                 return 20105, dict_err.get(20105)
 
             Like.objects.create(journey=journey, is_anonymous=is_anonymous, from_user_id=from_user_id, to_user_id=to_user_id, ip=ip)
             journey.like_count += 1
+            journey.save()
 
             # 更新被赞次数
             UserCountBase().update_user_count(user_id=to_user_id, code='user_liked_count')

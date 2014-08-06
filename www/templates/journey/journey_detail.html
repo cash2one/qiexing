@@ -40,12 +40,36 @@ $(document).ready(function(){
 
 	// 删除游记事件
 	$('.delete-journey').bind('click', function(){
+		var target = $(this);
+
 		if(confirm('确定要删除此游记吗？')){
-			$.QXNotice.SuccessTopNotice('删除游记成功');
+
+			// 设置ajax元素id,防止多次点击
+        	g_ajax_processing_obj_id = target.setUUID().attr('id');
+
+			ajaxSend(
+	            "/journey/remove_journey", 
+	            {'journey_id': target.data('journey_id')}, 
+	            function(data){
+	                if(data['errcode'] != '0'){
+	                    $.QXNotice.InfoTopNotice(data['errmsg']);
+	                    return;
+	                }
+
+	                // 操作成功执行动画
+	                $.QXNotice.SuccessTopNotice('删除成功, 页面即将跳转游记列表!');
+	                
+	                window.setTimeout(function(){
+	                	window.location.href = "/journey";
+	                }, 3000)
+	            }
+	        );
+
 		}
 		
 	});
 
+	// 点赞
 	$('.like').bind('click', function(){
 		var target = $(this);
 
@@ -57,12 +81,12 @@ $(document).ready(function(){
             {'journey_id': target.data('journey_id')}, 
             function(data){
                 if(data['errcode'] != '0'){
-                    $.ZXMsg.alert('提示', data['errmsg']);
+                    $.QXNotice.InfoTopNotice(data['errmsg']);
                     return;
                 }
 
                 // 操作成功执行动画
-                $.QXNotice.SuccessTopNotice('赞成功');
+                $.QXNotice.SuccessTopNotice('点赞成功');
 
                 var count = parseInt($('.like-count').html());
                 $('.like-count').html(count + 1);
@@ -70,6 +94,39 @@ $(document).ready(function(){
         );
 
 	});
+
+
+	// 验证
+	$('#edit_journey_modal form').validate({
+        submitHandler: function(form){
+            
+            // 去掉空格 去掉html标签之后的文本
+            var content = $.QXUtils.clearEscapeCharacters($.QXUtils.clearHtmlTags(journeyEditor.html()));
+
+            // 大于2个字才提交
+            if($.trim(content).length >= 10){
+                form.submit();
+            } else {
+                $(journeyEditor.srcElement[0]).after('<label class="error">至少需要输入10个字</label>');
+            }
+        }
+    });
+
+    $('.answer-form').validate({
+        submitHandler: function(form){
+            
+            // 去掉空格 去掉html标签之后的文本
+            var content = $.QXUtils.clearEscapeCharacters($.QXUtils.clearHtmlTags(answerEditor.html()));
+
+            // 大于2个字才提交
+            if($.trim(content).length >= 10){
+                form.submit();
+            } else {
+                $(answerEditor.srcElement[0]).after('<label class="error">至少需要输入10个字</label>');
+            }
+        }
+    });
+
 	
 });
 </script>
@@ -98,10 +155,10 @@ $(document).ready(function(){
                         </div>
                         <div class="modal-body">
                             <div class="form-group">
-                                <input type="text" class="form-control" name="title" placeholder="游记标题" 
-                                    value=''></div>
+                                <input type="text" class="form-control" name="journey_title" placeholder="游记标题" 
+                                    value='{{journey.title}}' required minlength='10' maxlength='128'></div>
                             <div class="form-group">
-                                <textarea id="journey_editor" name="content" class="form-control" style="height: 260px">111111</textarea>
+                                <textarea id="journey_editor" name="journey_content" class="form-control" style="height: 260px">{{journey.content}}</textarea>
                             </div>
                         </div>
                         <div class="modal-footer">
@@ -115,13 +172,13 @@ $(document).ready(function(){
 
 		<div class="pt-15 row">
 			<div class="col-md-4">
-				<button type="button" class="btn btn-danger">
+				<button type="button" class="btn btn-danger like" data-journey_id="{{journey.id}}">
 					<span class="f20 fa fa-thumbs-o-up pr-5"></span><span class="like-count">{{journey.like_count}}</span> 人赞过
 				</button>
 			</div>
 			<div class="col-md-8 text-right f12 pt-25">
 				<a href="#" class="co2" data-toggle="modal" data-target="#edit_journey_modal" data-backdrop="static"><span class="fa fa-edit pr-3"></span>修改</a>
-				<a href="javascript:void(0);" class="co2 pl-10 delete-journey"><span class="fa fa-trash-o pr-3"></span>删除</a>
+				<a href="javascript:void(0);" class="co2 pl-10 delete-journey" data-journey_id="{{journey.id}}"><span class="fa fa-trash-o pr-3"></span>删除</a>
 				<a class="border-block-blue ml-5 pl-5 pr-5 pt-2 pb-2 share-qq" href="javascript: void(0);">
                     分享到QQ
                 </a>

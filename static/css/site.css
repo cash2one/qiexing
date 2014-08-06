@@ -247,6 +247,7 @@ body {
 }
 
 a{color: #3F484F;}
+a:focus {outline: none;-moz-outline: none;}
 a:hover{color: #f36119;}
 
 
