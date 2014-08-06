@@ -302,3 +302,5 @@ label.error{
     background-color: #C4490C;
     border-color: #C4490C;
 }
+
+.placeholder { color: #aaa; }

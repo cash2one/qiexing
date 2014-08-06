@@ -79,7 +79,7 @@ $(document).ready(function(){
 		<div class="modal fade" id="edit_journey_modal">
             <div class="modal-dialog">
                 <div class="modal-content">
-                    <form role="form" method='post' action='/question/modify_question/{{question.id}}'>
+                    <form role="form" method='post' action='/journey/modify_journey/{{journey.id}}'>
                         <div class="modal-header">
                             <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
                             <h4 class="modal-title">修改游记</h4>
@@ -167,7 +167,7 @@ $(document).ready(function(){
 
 		<!-- 回复文本框 -->
 		<div class="answer-main">
-			<form class="answer-form" role="form" method="post" action="/question/create_answer/{{question.id}}">
+			<form class="answer-form" role="form" method="post" action="/journey/create_answer/{{journey.id}}">
 	            <div class="form-group mb-0">
 	                <textarea id="answer_editor" name="answer_content" class="form-control" style="height: 200px;"></textarea>
 	            </div>
