@@ -11,7 +11,7 @@ $(document).ready(function(){
 {% endblock %}
 
 {% block left %}
-<form class="form-horizontal" role="form" method="post" action="/journey/write_journey">
+<form class="form-horizontal" role="form" method="post" action="/journey/write_journey"> 
 	<div class="form-group pt-5">
         <input type="text" class="form-control" name="journey_title" placeholder="游记标题" value='{{journey_title}}' required minlength='10' maxlength='128'>
     </div>

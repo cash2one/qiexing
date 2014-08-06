@@ -141,7 +141,7 @@ LOGGING = {
 
 SESSION_COOKIE_AGE = 60 * 60 * 24 * 10
 SESSION_COOKIE_HTTPONLY = True
-SESSION_COOKIE_DOMAIN = '.iqiexing.com' if not LOCAL_FLAG else '.a.com'
+# SESSION_COOKIE_DOMAIN = '.iqiexing.com' if not LOCAL_FLAG else '.a.com'
 
 import logging
 logging.basicConfig(format='%(asctime)s %(message)s ---------- %(pathname)s:%(module)s.%(funcName)s Line:%(lineno)d',
