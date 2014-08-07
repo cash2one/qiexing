@@ -3,33 +3,152 @@
 
 {% block javascript %}
 <script type="text/javascript">
+$(document).ready(function(){
+    var answerEditor = createEditor('#answer_editor'),
+        modifyAnswerEditor = createEditor('#modify_answer_editor');
+
+    // 回复事件
+    $('.say-to').bind('click', function(){
+        var target = $(this);
+
+        // 滚动到输入框的位置框
+        $('html,body').animate({
+            scrollTop: $('.answer-main').offset().top 
+                + ($.browser.msie ? document.documentElement.scrollTop : 0) 
+                - 5
+        });
+        answerEditor.focus();
+        answerEditor.html('');
+        answerEditor.appendHtml("<span>@" + target.data('user_name') + " </span>");
+    });
+
+    $('.answer-form').validate({
+        submitHandler: function(form){
+            
+            // 去掉空格 去掉html标签之后的文本
+            var content = $.QXUtils.clearEscapeCharacters($.QXUtils.clearHtmlTags(answerEditor.html()));
+
+            // 大于2个字才提交
+            if($.trim(content).length >= 10){
+                form.submit();
+            } else {
+                $(answerEditor.srcElement[0]).after('<label class="error">至少需要输入10个字</label>');
+            }
+        }
+    });
+
+    $('#edit_answer_modal form').validate({
+        submitHandler: function(form){
+            
+            // 去掉空格 去掉html标签之后的文本
+            var content = $.QXUtils.clearEscapeCharacters($.QXUtils.clearHtmlTags(modifyAnswerEditor.html()));
+
+            // 大于2个字才提交
+            if($.trim(content).length >= 10){
+                form.submit();
+            } else {
+                $(modifyAnswerEditor.srcElement[0]).after('<label class="error">至少需要输入10个字</label>');
+            }
+        }
+    });
+
+
+    // 修改回复
+    $('.modify-answer').bind('click', function(){
+        var me = $(this);
+
+        // 显示弹出框
+        $('#edit_answer_modal').modal({'show': true, 'backdrop': 'static'});
+
+        modifyAnswerEditor.html(me.parents('li').find('.answer-content').html());
+
+        $('#modify_answer_id').val(me.data('answer_id'));
+    });
+
+    // 删除回复
+    $('.remove-answer').bind('click', function(){
+        var me = $(this);
+        if(confirm('确认删除此回复？')){
+            ajaxSend(
+                "/answer/remove_answer", 
+                {'answer_id': me.data('answer_id')}, 
+                function(data){
+                    if(data['errcode'] != '0'){
+                        $.QXNotice.InfoTopNotice(data['errmsg']);
+                        return;
+                    }
+
+                    // 操作成功执行动画
+                    $.QXNotice.SuccessTopNotice('操作成功!');
+
+                    me.parents('li').remove();
+                }
+            );
+        }
+        
+    });
+});
 </script>
 {% endblock %}
 
 <div class="pt-20">
-	<div class="f16 border-bottom bdc-ddd"><h4>共 {{answers_count}} 条回复</h4></div>
-	<ul class="list-group">
-		{% for answer in answers %}
-		<li class="list-group-item bdc-eee border-left-0 pl-0 border-right-0 f13">
-			<a href="{{answer.from_user.get_url}}"><img class="img-rounded avatar-45 pa" alt="{{answer.from_user.nick}}" src="{{answer.from_user.get_avatar_65}}"></a>
-			<div class="pl-60">
-				<div class=""><a href="{{answer.from_user.get_url}}">{{answer.from_user.nick}}</a><span class="co2 pl-5">({{answer.from_user.des|default:"暂无简介"}})</span></div>
-				<div class="pt-10  line-height-25">{{answer.content|safe}}</div>
-				<div class="pt-10">
-					<span class="co2">{{answer.create_time}}</span>
-					<span class="f12 pl-5">
-						<a href="javascript:void(0);" class="co2 say-to" data-user_name="{{answer.from_user.nick}}"><span class="fa fa-mail-forward pr-3"></span>回复</a>
-					</span>
-				</div>
-			</div>
-		</li>
-		{% endfor %}
-	</ul>
+    <div class="f16 border-bottom bdc-ddd"><h4>共 {{answers_count}} 条回复</h4></div>
+    <ul class="list-group">
+        {% for answer in answers %}
+        <li class="list-group-item bdc-eee border-left-0 pl-0 border-right-0 f13">
+            <a href="{{answer.from_user.get_url}}"><img class="img-rounded avatar-45 pa" alt="{{answer.from_user.nick}}" src="{{answer.from_user.get_avatar_65}}"></a>
+            <div class="pl-60">
+                <div class=""><a href="{{answer.from_user.get_url}}">{{answer.from_user.nick}}</a><span class="co2 pl-5">({{answer.from_user.des|default:"暂无简介"}})</span></div>
+                <div class="pt-10  line-height-25 answer-content">{{answer.content|safe}}</div>
+                <div class="pt-10">
+                    <span class="co2">{{answer.create_time}}</span>
+                    <span class="f12 pl-5">
+                        <a href="javascript:void(0);" class="co2 say-to" data-user_name="{{answer.from_user.nick}}"><span class="fa fa-mail-forward pr-3"></span>回复</a>
+                    </span>
+
+                    <span class="f12 pl-5">
+                        <a href="javascript:void(0);" class="co2 modify-answer" data-answer_id="{{answer.id}}"><span class="fa fa-mail-forward pr-3"></span>修改</a>
+                    </span>
+                    <span class="f12 pl-5">
+                        <a href="javascript:void(0);" class="co2 remove-answer" data-answer_id="{{answer.id}}"><span class="fa fa-mail-forward pr-3"></span>删除</a>
+                    </span>
+                </div>
+            </div>
+        </li>
+        {% endfor %}
+    </ul>
+
+    <!-- 弹出层 -->
+    <div class="modal fade" id="edit_answer_modal">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <form role="form" method='post' action='/answer/modify_answer'>
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                        <h4 class="modal-title">修改游记</h4>
+                    </div>
+                    <div class="modal-body">
+                        <div class="form-group">
+                            <textarea id="modify_answer_editor" name="edit_answer_content" class="form-control" style="height: 260px"></textarea>
+                            <input type="hidden" name="obj_id" value="{{obj_id}}" />
+                            <input type="hidden" name="obj_type" value="{{obj_type}}" />
+                            <input type="hidden" name="answer_id" id="modify_answer_id" value="" />
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+                        <button type="submit" class="btn btn-danger">保存</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
 </div>
 
 <!-- 回复文本框 -->
 <div class="answer-main">
-	<form class="answer-form" role="form" method="post" action="/answer/create_answer">
+    <form class="answer-form" role="form" method="post" action="/answer/create_answer">
         <div class="form-group mb-0">
             <textarea id="answer_editor" name="answer_content" class="form-control" style="height: 200px;">{{request.answer_content}}</textarea>
         </div>

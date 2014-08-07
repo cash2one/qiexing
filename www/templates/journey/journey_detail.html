@@ -20,23 +20,7 @@ $(document).ready(function(){
 		$.QXShare.sinaWeibo(url, title, '');
 	});
 
-	var answerEditor = createEditor('#answer_editor'),
-		journeyEditor = createEditor('#journey_editor');
-
-	// 回复事件
-	$('.say-to').bind('click', function(){
-		var target = $(this);
-
-		// 滚动到输入框的位置框
-	    $('html,body').animate({
-	        scrollTop: $('.answer-main').offset().top 
-	            + ($.browser.msie ? document.documentElement.scrollTop : 0) 
-	            - 5
-	    });
-	    answerEditor.focus();
-	    answerEditor.html('');
-	    answerEditor.appendHtml("<span>@" + target.data('user_name') + " </span>");
-	});
+	var journeyEditor = createEditor('#journey_editor');
 
 	// 删除游记事件
 	$('.delete-journey').bind('click', function(){
@@ -108,21 +92,6 @@ $(document).ready(function(){
                 form.submit();
             } else {
                 $(journeyEditor.srcElement[0]).after('<label class="error">至少需要输入10个字</label>');
-            }
-        }
-    });
-
-    $('.answer-form').validate({
-        submitHandler: function(form){
-            
-            // 去掉空格 去掉html标签之后的文本
-            var content = $.QXUtils.clearEscapeCharacters($.QXUtils.clearHtmlTags(answerEditor.html()));
-
-            // 大于2个字才提交
-            if($.trim(content).length >= 10){
-                form.submit();
-            } else {
-                $(answerEditor.srcElement[0]).after('<label class="error">至少需要输入10个字</label>');
             }
         }
     });
