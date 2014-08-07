@@ -136,7 +136,7 @@ def get_user_by_nick(request, nick):
 
 
 @member_required
-def user_settings(request, template_name='account/change_profile.html'):
+def change_profile(request, template_name='account/change_profile.html'):
     img_key = 'avatar_%s' % utils.uuid_without_dash()   # 七牛上传图片文件名
     uptoken = qiniu_client.get_upload_token(img_key)    # 七牛图片上传token
     if request.POST:

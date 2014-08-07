@@ -82,6 +82,7 @@ body {
 .pb-3{padding-bottom: 3px;}
 .pb-5{padding-bottom: 5px;}
 .pb-10{padding-bottom: 10px;}
+.pb-15{padding-bottom: 15px;}
 .pb-20{padding-bottom: 20px;}
 .pb-30{padding-bottom: 30px;}
 
@@ -90,6 +91,7 @@ body {
 .bgc-333{background-color: #333;}
 .bgc-f36119{background-color: #f36119;}
 .bgc-272829{background-color: #272829;}
+.bgc-eee{background-color: #eee;}
 
 .w200{width: 200px;}
 .w215{width: 215px;}
@@ -142,6 +144,10 @@ body {
 	height: 55px;
 }
 
+.avatar-100{
+    width: 100px;
+    height: 100px;
+}
 
 .qx-info-notice{
   background-color: #56A8C7;

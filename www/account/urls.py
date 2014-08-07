@@ -5,7 +5,7 @@ from django.conf.urls import patterns, url
 
 urlpatterns = patterns('www.account.views',
                        url(r'^captcha$', 'captcha'),
-                       url(r'^user_settings$', 'user_settings'),
+                       url(r'^user_settings$', 'change_profile'),
                        url(r'^user_settings/change_pwd$', 'change_pwd'),
                        url(r'^user_settings/change_email$', 'change_email'),
                        url(r'^user_settings/verify_email$', 'verify_email'),

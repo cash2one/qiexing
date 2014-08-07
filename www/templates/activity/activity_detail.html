@@ -5,13 +5,60 @@
 {% block javascript %}
 <script type="text/javascript">
 $(document).ready(function(){
-	var answerEditor = createEditor('#answer_editor');
+	$('.date').datetimepicker({
+        format: 'yyyy-mm-dd',
+        language: 'zh-CN',
+        minView: 2,
+        autoclose: true
+    });
+
+    $('.start-date').val($.QXUtils.formatDate(new Date(), 'y-m-d'));
+    $('.end-date').val($.QXUtils.formatDate(new Date(), 'y-m-d'));
+    $('.stop-date').val($.QXUtils.formatDate(new Date(), 'y-m-d'));
+    $('.assemble-date').val($.QXUtils.formatDate(new Date(), 'y-m-d'));
+
+	var editor = createEditor('#modify_activity_editor');
+
+	// 验证
+    $('#edit_activity_modal form').validate({
+        submitHandler: function(form){
+            
+            // 去掉空格 去掉html标签之后的文本
+            var content = $.QXUtils.clearEscapeCharacters($.QXUtils.clearHtmlTags(editor.html()));
+
+            // 大于2个字才提交
+            if($.trim(content).length >= 10){
+                form.submit();
+            } else {
+                $(editor.srcElement[0]).after('<label class="error">至少需要输入10个字</label>');
+            }
+        }
+    });
+
+    $('.regist-form').validate();
+
+
+    $('.delete-activity').bind('click', function(){
+    	if(confirm('确认删除此活动?')){
+    		alert('成')
+    	}
+    });
+
+    $('.btn-regist-activity').bind('click', function(){
+    	$('.regist-activity-info').fadeIn('fast');
+    });
+
+    $('.close').bind("click", function(){
+        $('.regist-activity-info').fadeOut('fast');
+    });
+
+ 
 });
 </script>
 {% endblock %}
 
 {% block left %}
-<div class="row pt-25">
+<div class="row pt-25 pr">
 	<div class="col-md-6">
 		<img class="w pl-3 pr-3 pt-3 pb-3" src="http://file.517huwai.com/Public/Thumb/?w=324&h=227&t=f&url=./Public/Uploads/2014/07/30/53d8e690cf232.jpg"></div>
 	<div class="col-md-6">
@@ -45,6 +92,21 @@ $(document).ready(function(){
 			<span class="co5">28 人</span>
 		</div>
 	</div>
+
+	<div class="pa regist-activity-info bgc-fff bdc-ddd border-5" style="left: 340px; top: 50px; width: 300px; display: none;">
+		<form class="form-horizontal regist-form" role="form" method="post" action="/">
+		    <div class="pt-10 pl-15 f16">报名信息确认<span class="fa fa-times co2 pull-right pr-10 pointer close"></span></div>
+		    <div class="form-group pt-15 pr-30 pl-30">
+		    	<input type="text" required minlength='2' maxlength='10' name="regist_name" class="regist-name form-control" placeholder="你的联系名字，请填写真实姓名" />
+		    </div>
+		    <div class="form-group pr-30 pl-30">
+		    	<input type="text" required minlength='8' maxlength='15' name="regist_tel" class="regist-tel form-control" placeholder="你的联系电话，请确保电话真实"/>
+		    </div>
+		    <div class="form-group pr-30 pl-30 text-right">
+		    	<button type="submit" class="btn btn-danger regist-ok">确认</button>
+		    </div>
+		</form>
+	</div>
 </div>
 
 <ul class="nav nav-pills pt-15 qx-nav-pills">
@@ -55,13 +117,19 @@ $(document).ready(function(){
 		<a href="#person_list" class="black-blue" data-toggle="pill">报名列表</a>
 	</li>
 	<li class="pull-right pr-5">
-		<button type="submit" class="btn btn-danger">我 要 报 名</button>
+		<button type="submit" class="btn btn-danger btn-regist-activity">我 要 报 名</button>
+	</li>
+	<li class="pull-right pr-5">
+		<a href="javascript:void(0);" class="co2 pl-10 delete-activity" data-journey_id="{{activity.id}}"><span class="fa fa-trash-o pr-3"></span>删除</a>
+	</li>
+	<li class="pull-right pr-5">
+		<a href="javascript:void(0);" class="co2" data-toggle="modal" data-target="#edit_activity_modal" data-backdrop="static"><span class="fa fa-edit pr-3"></span>修改</a>
 	</li>
 </ul>
 <div class="tab-content">
 	<!-- 活动详情 -->
 	<div class="tab-pane fade pt-15 in active" id="activity_detail">
-		<div>
+		<div class="activity-content">
 			<p>
 				【 <b>行程安排</b>
 				】
@@ -86,6 +154,77 @@ $(document).ready(function(){
 				注：以上行程仅供参考，实际计划可能会因活动参加的人数、体能状况、新老驴比例、天气等因素而适当变动，以活动领队决定为准！！！（注意：如果活动前遇到下雨等极端恶劣天气，请及时联系领队了解活动安排）请在出发前一天查阅或收听收看天气预报，天气变化无常雨具必带。
 			</p>
 		</div>
+
+		<!-- 弹出层 -->
+		<div class="modal fade" id="edit_activity_modal">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <form class="form-horizontal" role="form" method="post" action="/" enctype="multipart/form-data">
+	                    <div class="modal-header">
+	                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+	                        <h4 class="modal-title">修改活动详情</h4>
+	                    </div>
+	                    <div class="modal-body">
+	                    	
+	                    		<div class="form-group pt-5">
+							        <label class="col-md-2 control-label">活动封面</label>
+							        <div class="col-md-3 pr pr-30">
+							            <input name="img" type="file" />
+							        </div>
+							    </div>
+								<div class="form-group pt-5">
+							        <label class="col-md-2 control-label">活动标题</label>
+							        <div class="col-md-10">
+							            <input type="text" class="form-control" name="activity_title" placeholder="活动标题" value='' required minlength='5' maxlength='128'>
+							        </div>
+							    </div>
+							    <div class="form-group pt-5">
+							        <label class="col-md-2 control-label">活动时间</label>
+							        <div class="col-md-3 pr pr-30">
+							            <input type="text" name="start_date" class="form-control date start-date" value="" readonly="" required>
+							            <span class="pa" style="top: 5px; right: -10px;">到</span>
+							        </div>
+							        <div class="col-md-3 pl-30">
+							            <input type="text" name="end_date" class="form-control date end-date" value="" readonly="" required>
+							        </div>
+							    </div>
+							    <div class="form-group pt-5">
+							        <label class="col-md-2 control-label">活动地点</label>
+							        <div class="col-md-10">
+							            <input type="text" class="form-control" name="activity_addr" placeholder="活动地点" value='' required minlength='5' maxlength='128' required>
+							        </div>
+							    </div>
+							    <div class="form-group pt-5">
+							        <label class="col-md-2 control-label">集合时间</label>
+							        <div class="col-md-3 pr pr-30">
+							            <input type="text" name="assemble_date" class="form-control date assemble-date" value="" readonly="" required>
+							        </div>
+							        <label class="col-md-3 control-label">报名截止时间</label>
+							        <div class="col-md-3 pr pr-30">
+							            <input type="text" name="stop_date" class="form-control date stop-date" value="" readonly="" required>
+							        </div>
+							    </div>
+							    <div class="form-group pt-5">
+							        <label class="col-md-2 control-label">集合地点</label>
+							        <div class="col-md-10">
+							            <input type="text" class="form-control" name="assemble_addr" placeholder="集合地点" value='{{journey_title}}' required minlength='5' maxlength='128'>
+							        </div>
+							    </div>
+							    <div class="form-group pt-5">
+							        <div class="col-md-12"><textarea id="modify_activity_editor"  name="activity_content" class="form-control" style="height: 260px"></textarea></div>
+							    </div>
+							
+					    </div>
+					    
+	                    <div class="modal-footer">
+	                        <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+	                        <button type="submit" class="btn btn-danger">保存</button>
+	                    </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+
 
 		<!-- 评论区 -->
 		<div class="pt-20">
@@ -153,10 +292,10 @@ $(document).ready(function(){
 					<th>#</th>
 					<th>头像</th>
 					<th>用户</th>
-					<th>性别</th>
 					<th>人数</th>
 					<th>报名日期</th>
-					<th>姓名</th>
+					<th>真实姓名</th>
+					<th>性别</th>
 					<th>联系电话</th>
 				</tr>
 			</thead>
@@ -165,11 +304,20 @@ $(document).ready(function(){
 					<td>1</td>
 					<td><img class="img-rounded" src="http://img0.zhixuan.com/newest_avatar_817c7c1a147611e486cf00163e003240!25m25"></td>
 					<td>随便玩玩</td>
-					<td>男</td>
 					<td>2</td>
 					<td>2014-08-08 12:56</td>
 					<td>习大大</td>
+					<td>男</td>
 					<td>13585958654</td>
+				</tr>
+
+				<tr>
+					<td>1</td>
+					<td><img class="img-rounded" src="http://img0.zhixuan.com/newest_avatar_817c7c1a147611e486cf00163e003240!25m25"></td>
+					<td>随便玩玩</td>
+					<td>2</td>
+					<td>2014-08-08 12:56</td>
+					<td colspan="3" class="bgc-eee">活动参与者才能查看</td>
 				</tr>
 			</tbody>
 		</table>
