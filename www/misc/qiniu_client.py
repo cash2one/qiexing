@@ -17,15 +17,15 @@ import qiniu.rs
 from common import utils
 
 
-HASH_KEY = 'zhixuanimg20140315'
-AK = 'DdZbYWvnh7XAEnu9s4WqnbN-7_0qM23lcKitiKrx'
-SK = '1VU-ve9ecmMDFBRvI-pWxTsW4oq4uS-c1Ea5WuxP'
+HASH_KEY = 'qimg20140806'
+AK = 'mgctGryW2bZJfUpeGONz2hIaI1Qd24-aSzQGtvfQ'
+SK = '7Wo2AcGEG1hDmJEYXmKaPcvrsPMdeFVIjCw64Ztz'
 
 qiniu.conf.ACCESS_KEY = AK
 qiniu.conf.SECRET_KEY = SK
 
 
-def get_upload_token(img_key=None, img_type='avatar', scope='zimg0'):
+def get_upload_token(img_key=None, img_type='avatar', scope='qimg0'):
     if img_key:
         scope = '%s:%s' % (scope, img_key)
     if img_type == 'avatar':
@@ -65,7 +65,7 @@ def upload_img(file_data, img_type='other', file_name=None):
     return True, key
 
 
-def batch_delete(lst_names, bucket_name='zimg0'):
+def batch_delete(lst_names, bucket_name='qimg0'):
     '''
     @note: 批量删除文件
     '''

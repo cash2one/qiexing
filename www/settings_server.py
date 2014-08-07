@@ -22,7 +22,7 @@ SERVER_NAME = 'QIEXING_WEB0' if not LOCAL_FLAG else 'DEVELOPER'
 SERVER_DOMAIN = 'iqiexing.com' if not LOCAL_FLAG else 'a.com:8000'
 MAIN_DOMAIN = 'http://www.%s' % SERVER_DOMAIN
 
-IMG0_DOMAIN = 'http://img0.iqiexing.com'    # 'http://zimg0.qiniudn.com'
+IMG0_DOMAIN = 'http://qimg0.qiniudn.com'
 
 EMAIL_FROM = u'"且行" <service@iqiexing.com>'
 EMAIL_HOST_USER = 'service@iqiexing.com'

@@ -8,7 +8,8 @@ import urllib
 from django.http import HttpResponse, Http404, HttpResponseRedirect
 from django.conf import settings
 
-from common import qiniu_client, debug
+from common import debug
+from www.misc import qiniu_client
 from www.misc.decorators import member_required
 
 
