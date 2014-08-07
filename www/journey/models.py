@@ -42,6 +42,12 @@ class Journey(models.Model):
         return UserBase().get_user_by_id(self.user_id)
 
     def get_cover(self):
+        import re
+
+        tag_img = re.compile('<img .*?src=[\"\'](.+?)[\"\']')
+        imgs = tag_img.findall(self.content)
+        if imgs:
+            return imgs[0]
         return '%s/img/default_journey_cover.jpeg' % settings.MEDIA_URL
 
 
