@@ -106,12 +106,14 @@ $(document).ready(function(){
                         <a href="javascript:void(0);" class="co2 say-to" data-user_name="{{answer.from_user.nick}}"><span class="fa fa-mail-forward pr-3"></span>回复</a>
                     </span>
 
+                    {% if answer.from_user.id == request.user.id or request.user.is_staff %}
                     <span class="f12 pl-5 pull-right">
                         <a href="javascript:void(0);" class="co2 remove-answer" data-answer_id="{{answer.id}}"><span class="fa fa-trash-o pr-3"></span>删除</a>
                     </span>
                     <span class="f12 pl-5 pull-right">
                         <a href="javascript:void(0);" class="co2 modify-answer" data-answer_id="{{answer.id}}"><span class="fa fa-edit pr-3"></span>修改</a>
                     </span>
+                    {% endif %}
                     
                 </div>
             </div>

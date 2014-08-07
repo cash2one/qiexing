@@ -171,14 +171,14 @@ class AnswerBase(object):
         return Answer.objects.filter(obj_id=obj_id, obj_type=obj_type, state=True)
 
     def get_user_received_answer(self, user_id):
-        return Answer.objects.select_related('question').filter(to_user_id=user_id, state=True)\
+        return Answer.objects.filter(to_user_id=user_id, state=True)\
             .exclude(from_user_id=user_id).order_by('-id')
 
     def get_user_sended_answer(self, user_id):
-        return Answer.objects.select_related('question').filter(from_user_id=user_id, state=True).order_by('-id')
+        return Answer.objects.filter(from_user_id=user_id, state=True).order_by('-id')
 
     def get_at_answers(self, user_id):
-        return [aa.answer for aa in AtAnswer.objects.select_related('answer', 'answer__question').filter(user_id=user_id)]
+        return [aa.answer for aa in AtAnswer.objects.select_related('answer').filter(user_id=user_id)]
 
     @answer_required
     def get_answer_admin_permission(self, answer, user):
@@ -214,7 +214,7 @@ class AnswerBase(object):
             ps = dict(id=id)
             if need_state:
                 ps.update(dict(state=True))
-            return Answer.objects.select_related('question').get(**ps)
+            return Answer.objects.get(**ps)
         except Answer.DoesNotExist:
             return None
 
@@ -227,7 +227,8 @@ class AnswerBase(object):
         answer_summary = {}
         if answer:
             user = answer.get_from_user()
-            answer_summary = dict(answer_id=answer.id, question_id=answer.question.id, question_title=answer.question.title,
+            obj = self.get_obj(answer.obj_id, answer.obj_type)
+            answer_summary = dict(answer_id=answer.id, obj_id=answer.obj_id, obj_title=obj.title,
                                   answer_summary=answer.get_summary(), answer_like_count=answer.like_count, answer_user_id=user.id,
                                   answer_user_avatar=user.get_avatar_65(), answer_user_nick=user.nick, answer_user_des=user.des or '')
         return answer_summary
