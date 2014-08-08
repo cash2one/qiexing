@@ -15,10 +15,10 @@ from www.answer.models import Answer, AtAnswer
 
 
 dict_err = {
-    40100: u'标题过于简单，稍微详述一下',
-    40101: u'标题过于冗长，稍微提炼一下',
-    40102: u'内容过于简单，稍微详述一下',
-    40103: u'内容过于冗长，稍微提炼一下',
+    20100: u'标题过于简单，稍微详述一下',
+    20101: u'标题过于冗长，稍微提炼一下',
+    20102: u'内容过于简单，稍微详述一下',
+    20103: u'内容过于冗长，稍微提炼一下',
 
     40800: u'对象不存在或者已删除',
     40801: u'回答不存在或者已删除',
@@ -72,14 +72,17 @@ class AnswerBase(object):
 
     def get_obj(self, obj_id, obj_type):
         from www.journey.models import Journey
+        from www.activity.models import Activity
 
         obj_type = str(obj_type)
         try:
             if obj_type == "0":
                 return Journey.objects.get(id=obj_id)
+            elif obj_type == "1":
+                return Activity.objects.get(id=obj_id)
             else:
                 pass
-        except Journey.DoesNotExist:
+        except Journey.DoesNotExist, Activity.objects.DoesNotExist:
             pass
         raise Exception, u"obj does not exist"
 

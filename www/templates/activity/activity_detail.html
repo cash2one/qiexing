@@ -1,6 +1,7 @@
 {% extends "activity/base_activity.html" %}
-
-{% block title %}活动详情{% endblock title %}
+{% load custom_tags %}
+{% load custom_filters %}
+{% block title %}{{activity.title}}{% endblock title %}
 
 {% block javascript %}
 <script type="text/javascript">
@@ -60,36 +61,32 @@ $(document).ready(function(){
 {% block left %}
 <div class="row pt-25 pr">
 	<div class="col-md-6">
-		<img class="w pl-3 pr-3 pt-3 pb-3" src="http://file.517huwai.com/Public/Thumb/?w=324&h=227&t=f&url=./Public/Uploads/2014/07/30/53d8e690cf232.jpg"></div>
+		<img class="w pl-3 pr-3 pt-3 pb-3" src="{{activity.activity_cover}}" alt="{{activity.title}}"></div>
 	<div class="col-md-6">
-		<h4 class="mt-5 fb">周末两玩：徒步老掌沟至坝上草原骑马</h4>
+		<h4 class="mt-5 fb">{{activity.title}}</h4>
 		<div class="pt-10">
 			<span class="fb pr-10">活动发起人:</span>
-			<a href="#">精灵公子</a>
+			<a href="{{activity.user.get_url}}">{{activity.user.nick}}</a>
 		</div>
 		<div class="pt-5">
 			<span class="fb pr-10">活动时间:</span>
-			2014-08-08 到 2014-08-10
+			{{activity.start_date}} 到 {{activity.end_date}}
 		</div>
 		<div class="pt-5">
 			<span class="fb pr-10">活动地点:</span>
-			承德 河北丰宁县
+			{{activity.assembly_point}}
 		</div>
 		<div class="pt-5">
 			<span class="fb pr-10">报名截止时间:</span>
-			2014-08-07 18:00
-		</div>
-		<div class="pt-5">
-			<span class="fb pr-10">集合时间:</span>
-			2014-08-08 20:20
+			{{activity.sign_up_end_date}}
 		</div>
 		<div class="pt-5">
 			<span class="fb pr-10">集合地点:</span>
-			健德门桥的东北角马兰拉面馆西侧马路边
+			{{activity.assembly_point}}
 		</div>
 		<div class="pt-5">
 			<span class="fb pr-10">参加人数:</span>
-			<span class="co5">28 人</span>
+			<span class="co5">{{activity.person_count}}人</span>
 		</div>
 	</div>
 
@@ -129,31 +126,7 @@ $(document).ready(function(){
 <div class="tab-content">
 	<!-- 活动详情 -->
 	<div class="tab-pane fade pt-15 in active" id="activity_detail">
-		<div class="activity-content">
-			<p>
-				【 <b>行程安排</b>
-				】
-			</p>
-			<p>
-				8月8日晚20.20集合，30准时出发！
-				<br>
-				8月9日凌晨到达老掌沟，扎营或车上睡觉。
-				<br>
-				早7：30出发；
-				<br>
-				下午15：00左右到达目的地东四合泉；
-				<br>
-				晚上篝火狂欢。
-				<br>
-				8月10日早7:00早饭，早饭后骑马；
-				<br>
-				中午14:00上车回北京；
-				<br>
-				晚19：00左右到京。
-				<br>
-				注：以上行程仅供参考，实际计划可能会因活动参加的人数、体能状况、新老驴比例、天气等因素而适当变动，以活动领队决定为准！！！（注意：如果活动前遇到下雨等极端恶劣天气，请及时联系领队了解活动安排）请在出发前一天查阅或收听收看天气预报，天气变化无常雨具必带。
-			</p>
-		</div>
+		<div class="activity-content">{{activity.content|safe}}</div>
 
 		<!-- 弹出层 -->
 		<div class="modal fade" id="edit_activity_modal">
@@ -226,62 +199,8 @@ $(document).ready(function(){
         </div>
 
 
-		<!-- 评论区 -->
-		<div class="pt-20">
-			<div class="f16 border-bottom bdc-ddd"><h4>共 18 条回复</h4></div>
-			<ul class="list-group">
-				<li class="list-group-item bdc-eee border-left-0 pl-0 border-right-0 f13">
-					<img class="img-rounded avatar-45 pa" src="http://img0.zhixuan.com/newest_avatar_436e7296f75911e3b4cd00163e003240!65m65">
-					<div class="pl-60">
-						<div class=""><a href="#">随便玩玩</a><span class="co2 pl-5">(你是我的小呀小苹果，怎么爱你都嫌多!)</span></div>
-						<div class="pt-10  line-height-25">谢谢李老师的文章……看得想哭了。觉得有什么东西梗在心里说不上来。翻武志红老师的博客，也有说法是「拖延是无法与当前在做的事建立联结」，也深以为然。许多事只是个要完成的任务，完成了我们仿佛就成了理想中的那个人，但这任务本身可厌可憎，我们不以它为乐，大概是这种感觉，很难过</div>
-						<div class="pt-10">
-							<span class="co2">2014-05-05 12:45:45</span>
-							<span class="f12 pl-5">
-								<a href="javascript:void(0);" class="co2 say-to" data-user_name="呵呵"><span class="fa fa-mail-forward pr-3"></span>回复</a>
-							</span>
-						</div>
-					</div>
-				</li>
-				<li class="list-group-item bdc-eee border-left-0 pl-0 border-right-0 f13">
-					<img class="img-rounded avatar-45 pa" src="http://img0.zhixuan.com/newest_avatar_436e7296f75911e3b4cd00163e003240!65m65">
-					<div class="pl-60">
-						<div class=""><a href="#">随便玩玩</a><span class="co2 pl-5">(你是我的小呀小苹果，怎么爱你都嫌多!)</span></div>
-						<div class="pt-10  line-height-25">谢谢李老师的文章……看得想哭了。觉得有什么东西梗在心里说不上来。翻武志红老师的博客，也有说法是「拖延是无法与当前在做的事建立联结」，也深以为然。许多事只是个要完成的任务，完成了我们仿佛就成了理想中的那个人，但这任务本身可厌可憎，我们不以它为乐，大概是这种感觉，很难过</div>
-						<div class="pt-10">
-							<span class="co2">2014-05-05 12:45:45</span>
-							<span class="f12 pl-5">
-								<a href="javascript:void(0);" class="co2 say-to" data-user_name="嘿嘿"><span class="fa fa-mail-forward pr-3"></span>回复</a>
-							</span>
-						</div>
-					</div>
-				</li>
-				<li class="list-group-item bdc-eee border-left-0 pl-0 border-right-0 f13">
-					<img class="img-rounded avatar-45 pa" src="http://img0.zhixuan.com/newest_avatar_436e7296f75911e3b4cd00163e003240!65m65">
-					<div class="pl-60">
-						<div class=""><a href="#">随便玩玩</a><span class="co2 pl-5">(你是我的小呀小苹果，怎么爱你都嫌多!)</span></div>
-						<div class="pt-10  line-height-25">谢谢李老师的文章……看得想哭了。觉得有什么东西梗在心里说不上来。翻武志红老师的博客，也有说法是「拖延是无法与当前在做的事建立联结」，也深以为然。许多事只是个要完成的任务，完成了我们仿佛就成了理想中的那个人，但这任务本身可厌可憎，我们不以它为乐，大概是这种感觉，很难过</div>
-						<div class="pt-10">
-							<span class="co2">2014-05-05 12:45:45</span>
-							<span class="f12 pl-5">
-								<a href="javascript:void(0);" class="co2 say-to" data-user_name="嘻嘻"><span class="fa fa-mail-forward pr-3"></span>回复</a>
-							</span>
-						</div>
-					</div>
-				</li>
-			</ul>
-		</div>
-		<!-- 回复文本框 -->
-		<div class="answer-main">
-			<form class="answer-form" role="form" method="post" action="/journey/create_answer/{{journey.id}}">
-	            <div class="form-group mb-0">
-	                <textarea id="answer_editor" name="answer_content" class="form-control" style="height: 200px;"></textarea>
-	            </div>
-	            <div class="form-group pull-right">
-	                <button type="submit" class="btn btn-danger">提交你的回答</button>
-	            </div>
-	        </form>
-		</div>
+		<!-- 回复区 -->
+		{{answers_list_params|answers_list:request}}
 	</div>
 
 	<!-- 报名人列表 -->

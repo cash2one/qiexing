@@ -62,7 +62,7 @@
                         </li>
                     </ul>
 
-                    <ul class="nav navbar-nav navbar-right mt-20">
+                    <ul class="nav navbar-nav navbar-right">
                         {% if request.user.is_authenticated %}
                         <li class="user-menu dropdown">
                             <a href="{{request.user.get_url}}" class="dropdown-toggle user w140" data-toggle="dropdown" title="{{request.user.nick}}" style="padding-top: 12px; padding-bottom: 13px;">
