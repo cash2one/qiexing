@@ -64,6 +64,7 @@ body {
 .pl-35{padding-left: 35px;}
 .pl-30{padding-left: 30px;}
 .pl-40{padding-left: 40px;}
+.pl-45{padding-left: 45px;}
 .pl-50{padding-left: 50px;}
 .pl-60{padding-left: 60px;}
 .pl-70{padding-left: 70px;}
@@ -132,6 +133,11 @@ body {
 .avatar-25{
 	width: 25px;
 	height: 25px;
+}
+
+.avatar-35{
+  width: 35px;
+  height: 35px;
 }
 
 .avatar-45{

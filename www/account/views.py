@@ -206,7 +206,18 @@ def logout(request):
     return HttpResponseRedirect('/')
 
 
+def user_journey(request, user_id=None, template_name="account/user_journey.html"):
+
+    return render_to_response(template_name, locals(), context_instance=RequestContext(request))
+
+
+def user_comment(request, user_id=None, template_name="account/user_comment.html"):
+
+    return render_to_response(template_name, locals(), context_instance=RequestContext(request))
+
 # ===================================================ajax部分=================================================================#
+
+
 @member_required
 def get_user_info_by_id(request):
     '''
