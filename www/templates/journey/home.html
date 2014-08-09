@@ -1,5 +1,6 @@
 {% extends "base/base.html" %}
-
+{% load custom_tags %}
+{% load custom_filters %}
 {% block title %}首页{% endblock title %}
 
 {% block container %}
@@ -31,51 +32,23 @@
 <div class="mt-15">
     <h4 class="pt-15 fb"><a href="/activity/">推荐活动</a></h4>
     <ul class="row list-inline">
+        {% for activity in activitys %}
         <li class="col-md-4 pl-0">
             <div class="pl-15 pr-15">
                 <div>
-                    <a href="#">
-                        <img class="w" src="http://static.doyouhike.net/files/recommend/2014/07/25/4/4607a892a6d17d68b68779efd2f0d103.jpg">
+                    <a href="{{activity.get_url}}">
+                        <img class="w" src="{{activity.activity_cover}}" alt="{{activity.title}}" style="height: 225px;">
                     </a>
                 </div>
                 <div class="pt-10">
-                    <a href="#" class="f16">东极岛</a>
+                    <a href="{{activity.get_url}}" class="f16" ht>{{activity.title}}</a>
                 </div>
                 <div class="pt-10">
-                    <a href="#" class="co2">大陆之东的岛屿，海浪都来亲吻你，鱼儿都来拥抱你，你是人间仙境，太平洋的阳光它最先照耀这~啊，东极岛。</a>
+                    <a href="{{activity.get_url}}" class="co2">{{activity.get_summary|str_display:45}}</a>
                 </div>
             </div>
         </li>
-        <li class="col-md-4 pl-0">
-            <div class="pl-15 pr-15">
-                <div>
-                    <a href="#">
-                        <img class="w" src="http://static.doyouhike.net/files/recommend/2014/08/04/b/b073f8a9b7b70804111616adeae78fcc.jpg">
-                    </a>
-                </div>
-                <div class="pt-10">
-                    <a href="#" class="f16">甘南</a>
-                </div>
-                <div class="pt-10">
-                    <a href="#" class="co2">流经甘南的黄河赐予了这里苍茫高远的气质， 草原的风吹来了谁的呼唤，像少年一样在旷野中飞驰吧！</a>
-                </div>
-            </div>
-        </li>
-        <li class="col-md-4 pl-0">
-            <div class="pl-15 pr-15">
-                <div>
-                    <a href="#">
-                        <img class="w" src="http://static.doyouhike.net/files/recommend/2014/08/04/0/0f9e4ce2d5e4fb8e4bdd710fda1a77e2.jpg">
-                    </a>
-                </div>
-                <div class="pt-10">
-                    <a href="#" class="f16">瑞典</a>
-                </div>
-                <div class="pt-10">
-                    <a href="#" class="co2">这里是维京海盗的故乡、诺贝尔奖诞生地、IKEA的国度~重点是，8月！瑞典龙虾节！吃货们快去攻占瑞典吧！</a>
-                </div>
-            </div>
-        </li>
+        {% endfor %}
     </ul>
 </div>
 
@@ -83,70 +56,24 @@
 <div class="mt-15">
     <h4 class="pt-15 fb"><a href="/journey/">热门游记</a></h4>
     <ul class="row list-inline">
+        {% for journey in journeys %}
         <li class="col-md-3 pl-0">
             <div class="pl-15 pr-15">
                 <div>
-                    <a href="/journey/1">
-                        <img class="w" src="http://static.doyouhike.net/files/recommend/2014/07/28/d/d00589db63d6c3e50352d266bcfd47a5.jpg">
+                    <a href="{{journey.get_url}}">
+                        <img class="w" src="{{journey.get_cover}}" alt="{{journey.title}}" style="height: 250px;">
                     </a>
                 </div>
                 <div class="pt-10">
-                    <a href="/journey/1" class="f16">风雨依稀，彩虹依旧-年保徒步</a>
+                    <a href="{{journey.get_url}}" class="f16">{{journey.title|str_display:13}}</a>
                 </div>
                 <div class="pt-10 row">
-                    <div class="col-md-6 f12"><a class="co2" href="#">寻找青鸟妹妹</a></div>
-                    <div class="col-md-6 text-right f12 co2">1200次浏览</div>
+                    <div class="col-md-6 f12"><a class="co2" href="{{journey.user.get_url}}">{{journey.user.nick}}</a></div>
+                    <div class="col-md-6 text-right f12 co2">{{journey.views_count}}次浏览</div>
                 </div>
             </div>
         </li>
-        <li class="col-md-3 pl-0">
-            <div class="pl-15 pr-15">
-                <div>
-                    <a href="#">
-                        <img class="w" src="http://static.doyouhike.net/files/recommend/2014/07/28/4/43504114bfaedd01c30790fd73ea2413.jpg">
-                    </a>
-                </div>
-                <div class="pt-10">
-                    <a href="#" class="f16">风雨依稀，彩虹依旧-年保徒步</a>
-                </div>
-                <div class="pt-10 row">
-                    <div class="col-md-6 f12"><a class="co2" href="#">寻找青鸟妹妹</a></div>
-                    <div class="col-md-6 text-right f12 co2">1200次浏览</div>
-                </div>
-            </div>
-        </li>
-        <li class="col-md-3 pl-0">
-            <div class="pl-15 pr-15">
-                <div>
-                    <a href="#">
-                        <img class="w" src="http://static.doyouhike.net/files/recommend/2014/07/28/0/0e2d6a42242d23f41378207df1165fef.jpg">
-                    </a>
-                </div>
-                <div class="pt-10">
-                    <a href="#" class="f16">风雨依稀，彩虹依旧-年保徒步</a>
-                </div>
-                <div class="pt-10 row">
-                    <div class="col-md-6 f12"><a class="co2" href="#">寻找青鸟妹妹</a></div>
-                    <div class="col-md-6 text-right f12 co2">1200次浏览</div>
-                </div>
-            </div>
-        </li>
-        <li class="col-md-3 pl-0">
-            <div class="pl-15 pr-15">
-                <div>
-                    <a href="#">
-                        <img class="w" src="http://static.doyouhike.net/files/recommend/2014/07/14/6/65e6dedbcce1f569ff075e5dfa958616.jpg">
-                    </a>
-                </div>
-                <div class="pt-10">
-                    <a href="#" class="f16">风雨依稀，彩虹依旧-年保徒步</a>
-                </div>
-                <div class="pt-10 row">
-                    <div class="col-md-6 f12"><a class="co2" href="#">寻找青鸟妹妹</a></div>
-                    <div class="col-md-6 text-right f12 co2">1200次浏览</div>
-                </div>
-            </div>
-        </li>
+        {% endfor %}
     </ul>
 </div>
 {% endblock container %}
