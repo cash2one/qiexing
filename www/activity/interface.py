@@ -93,7 +93,7 @@ class ActivityBase(object):
                 transaction.rollback(using=ACTIVITY_DB)
                 return 99800, dict_err.get(99800)
 
-            errcode, errmsg = JourneyBase().validata_journey_element(title, content, min_title_len=5)
+            errcode, errmsg = JourneyBase().validata_activity_element(title, content, min_title_len=5)
             if not errcode == 0:
                 transaction.rollback(using=ACTIVITY_DB)
                 return errcode, errmsg
@@ -118,11 +118,11 @@ class ActivityBase(object):
     def modify_activity(self, activity, title, content, start_date, end_date, sign_up_end_date, addr, assembly_point, activity_cover=None):
         try:
             content = utils.filter_script(content)
-            if not all((title, content, start_date, end_date, sign_up_end_date, activity_cover, addr, assembly_point)):
+            if not all((title, content, start_date, end_date, sign_up_end_date, addr, assembly_point)):
                 transaction.rollback(using=ACTIVITY_DB)
                 return 99800, dict_err.get(99800)
 
-            errcode, errmsg = JourneyBase().validata_journey_element(title, content, min_title_len=5)
+            errcode, errmsg = JourneyBase().validata_activity_element(title, content, min_title_len=5)
             if not errcode == 0:
                 return errcode, errmsg
 

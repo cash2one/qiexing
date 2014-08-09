@@ -51,8 +51,11 @@ def create_activity(request, template_name='activity/create_activity.html'):
         sign_up_end_date = request.POST.get('sign_up_end_date', '').strip()
         assembly_point = request.POST.get('assembly_point', '').strip()
 
-        flag, img_name = qiniu_client.upload_img(request.FILES.get('activity_cover'), img_type='activity')
-        img_name = '%s/%s' % (settings.IMG0_DOMAIN, img_name) if flag else ""
+        activity_cover = request.FILES.get('activity_cover')
+        img_name = None
+        if activity_cover:
+            flag, img_name = qiniu_client.upload_img(activity_cover, img_type='activity')
+            img_name = '%s/%s' % (settings.IMG0_DOMAIN, img_name) if flag else ""
 
         errcode, result = ab.create_activity(request.user.id, activity_title, activity_content, start_date, end_date,
                                              sign_up_end_date, activity_addr, assembly_point, img_name)
@@ -61,3 +64,39 @@ def create_activity(request, template_name='activity/create_activity.html'):
         else:
             error_msg = result
     return render_to_response(template_name, locals(), context_instance=RequestContext(request))
+
+
+@staff_required
+def modify_activity(request, activity_id):
+    if request.POST:
+        activity_title = request.POST.get('activity_title', '').strip()
+        activity_content = request.POST.get('activity_content', '').strip()
+        start_date = request.POST.get('start_date', '').strip()
+        end_date = request.POST.get('end_date', '').strip()
+        activity_addr = request.POST.get('activity_addr', '').strip()
+        sign_up_end_date = request.POST.get('sign_up_end_date', '').strip()
+        assembly_point = request.POST.get('assembly_point', '').strip()
+
+        activity_cover = request.FILES.get('activity_cover')
+        img_name = None
+        if activity_cover:
+            flag, img_name = qiniu_client.upload_img(activity_cover, img_type='activity')
+            img_name = '%s/%s' % (settings.IMG0_DOMAIN, img_name) if flag else ""
+
+        activity = ab.get_activity_by_id(activity_id)
+        errcode, result = ab.modify_activity(activity, activity_title, activity_content, start_date, end_date,
+                                             sign_up_end_date, activity_addr, assembly_point, img_name)
+        if errcode == 0:
+            request.session['success_msg'] = u'修改成功'
+        else:
+            request.session['error_msg'] = result
+        return HttpResponseRedirect(activity.get_url())
+
+# ===================================================ajax部分=================================================================#
+
+
+@staff_required
+@common_ajax_response
+def remove_activity(request):
+    activity_id = request.POST.get('activity_id', '').strip()
+    return ab.remove_activity(activity_id, request.user)
