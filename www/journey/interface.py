@@ -76,7 +76,7 @@ class JourneyBase(object):
             return 20103, dict_err.get(20103)
         return 0, dict_err.get(0)
 
-    def validata_journey_element(self, journey_title, journey_content, min_title_len=10):
+    def validate_journey_element(self, journey_title, journey_content, min_title_len=10):
         errcode, errmsg = self.validate_title(journey_title, min_title_len)
         if not errcode == 0:
             return errcode, errmsg
@@ -98,7 +98,7 @@ class JourneyBase(object):
             journey_title = utils.filter_script(journey_title)
             journey_content = utils.filter_script(journey_content)
 
-            errcode, errmsg = self.validata_journey_element(journey_title, journey_content)
+            errcode, errmsg = self.validate_journey_element(journey_title, journey_content)
             if not errcode == 0:
                 transaction.rollback(using=JOURNEY_DB)
                 return errcode, errmsg
@@ -127,7 +127,7 @@ class JourneyBase(object):
             journey_title = utils.filter_script(journey_title)
             journey_content = utils.filter_script(journey_content)
 
-            errcode, errmsg = self.validata_journey_element(journey_title, journey_content)
+            errcode, errmsg = self.validate_journey_element(journey_title, journey_content)
             if not errcode == 0:
                 transaction.rollback(using=JOURNEY_DB)
                 return errcode, errmsg

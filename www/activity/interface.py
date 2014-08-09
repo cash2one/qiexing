@@ -93,7 +93,7 @@ class ActivityBase(object):
                 transaction.rollback(using=ACTIVITY_DB)
                 return 99800, dict_err.get(99800)
 
-            errcode, errmsg = JourneyBase().validata_activity_element(title, content, min_title_len=5)
+            errcode, errmsg = JourneyBase().validate_journey_element(title, content, min_title_len=5)
             if not errcode == 0:
                 transaction.rollback(using=ACTIVITY_DB)
                 return errcode, errmsg
@@ -122,7 +122,7 @@ class ActivityBase(object):
                 transaction.rollback(using=ACTIVITY_DB)
                 return 99800, dict_err.get(99800)
 
-            errcode, errmsg = JourneyBase().validata_activity_element(title, content, min_title_len=5)
+            errcode, errmsg = JourneyBase().validate_journey_element(title, content, min_title_len=5)
             if not errcode == 0:
                 return errcode, errmsg
 
@@ -183,3 +183,13 @@ class ActivityBase(object):
                                     activity_summary=activity.get_summary(), activity_like_count=activity.like_count, activity_user_id=user.id,
                                     activity_user_avatar=user.get_avatar_65(), activity_user_nick=user.nick, activity_user_des=user.des or '')
         return activity_summary
+
+
+class ActivityPersonBase(object):
+
+    def __init__(self):
+        pass
+
+    @activity_required
+    def join_activity(self, activity, user_id):
+        pass
