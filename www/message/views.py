@@ -10,91 +10,91 @@ from common import utils, page, debug, user_agent_parser
 from www.misc import qiniu_client
 from www.misc.decorators import member_required, common_ajax_response
 from www.tasks import async_clear_count_info_by_code
-from www.account import interface as interface_account
-from www.question import interface as interface_question
+# from www.account import interface as interface_account
+# from www.question import interface as interface_question
 from www.message import interface
 
 
-urb = interface.UnreadCountBase()
-lb = interface_question.LikeBase()
-ab = interface_question.AnswerBase()
-ub = interface_account.UserBase()
-iab = interface.InviteAnswerBase()
+# urb = interface.UnreadCountBase()
+# lb = interface_question.LikeBase()
+# ab = interface_question.AnswerBase()
+# ub = interface_account.UserBase()
+# iab = interface.InviteAnswerBase()
 
 
-@member_required
+# @member_required
 def system_message(request, template_name='message/system_message.html'):
-    system_messages = urb.get_system_message(request.user.id)
+    # system_messages = urb.get_system_message(request.user.id)
 
     # 分页
-    page_num = int(request.REQUEST.get('page', 1))
-    page_objs = page.Cpt(system_messages, count=10, page=page_num).info
-    system_messages = page_objs[0]
-    page_params = (page_objs[1], page_objs[4])
+    # page_num = int(request.REQUEST.get('page', 1))
+    # page_objs = page.Cpt(system_messages, count=10, page=page_num).info
+    # system_messages = page_objs[0]
+    # page_params = (page_objs[1], page_objs[4])
 
     # 异步清除未读消息数
-    async_clear_count_info_by_code(request.user.id, code='system_message')
-    unread_count_info = urb.get_unread_count_info(request.user)
+    # async_clear_count_info_by_code(request.user.id, code='system_message')
+    # unread_count_info = urb.get_unread_count_info(request.user)
     return render_to_response(template_name, locals(), context_instance=RequestContext(request))
 
 
-@member_required
+# @member_required
 def received_like(request, template_name='message/received_like.html'):
 
-    likes = lb.get_to_user_likes(request.user.id)
+    # likes = lb.get_to_user_likes(request.user.id)
 
     # 分页
-    page_num = int(request.REQUEST.get('page', 1))
-    page_objs = page.Cpt(likes, count=10, page=page_num).info
-    likes = page_objs[0]
-    page_params = (page_objs[1], page_objs[4])
-    likes = lb.format_likes(likes)
-    likes_count = page_objs[5]
+    # page_num = int(request.REQUEST.get('page', 1))
+    # page_objs = page.Cpt(likes, count=10, page=page_num).info
+    # likes = page_objs[0]
+    # page_params = (page_objs[1], page_objs[4])
+    # likes = lb.format_likes(likes)
+    # likes_count = page_objs[5]
 
     # 异步清除未读消息数
-    async_clear_count_info_by_code(request.user.id, code='received_like')
-    unread_count_info = urb.get_unread_count_info(request.user)
+    # async_clear_count_info_by_code(request.user.id, code='received_like')
+    # unread_count_info = urb.get_unread_count_info(request.user)
 
-    user_agent_dict = user_agent_parser.Parse(request.META.get('HTTP_USER_AGENT'))
+    # user_agent_dict = user_agent_parser.Parse(request.META.get('HTTP_USER_AGENT'))
 
     # 手机客户端换模板
-    if user_agent_dict['os']['family'] in ('Android', 'iOS'):
-        template_name = 'message/received_like_m.html'
+    # if user_agent_dict['os']['family'] in ('Android', 'iOS'):
+    #     template_name = 'message/received_like_m.html'
 
     return render_to_response(template_name, locals(), context_instance=RequestContext(request))
 
 
-@member_required
+# @member_required
 def received_answer(request, template_name='message/received_answer.html'):
-    answers = ab.get_user_received_answer(request.user.id)
+    # answers = ab.get_user_received_answer(request.user.id)
 
     # 分页
-    page_num = int(request.REQUEST.get('page', 1))
-    page_objs = page.Cpt(answers, count=10, page=page_num).info
-    answers = page_objs[0]
-    page_params = (page_objs[1], page_objs[4])
-    answers = ab.format_answers(answers)
+    # page_num = int(request.REQUEST.get('page', 1))
+    # page_objs = page.Cpt(answers, count=10, page=page_num).info
+    # answers = page_objs[0]
+    # page_params = (page_objs[1], page_objs[4])
+    # answers = ab.format_answers(answers)
 
     # 异步清除未读消息数
-    async_clear_count_info_by_code(request.user.id, code='received_answer')
-    unread_count_info = urb.get_unread_count_info(request.user)
+    # async_clear_count_info_by_code(request.user.id, code='received_answer')
+    # unread_count_info = urb.get_unread_count_info(request.user)
     return render_to_response(template_name, locals(), context_instance=RequestContext(request))
 
 
-@member_required
+# @member_required
 def at_answer(request, template_name='message/at_answer.html'):
-    answers = ab.get_at_answers(request.user.id)
+    # answers = ab.get_at_answers(request.user.id)
 
     # 分页
-    page_num = int(request.REQUEST.get('page', 1))
-    page_objs = page.Cpt(answers, count=10, page=page_num).info
-    answers = page_objs[0]
-    page_params = (page_objs[1], page_objs[4])
-    answers = ab.format_answers(answers)
+    # page_num = int(request.REQUEST.get('page', 1))
+    # page_objs = page.Cpt(answers, count=10, page=page_num).info
+    # answers = page_objs[0]
+    # page_params = (page_objs[1], page_objs[4])
+    # answers = ab.format_answers(answers)
 
     # 异步清除未读消息数
-    async_clear_count_info_by_code(request.user.id, code='at_answer')
-    unread_count_info = urb.get_unread_count_info(request.user)
+    # async_clear_count_info_by_code(request.user.id, code='at_answer')
+    # unread_count_info = urb.get_unread_count_info(request.user)
     return render_to_response(template_name, locals(), context_instance=RequestContext(request))
 
 

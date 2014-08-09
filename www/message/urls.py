@@ -4,6 +4,7 @@ from django.conf.urls import patterns, include, url
 
 urlpatterns = patterns('www.message.views',
                        url(r'^$', 'system_message'),
+                       url(r'^system_message/?$', 'system_message'),
                        url(r'^received_like/?$', 'received_like'),
                        url(r'^received_answer/?$', 'received_answer'),
                        url(r'^at_answer/?$', 'at_answer'),

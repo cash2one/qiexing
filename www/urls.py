@@ -22,6 +22,7 @@ urlpatterns = patterns('',
                        url(r'^activity/', include('www.activity.urls')),
                        url(r'^sight/', include('www.sight.urls')),
                        url(r'^answer/', include('www.answer.urls')),
+                       url(r'^message/', include('www.message.urls')),
 
                        url(r'^p/(?P<user_id>\w+)?$', 'www.account.views.user_journey'),
                        url(r'^p/(?P<user_id>\w+)/user_comment/?$', 'www.account.views.user_comment'),
