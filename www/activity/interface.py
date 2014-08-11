@@ -2,13 +2,13 @@
 
 import datetime
 from django.db import transaction
-from django.db.models import F
+# from django.db.models import F
 
-from common import utils, debug, cache
+from common import utils, debug
 from www.misc.decorators import cache_required
 from www.misc import consts
-from www.tasks import async_send_email
-from www.message.interface import UnreadCountBase
+# from www.tasks import async_send_email
+# from www.message.interface import UnreadCountBase
 from www.account.interface import UserBase
 from www.journey.interface import JourneyBase
 from www.activity.models import Activity, ActivityPerson

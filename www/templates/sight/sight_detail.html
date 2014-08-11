@@ -12,45 +12,35 @@
 
 {% block container %}
 <div class="col-md-8">
-	<h3><span class="co5">成都</span> | <span class="co2">Chengdu</span></h3>
+    <h3><span class="co5">{{sight.name}}</span> | <span class="co2">{{sight.code}}</span></h3>
 
-	<div id="carousel-example-generic" class="carousel slide mt-15" data-ride="carousel">
-	    <ol class="carousel-indicators">
-	        <li data-target="#carousel-example-generic" data-slide-to="0" class="active"></li>
-	        <li data-target="#carousel-example-generic" data-slide-to="1" class=""></li>
-	        <li data-target="#carousel-example-generic" data-slide-to="2" class=""></li>
-	    </ol>
-	    <div class="carousel-inner" role="listbox">
-	        <div class="item active">
-	            <img src="http://www.76mof.com/Uploadfiles/20140611-122112.jpg"></div>
-	        <div class="item">
-	            <img src="http://www.76mof.com/Uploadfiles/20140610-092322.jpg"></div>
-	        <div class="item">
-	            <img src="http://www.76mof.com/Uploadfiles/20140611-122112.jpg"></div>
-	    </div>
-	    <a class="left carousel-control" href="#carousel-example-generic" role="button" data-slide="prev">
-	        <!-- <span class="glyphicon glyphicon-chevron-left"></span> -->
-	        <span class="sr-only">Previous</span>
-	    </a>
-	    <a class="right carousel-control" href="#carousel-example-generic" role="button" data-slide="next">
-	        <!-- <span class="glyphicon glyphicon-chevron-right"></span> -->
-	        <span class="sr-only">Next</span>
-	    </a>
-	</div>
+    {% if sight.imgs %}
+    <div data-ride="carousel" class="carousel slide mt-15" id="carousel-example-generic">
+        <ol class="carousel-indicators">
+            <!-- <li class="active" data-slide-to="0" data-target="#carousel-example-generic"></li> -->
+            {% for img in sight.imgs %}
+            <li class="{% if forloop.first %}active{% endif %}" data-slide-to="{{forloop.counter0}}" data-target="#carousel-example-generic"></li>
+            {% endfor %}
+        </ol>
+        <div role="listbox" class="carousel-inner">
+            <!-- <div class="item active"><img src="http://www.76mof.com/Uploadfiles/20140611-122112.jpg"></div> -->
+            {% for img in sight.imgs %}
+            <div class="item{% if forloop.first %} active{% endif %}"><img src="{{img.img}}" alt="{{sight.name}}"></div>
+            {% endfor %}
+        </div>
+        <a data-slide="prev" role="button" href="#carousel-example-generic" class="left carousel-control">
+            <span class="sr-only">Previous</span>
+        </a>
+        <a data-slide="next" role="button" href="#carousel-example-generic" class="right carousel-control">
+            <span class="sr-only">Next</span>
+        </a>
+    </div>
+    {% endif %}
 
-	<div class="content f15 line-height-25 pt-25">
-		<p>
-			稻城，古名“稻坝”。境内最高海拔6032米，最低海拔2000米，垂直高差达4032米。藏语意为山谷沟口开阔之地。稻城历史文化悠久，其藏传佛教的神秘文化很有特色。全县有13座寺庙，以雄登寺和贡嘎岭寺最负盛名。
-    稻城温泉资源丰富，出露点有20余处，分布在茹布乡、省母乡、蒙自乡、日瓦乡、各卡乡等。特别是县城东南3公里处贡巴山北麓的“茹布查卡”（查合温泉），出 口处水温一般为68℃，最高水温达80℃，流量1.33公升／秒，昼夜流量高达 7000立方米，可建装机容量2000千瓦以上的地热电站。该处泉水无色、无沉积物，不含硫，为村民世代饮用，又能浸泡治病，驰名州内外，是本县得天独厚的自然财富。
-		</p>
-		<p>
-			亚丁风景区，在甘孜州南部稻城县日瓦乡境内，景区以仙乃日、降边央、夏纳多吉三座雪峰为核心区，北南向分布。因特殊的地理环境和自然气候，形成了独特的地貌与自然景观，并且是我国保存最完整的一处自然生态系统。
-		</p>
-		<p>
-			仙乃日（藏语观世间菩萨）、降边央（藏语文殊菩萨）、夏纳多吉（藏语金刚手）三座雪山相距不远，各自拔地而起，呈三角鼎立，藏传佛教称为“日松贡布”，意为三怙主神山。北峰仙乃日海拔6032米，南峰降边央海拔5958米，东峰夏纳多吉海拔5958米，三座雪山峰峰形各异，但都洁白无瑕，一尘不染。山腰茫茫林海，飞泉瀑布于其间，山脚宽谷曲流，镶嵌着明镜般的湖泊。雪峰、冰川、森林、溪流、瀑布、草甸、湖泊有机地组合，野生动物出没于其中，托出了一方静谧的净土。
-三座神山蜚声藏区，神山圣湖集于一体，除了它巍峨壮观和周围奇绝的自然风光，还有着神秘的宗教文化，是藏区的一处圣地，前来朝觐者络绎不绝。
-		</p>
-	</div>
+
+    <div class="content f15 line-height-25 pt-25">
+        <p>{{sight.des|safe}}</p>
+    </div>
 
 </div>
 
