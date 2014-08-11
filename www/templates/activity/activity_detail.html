@@ -206,6 +206,7 @@ $(document).ready(function(){
 
 	<!-- 报名人列表 -->
 	<div class="tab-pane fade pt-15 in" id="person_list">
+		{% if activity_persons %}
 		<table class="table table-hover">
 			<thead>
 				<tr>
@@ -220,27 +221,27 @@ $(document).ready(function(){
 				</tr>
 			</thead>
 			<tbody>
+				{% for ap in activity_persons %}
 				<tr>
-					<td>1</td>
-					<td><img class="img-rounded" src="http://img0.zhixuan.com/newest_avatar_817c7c1a147611e486cf00163e003240!25m25"></td>
-					<td>随便玩玩</td>
-					<td>2</td>
-					<td>2014-08-08 12:56</td>
-					<td>习大大</td>
-					<td>男</td>
-					<td>13585958654</td>
+					<td>{{forloop.counter}}</td>
+					<td><a href="{{ap.user.get_url}}"><img class="img-rounded avatar-25" src="{{ap.user.get_avatar_25}}" alt="{{ap.user.nick}}"></a></td>
+					<td><a href="{{ap.user.get_url}}">{{ap.user.nick}}</a></td>
+					<td>{{ap.partner_count}}</td>
+					<td>{{ap.create_time}}</td>
+					{% if activity.is_user_in %}
+					<td>{{ap.real_name}}</td>
+					<td>{{ap.user.get_gender_display}}</td>
+					<td>{{ap.mobile}}</td>
+					{% else %}
+					<td colspan="3" class="bgc-eee">{% if forloop.first %}活动参与者才能查看{% endif %}</td>
+					{% endif %}
 				</tr>
-
-				<tr>
-					<td>1</td>
-					<td><img class="img-rounded" src="http://img0.zhixuan.com/newest_avatar_817c7c1a147611e486cf00163e003240!25m25"></td>
-					<td>随便玩玩</td>
-					<td>2</td>
-					<td>2014-08-08 12:56</td>
-					<td colspan="3" class="bgc-eee">活动参与者才能查看</td>
-				</tr>
+				{% endfor %}
 			</tbody>
 		</table>
+		{% else %}
+		<div class="alert alert-info popmsg box-shadow-224 border-radius-0">暂无</div>
+		{% endif %}
 	</div>
 
 

@@ -11,32 +11,23 @@ sys.path.extend([os.path.abspath(os.path.join(SITE_ROOT, '../')),
 os.environ['DJANGO_SETTINGS_MODULE'] = 'www.settings'
 
 
-user_id = user = '0dda67e6d98811e3ab90685b35d0bf16'
+user_id = user = 'b2d540e11c7511e48083685b35d0bf16'
 
 
 def main():
     import datetime
-    from www.message import interface
+    from www.activity import interface
+    from www.account.models import User
 
-    to_user_id = 'f762a6f5d2b711e39a09685b35d0bf16'
-    user_id2 = 'f40527cfd2c611e3b50a685b35d0bf16'
+    ab = interface.ActivityBase()
+    apb = interface.ActivityPersonBase()
 
-    ucb = interface.UnreadCountBase()
-    iab = interface.InviteAnswerBase()
-    gnb = interface.GlobalNoticeBase()
-    # print ucb.init_count_info()
-    # print ucb.get_unread_type()
-    # print ucb.get_unread_count_info(user)
-    # print ucb.get_unread_count_total(user)
-    # print ucb.update_unread_count(user, code='at_answer', operate="add")
-    # print ucb.update_unread_count(user, code='system_message', operate="add")
-    # print ucb.update_unread_count(user, code='received_like', operate="add")
-    # print ucb.update_unread_count(user, code='received_answer', operate="add")
+    activity = ab.get_activity_by_id(1)
+    request_user = User.objects.get(id=user_id)
+    # user_id_1 = u"48f23e751c7c11e494eb685b35d0bf16"
+    # print apb.join_activity(activity, user_id, real_name=u"简单的快乐", mobile=u"13005012270", partner_count=5, state=True)
+    print apb.set_join_state(activity, request_user, 2, True)
 
-    # print iab.update_invite_is_read(to_user_id)
-    # print iab.create_invite(from_user_id=user_id2, to_user_id=to_user_id, question_id=8)
-    # print gnb.create_global_notice(u'测试一个全局通知1', datetime.datetime.now(), datetime.datetime.now() + datetime.timedelta(days=10), user_id)
-    # print gnb.get_global_notice()
 
 if __name__ == '__main__':
     main()

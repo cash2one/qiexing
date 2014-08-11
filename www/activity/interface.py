@@ -11,7 +11,7 @@ from www.tasks import async_send_email
 from www.message.interface import UnreadCountBase
 from www.account.interface import UserBase
 from www.journey.interface import JourneyBase
-from www.activity.models import Activity
+from www.activity.models import Activity, ActivityPerson
 
 
 dict_err = {
@@ -25,6 +25,8 @@ dict_err = {
     30803: u'活动结束时间不能早于开始时间',
     30804: u'活动开始时间不能早于当前时间',
     30805: u'报名截止时间不能早于当前时间',
+    30806: u'已经报名了该活动',
+    30807: u'该用户未报名',
 }
 dict_err.update(consts.G_DICT_ERROR)
 
@@ -54,9 +56,11 @@ def activity_admin_required(func):
 
 class ActivityBase(object):
 
-    def format_activitys(self, activitys):
+    def format_activitys(self, activitys, request_user=None):
         for activity in activitys:
             activity.user = activity.get_user()
+            if request_user:
+                activity.is_user_in = ActivityPersonBase().is_user_in_activity(activity, request_user.id)
         return activitys
 
     def get_activity_by_id(self, id, need_state=True):
@@ -154,7 +158,7 @@ class ActivityBase(object):
     @activity_required
     def get_activity_admin_permission(self, activity, user):
         # 返回activity值用于activity对象赋值
-        return activity.from_user_id == user.id or activity.to_user_id == user.id or user.is_staff(), activity
+        return activity.user_id == user.id or user.is_staff(), activity
 
     @activity_admin_required
     @transaction.commit_manually(using=ACTIVITY_DB)
@@ -190,6 +194,66 @@ class ActivityPersonBase(object):
     def __init__(self):
         pass
 
+    def format_activity_persons(self, activity_persons):
+        for activity_person in activity_persons:
+            activity_person.user = UserBase().get_user_by_id(activity_person.user_id)
+        return activity_persons
+
+    def get_activity_persons_by_activity(self, activity):
+        return ActivityPerson.objects.filter(activity=activity, state=True)
+
     @activity_required
-    def join_activity(self, activity, user_id):
-        pass
+    @transaction.commit_manually(using=ACTIVITY_DB)
+    def join_activity(self, activity, user_id, real_name, mobile, partner_count, state=False):
+        try:
+            if not all((user_id, real_name, mobile)):
+                transaction.rollback(using=ACTIVITY_DB)
+                return 99800, dict_err.get(99800)
+
+            if ActivityPerson.objects.filter(activity=activity, user_id=user_id):
+                transaction.rollback(using=ACTIVITY_DB)
+                return 30806, dict_err.get(30806)
+
+            ActivityPerson.objects.create(activity=activity, user_id=user_id, real_name=real_name, mobile=mobile,
+                                          partner_count=partner_count, state=state)
+
+            if state:
+                activity.person_count += 1
+                activity.save()
+
+            transaction.commit(using=ACTIVITY_DB)
+            return 0, dict_err.get(0)
+        except Exception, e:
+            debug.get_debug_detail(e)
+            transaction.rollback(using=ACTIVITY_DB)
+            return 99900, dict_err.get(99900)
+
+    @activity_required
+    @transaction.commit_manually(using=ACTIVITY_DB)
+    def set_join_state(self, activity, request_user, activity_person_key_id, state):
+        try:
+            try:
+                ap = ActivityPerson.objects.get(id=activity_person_key_id)
+            except ActivityPerson.DoesNotExist:
+                transaction.rollback(using=ACTIVITY_DB)
+                return 30807, dict_err.get(30807)
+
+            if state == True and ap.state == False:
+                activity.person_count += 1
+                activity.save()
+            if state == False and ap.state == True:
+                activity.person_count -= 1
+                activity.save()
+
+            ap.state = state
+            ap.save()
+
+            transaction.commit(using=ACTIVITY_DB)
+            return 0, dict_err.get(0)
+        except Exception, e:
+            debug.get_debug_detail(e)
+            transaction.rollback(using=ACTIVITY_DB)
+            return 99900, dict_err.get(99900)
+
+    def is_user_in_activity(self, activity, user_id):
+        return True if ActivityPerson.objects.filter(activity=activity, user_id=user_id) else False

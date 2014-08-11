@@ -9,4 +9,5 @@ urlpatterns = patterns('www.activity.views',
                        url(r'^create_activity$', 'create_activity'),
                        url(r'^modify_activity/(?P<activity_id>\w+)$', 'modify_activity'),
                        url(r'^remove_activity$', 'remove_activity'),
+                       url(r'^join_activity$', 'join_activity'),
                        )

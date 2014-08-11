@@ -10,6 +10,7 @@ from www.misc.decorators import member_required, staff_required, common_ajax_res
 from www.activity import interface
 
 ab = interface.ActivityBase()
+apb = interface.ActivityPersonBase()
 
 
 def activity_list(request, template_name='activity/activity_list.html'):
@@ -22,7 +23,7 @@ def activity_detail(request, activity_id=None, template_name='activity/activity_
     activity = ab.get_activity_by_id(activity_id)
     if not activity:
         raise Http404
-    activity = ab.format_activitys([activity, ])[0]
+    activity = ab.format_activitys([activity, ], request_user=request.user)[0]
 
     answers_list_params = "%s$%s" % (activity.id, "1")  # 用于前端提取回复列表
 
@@ -36,6 +37,8 @@ def activity_detail(request, activity_id=None, template_name='activity/activity_
     if request.session.has_key('answer_content'):
         request.answer_content = request.session['answer_content']
         del request.session['answer_content']
+
+    activity_persons = apb.format_activity_persons(apb.get_activity_persons_by_activity(activity))
 
     return render_to_response(template_name, locals(), context_instance=RequestContext(request))
 
@@ -100,3 +103,13 @@ def modify_activity(request, activity_id):
 def remove_activity(request):
     activity_id = request.POST.get('activity_id', '').strip()
     return ab.remove_activity(activity_id, request.user)
+
+
+@member_required
+@common_ajax_response
+def join_activity(request):
+    activity_id = request.POST.get('activity_id', '').strip()
+    real_name = request.POST.get('real_name', '').strip()
+    mobile = request.POST.get('mobile', '').strip()
+    partner_count = request.POST.get('partner_count', '').strip()
+    return apb.join_activity(activity_id, request.user.id, real_name, mobile, partner_count)

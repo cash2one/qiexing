@@ -45,9 +45,10 @@ class ActivityPerson(models.Model):
     user_id = models.CharField(max_length=32, db_index=True)
     real_name = models.CharField(max_length=16)
     mobile = models.CharField(max_length=16)
+    partner_count = models.IntegerField()
     state = models.BooleanField(default=False, db_index=True)
     create_time = models.DateTimeField(db_index=True, auto_now_add=True)
 
     class Meta:
         unique_together = [('activity', 'user_id')]
-        ordering = ['-id']
+        ordering = ['-create_time']
