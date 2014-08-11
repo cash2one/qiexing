@@ -14,10 +14,10 @@ $(document).ready(function(){
         autoclose: true
     });
 
-    $('.start-date').val($.QXUtils.formatDate(new Date(), 'y-m-d'));
-    $('.end-date').val($.QXUtils.formatDate(new Date(), 'y-m-d'));
-    $('.stop-date').val($.QXUtils.formatDate(new Date(), 'y-m-d'));
-    $('.assemble-date').val($.QXUtils.formatDate(new Date(), 'y-m-d'));
+    $('.start-date').val() ? '' : $('.start-date').val($.QXUtils.formatDate(new Date(), 'y-m-d'));
+    $('.end-date').val() ? '' : $('.end-date').val($.QXUtils.formatDate(new Date(), 'y-m-d'));
+    $('.stop-date').val() ? '' : $('.stop-date').val($.QXUtils.formatDate(new Date(), 'y-m-d'));
+    $('.assemble-date').val() ? '' : $('.assemble-date').val($.QXUtils.formatDate(new Date(), 'y-m-d'));
 
 	var editor = createEditor('#modify_activity_editor');
 
@@ -41,17 +41,61 @@ $(document).ready(function(){
 
 
     $('.delete-activity').bind('click', function(){
+    	var me = $(this);
+
     	if(confirm('确认删除此活动?')){
-    		alert('成')
+    		ajaxSend(
+                "/activity/remove_activity", 
+                {'activity_id': me.data('activity_id')}, 
+                function(data){
+                    if(data['errcode'] != '0'){
+                        $.QXNotice.InfoTopNotice(data['errmsg']);
+                        return;
+                    }
+
+                    // 操作成功执行动画
+                    $.QXNotice.SuccessTopNotice('操作成功! 3秒后页面跳转');
+
+                    window.setTimeout(function(){
+                    	window.location.href = "/activity/";
+                    }, 3000)
+                    
+                }
+            );
+
     	}
     });
 
+
+    // 报名操作
     $('.btn-regist-activity').bind('click', function(){
     	$('.regist-activity-info').fadeIn('fast');
     });
-
     $('.close').bind("click", function(){
         $('.regist-activity-info').fadeOut('fast');
+    });
+    $('.regist-ok').bind('click', function(){
+    	var me = $(this);
+    	
+    	ajaxSend(
+            "/activity/join_activity", 
+            $.QXUtils.formToDict('.regist-form'),
+            function(data){
+                if(data['errcode'] != '0'){
+                    $.QXNotice.InfoTopNotice(data['errmsg']);
+                    return;
+                }
+
+                // 操作成功执行动画
+                $('.regist-activity-info').fadeOut('fast');
+                $.QXNotice.SuccessTopNotice('操作成功! 3秒后页面跳转');
+
+                window.setTimeout(function(){
+                	window.location.href = "/activity/{{activity.id}}";
+                }, 3000)
+                
+            }
+        );
     });
 
  
@@ -75,7 +119,7 @@ $(document).ready(function(){
 		</div>
 		<div class="pt-5">
 			<span class="fb pr-10">活动地点:</span>
-			{{activity.assembly_point}}
+			{{activity.addr}}
 		</div>
 		<div class="pt-5">
 			<span class="fb pr-10">报名截止时间:</span>
@@ -91,17 +135,24 @@ $(document).ready(function(){
 		</div>
 	</div>
 
-	<div class="pa regist-activity-info bgc-fff bdc-ddd border-5" style="left: 340px; top: 50px; width: 300px; display: none;">
+	<div class="pa regist-activity-info bgc-fff bdc-ddd border-5" style="left: 340px; top: 0px; width: 300px; display: none;">
 		<form class="form-horizontal regist-form" role="form" method="post" action="/">
-		    <div class="pt-10 pl-15 f16">报名信息确认<span class="fa fa-times co2 pull-right pr-10 pointer close"></span></div>
+		    <div class="pt-10 pl-15 f16">
+		    	报名信息确认
+		    	<span class="fa fa-times co2 pull-right pr-10 pointer close"></span>
+		    	<input type="hidden" value="{{activity.id}}" name="activity_id" />
+		    </div>
 		    <div class="form-group pt-15 pr-30 pl-30">
-		    	<input type="text" required minlength='2' maxlength='10' name="regist_name" class="regist-name form-control" placeholder="请填写真实姓名" />
+		    	<input type="text" required minlength='2' maxlength='10' name="real_name" class="real_name form-control" placeholder="请填写真实姓名" />
 		    </div>
 		    <div class="form-group pr-30 pl-30">
-		    	<input type="text" required minlength='8' maxlength='15' name="regist_tel" class="regist-tel form-control" placeholder="请确保手机号真实"/>
+		    	<input type="text" required minlength='8' maxlength='15' name="mobile" class="mobile form-control" placeholder="请确保手机号真实"/>
+		    </div>
+		    <div class="form-group pr-30 pl-30">
+		    	<input type="text" required minlength='1' maxlength='2' name="partner_count" class="partner_count form-control" placeholder="参加的总人数"/>
 		    </div>
 		    <div class="form-group pr-30 pl-30 text-right">
-		    	<button type="submit" class="btn btn-danger regist-ok">确认</button>
+		    	<button type="button" class="btn btn-danger regist-ok">确认</button>
 		    </div>
 		</form>
 	</div>
@@ -118,87 +169,83 @@ $(document).ready(function(){
 		<button type="submit" class="btn btn-danger btn-regist-activity">我 要 报 名</button>
 	</li>
 	<li class="pull-right pr-5">
-		<a href="javascript:void(0);" class="co2 pl-10 delete-activity" data-journey_id="{{activity.id}}"><span class="fa fa-trash-o pr-3"></span>删除</a>
+		<a href="javascript:void(0);" class="co2 pl-10 delete-activity" data-activity_id="{{activity.id}}"><span class="fa fa-trash-o pr-3"></span>删除</a>
 	</li>
 	<li class="pull-right pr-5">
 		<a href="javascript:void(0);" class="co2" data-toggle="modal" data-target="#edit_activity_modal" data-backdrop="static"><span class="fa fa-edit pr-3"></span>修改</a>
 	</li>
 </ul>
+
+<!-- 弹出层 -->
+<div class="modal fade" id="edit_activity_modal">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <form class="form-horizontal" role="form" method="post" action="/activity/modify_activity/{{activity.id}}" enctype="multipart/form-data">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                    <h4 class="modal-title">修改活动详情</h4>
+                </div>
+                <div class="modal-body">
+                	
+                		<div class="form-group pt-5">
+					        <label class="col-md-2 control-label">活动封面</label>
+					        <div class="col-md-3 pr pr-30">
+					            <input name="activity_cover" type="file" />
+					        </div>
+					    </div>
+						<div class="form-group pt-5">
+					        <label class="col-md-2 control-label">活动标题</label>
+					        <div class="col-md-10">
+					            <input type="text" class="form-control" name="activity_title" placeholder="活动标题" value='{{activity.title}}' required minlength='5' maxlength='128'>
+					        </div>
+					    </div>
+					    <div class="form-group pt-5">
+					        <label class="col-md-2 control-label">活动时间</label>
+					        <div class="col-md-3 pr pr-30">
+					            <input type="text" name="start_date" class="form-control date start-date" value="{{activity.start_date}}" readonly="" required>
+					            <span class="pa" style="top: 5px; right: -10px;">到</span>
+					        </div>
+					        <div class="col-md-3 pl-30">
+					            <input type="text" name="end_date" class="form-control date end-date" value="{{activity.end_date}}" readonly="" required>
+					        </div>
+					    </div>
+					    <div class="form-group pt-5">
+					        <label class="col-md-2 control-label">活动地点</label>
+					        <div class="col-md-10">
+					            <input type="text" class="form-control" name="activity_addr" placeholder="活动地点" value='{{activity.addr}}' required minlength='5' maxlength='128' required>
+					        </div>
+					    </div>
+					    <div class="form-group pt-5">
+					        <label class="col-md-2 control-label">报名截止时间</label>
+					        <div class="col-md-3 pr pr-30">
+					            <input type="text" name="sign_up_end_date" class="form-control date stop-date" value="" readonly="{{activity.sign_up_end_date}}" required>
+					        </div>
+					    </div>
+					    <div class="form-group pt-5">
+					        <label class="col-md-2 control-label">集合地点</label>
+					        <div class="col-md-10">
+					            <input type="text" class="form-control" name="assembly_point" placeholder="集合地点" value='{{activity.assembly_point}}' required minlength='5' maxlength='128'>
+					        </div>
+					    </div>
+					    <div class="form-group pt-5">
+					        <div class="col-md-12"><textarea id="modify_activity_editor"  name="activity_content" class="form-control" style="height: 260px">{{activity.content}}</textarea></div>
+					    </div>
+					
+			    </div>
+			    
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+                    <button type="submit" class="btn btn-danger">保存</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
 <div class="tab-content">
 	<!-- 活动详情 -->
 	<div class="tab-pane fade pt-15 in active" id="activity_detail">
 		<div class="activity-content">{{activity.content|safe}}</div>
-
-		<!-- 弹出层 -->
-		<div class="modal fade" id="edit_activity_modal">
-            <div class="modal-dialog">
-                <div class="modal-content">
-                    <form class="form-horizontal" role="form" method="post" action="/" enctype="multipart/form-data">
-	                    <div class="modal-header">
-	                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-	                        <h4 class="modal-title">修改活动详情</h4>
-	                    </div>
-	                    <div class="modal-body">
-	                    	
-	                    		<div class="form-group pt-5">
-							        <label class="col-md-2 control-label">活动封面</label>
-							        <div class="col-md-3 pr pr-30">
-							            <input name="img" type="file" />
-							        </div>
-							    </div>
-								<div class="form-group pt-5">
-							        <label class="col-md-2 control-label">活动标题</label>
-							        <div class="col-md-10">
-							            <input type="text" class="form-control" name="activity_title" placeholder="活动标题" value='' required minlength='5' maxlength='128'>
-							        </div>
-							    </div>
-							    <div class="form-group pt-5">
-							        <label class="col-md-2 control-label">活动时间</label>
-							        <div class="col-md-3 pr pr-30">
-							            <input type="text" name="start_date" class="form-control date start-date" value="" readonly="" required>
-							            <span class="pa" style="top: 5px; right: -10px;">到</span>
-							        </div>
-							        <div class="col-md-3 pl-30">
-							            <input type="text" name="end_date" class="form-control date end-date" value="" readonly="" required>
-							        </div>
-							    </div>
-							    <div class="form-group pt-5">
-							        <label class="col-md-2 control-label">活动地点</label>
-							        <div class="col-md-10">
-							            <input type="text" class="form-control" name="activity_addr" placeholder="活动地点" value='' required minlength='5' maxlength='128' required>
-							        </div>
-							    </div>
-							    <div class="form-group pt-5">
-							        <label class="col-md-2 control-label">集合时间</label>
-							        <div class="col-md-3 pr pr-30">
-							            <input type="text" name="assemble_date" class="form-control date assemble-date" value="" readonly="" required>
-							        </div>
-							        <label class="col-md-3 control-label">报名截止时间</label>
-							        <div class="col-md-3 pr pr-30">
-							            <input type="text" name="stop_date" class="form-control date stop-date" value="" readonly="" required>
-							        </div>
-							    </div>
-							    <div class="form-group pt-5">
-							        <label class="col-md-2 control-label">集合地点</label>
-							        <div class="col-md-10">
-							            <input type="text" class="form-control" name="assemble_addr" placeholder="集合地点" value='{{journey_title}}' required minlength='5' maxlength='128'>
-							        </div>
-							    </div>
-							    <div class="form-group pt-5">
-							        <div class="col-md-12"><textarea id="modify_activity_editor"  name="activity_content" class="form-control" style="height: 260px"></textarea></div>
-							    </div>
-							
-					    </div>
-					    
-	                    <div class="modal-footer">
-	                        <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
-	                        <button type="submit" class="btn btn-danger">保存</button>
-	                    </div>
-                    </form>
-                </div>
-            </div>
-        </div>
-
 
 		<!-- 回复区 -->
 		{{answers_list_params|answers_list:request}}

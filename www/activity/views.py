@@ -87,7 +87,7 @@ def modify_activity(request, activity_id):
             img_name = '%s/%s' % (settings.IMG0_DOMAIN, img_name) if flag else ""
 
         activity = ab.get_activity_by_id(activity_id)
-        errcode, result = ab.modify_activity(activity, activity_title, activity_content, start_date, end_date,
+        errcode, result = ab.modify_activity(activity, request.user, activity_title, activity_content, start_date, end_date,
                                              sign_up_end_date, activity_addr, assembly_point, img_name)
         if errcode == 0:
             request.session['success_msg'] = u'修改成功'
@@ -98,7 +98,7 @@ def modify_activity(request, activity_id):
 # ===================================================ajax部分=================================================================#
 
 
-@staff_required
+@member_required
 @common_ajax_response
 def remove_activity(request):
     activity_id = request.POST.get('activity_id', '').strip()
