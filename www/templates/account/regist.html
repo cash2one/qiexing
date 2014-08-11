@@ -21,6 +21,17 @@
 	$(document).ready(function(){
 		// 表单验证
 		$('.regist-main form').validate();
+
+		var changeCode = function(){
+			$('.captcha').attr('src', $('.captcha').attr('src') + '?' + new Date().getTime());
+		}
+
+		$('.change-code').bind('click', function(){
+			changeCode();
+		});
+		$('.captcha').bind('click', function(){
+			changeCode();
+		});
 	});
 </script>
 {% endblock %}
@@ -54,7 +65,10 @@
 				<div class="col-md-offset-1 col-md-5 pl-0 pr-0">
 					<input type="text" required maxlength='4' name="captcha" class="form-control input-lg" placeholder="验证码">
 				</div>
-				<img class="ml-5" src="/account/captcha" alt="验证码">
+				<div class="col-md-5 pl-35 pr-0">
+					<img class="ml-5 pr-50 captcha pointer" src="/account/captcha" alt="验证码">
+					<a href="javascript:void(0);" class="f12 pl-10 change-code">看不清？点击换一张</a>
+				</div>
 			</div>
 			<div class="form-group pt-5">
 				<div class="col-md-offset-1">

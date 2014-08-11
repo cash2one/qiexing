@@ -19,7 +19,7 @@ $(document).ready(function(){
         });
         answerEditor.focus();
         answerEditor.html('');
-        answerEditor.appendHtml("<span>@" + target.data('user_name') + " </span>");
+        answerEditor.appendHtml("<span>@" + target.data('user_name') + " </span><span> </span>");
     });
 
     $('.answer-form').validate({

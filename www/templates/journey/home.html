@@ -37,14 +37,14 @@
             <div class="pl-15 pr-15">
                 <div>
                     <a href="{{activity.get_url}}">
-                        <img class="w" src="{{activity.activity_cover}}" alt="{{activity.title}}" style="height: 225px;">
+                        <img class="w350 h225" src="{{activity.activity_cover}}" alt="{{activity.title}}">
                     </a>
                 </div>
                 <div class="pt-10">
-                    <a href="{{activity.get_url}}" class="f16" ht>{{activity.title}}</a>
+                    <a href="{{activity.get_url}}" class="f16" ht>{{activity.title|str_display:20}}</a>
                 </div>
                 <div class="pt-10">
-                    <a href="{{activity.get_url}}" class="co2">{{activity.get_summary|str_display:45}}</a>
+                    <a href="{{activity.get_url}}" class="co2">{{activity.get_summary|str_display:45|safe}}</a>
                 </div>
             </div>
         </li>
@@ -61,7 +61,7 @@
             <div class="pl-15 pr-15">
                 <div>
                     <a href="{{journey.get_url}}">
-                        <img class="w" src="{{journey.get_cover}}" alt="{{journey.title}}" style="height: 250px;">
+                        <img class="w h250" src="{{journey.get_cover}}" alt="{{journey.title}}">
                     </a>
                 </div>
                 <div class="pt-10">

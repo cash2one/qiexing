@@ -3,13 +3,16 @@
 {% block title %}景点{% endblock %}
 
 {% block base_js %}
+<script type="text/javascript" src="{{MEDIA_URL}}js/raphael/raphael-min.js"></script>
+<script type="text/javascript" src="{{MEDIA_URL}}js/raphael/china-map-path.js"></script>
+
 <script type="text/javascript">
     $(document).ready(function(){
         
         var R = Raphael("map", 600, 500);
         //调用绘制地图方法
         paintMap(R);
-               
+        
         for (var state in china) {
             china[state]['path'].color = Raphael.getColor(0.9);
                     
@@ -61,8 +64,10 @@
                     default:
                 }
                 //写入文字
-                //china[state]['text'] = R.text(xx, yy, china[state]['name']).attr(textAttr);
+                // china[state]['text'] = R.text(xx, yy, china[state]['name']);
+                
                 st[0].style.cursor = "pointer";
+                st[0].title = "测试";
 
                 st[0].onmouseover = function () {
                     st.animate({fill: st.color, stroke: "#eee"}, 300);
