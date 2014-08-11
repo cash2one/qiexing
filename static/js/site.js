@@ -174,6 +174,25 @@ if (!String.format) {
 
     };
 
+    /*
+        将表单数据转换成字典，用于ajax
+
+        用例:
+        $.ZXUtils.formToDict('myform');
+    */
+    $.QXUtils.formToDict = function(selector){
+        var postData = {};
+
+        // 转换
+        _.map($(selector).serializeArray(), function(i){
+            if(i.value){
+                postData[i.name] = i.value
+            }
+        });
+
+        return postData;
+    };
+
 
     // 分享插件
     $.QXShare = {

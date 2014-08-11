@@ -119,7 +119,8 @@ class ActivityBase(object):
             return 99900, dict_err.get(99900)
 
     @activity_admin_required
-    def modify_activity(self, activity, title, content, start_date, end_date, sign_up_end_date, addr, assembly_point, activity_cover=None):
+    @transaction.commit_manually(using=ACTIVITY_DB)
+    def modify_activity(self, activity, user, title, content, start_date, end_date, sign_up_end_date, addr, assembly_point, activity_cover=None):
         try:
             content = utils.filter_script(content)
             if not all((title, content, start_date, end_date, sign_up_end_date, addr, assembly_point)):
@@ -149,9 +150,10 @@ class ActivityBase(object):
 
             # 更新summary
             self.get_activity_summary_by_id(activity, must_update_cache=True)
-
+            transaction.commit(using=ACTIVITY_DB)
             return 0, activity
         except Exception, e:
+            transaction.rollback(using=ACTIVITY_DB)
             debug.get_debug_detail(e)
             return 99900, dict_err.get(99900)
 
@@ -182,9 +184,9 @@ class ActivityBase(object):
         activity = self.get_activity_by_id(activity_id_or_object, need_state=False) if not isinstance(activity_id_or_object, Activity) else activity_id_or_object
         activity_summary = {}
         if activity:
-            user = activity.user()
+            user = activity.get_user()
             activity_summary = dict(activity_id=activity.id, activity_title=activity.title,
-                                    activity_summary=activity.get_summary(), activity_like_count=activity.like_count, activity_user_id=user.id,
+                                    activity_summary=activity.get_summary(), activity_user_id=user.id,
                                     activity_user_avatar=user.get_avatar_65(), activity_user_nick=user.nick, activity_user_des=user.des or '')
         return activity_summary
 
