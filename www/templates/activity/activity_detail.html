@@ -165,6 +165,7 @@ $(document).ready(function(){
 	<li>
 		<a href="#person_list" class="black-blue" data-toggle="pill">报名列表</a>
 	</li>
+	{% if request.user.is_authenticated %}
 	<li class="pull-right pr-5">
 		<button type="submit" class="btn btn-danger btn-regist-activity">我 要 报 名</button>
 	</li>
@@ -174,6 +175,7 @@ $(document).ready(function(){
 	<li class="pull-right pr-5">
 		<a href="javascript:void(0);" class="co2" data-toggle="modal" data-target="#edit_activity_modal" data-backdrop="static"><span class="fa fa-edit pr-3"></span>修改</a>
 	</li>
+	{% endif %}
 </ul>
 
 <!-- 弹出层 -->

@@ -7,6 +7,8 @@ import urllib
 
 from django.http import HttpResponse, Http404, HttpResponseRedirect
 from django.conf import settings
+from django.shortcuts import render_to_response
+from django.template import RequestContext
 
 from common import debug
 from www.misc import qiniu_client
@@ -124,3 +126,14 @@ def crop_img(request):
                 result = dict(flag='-1', result=u'剪裁失败, 请稍后重试')
 
     return HttpResponse(json.dumps(result), mimetype='application/json')
+
+
+def static_view(request, template_name):
+    '''
+    @note: 静态模板采用通用目录
+    '''
+    file_name = os.path.abspath(os.path.join(settings.SITE_ROOT, './templates/static_templates/%s.html' % template_name))
+    if not os.path.exists(file_name):
+        raise Http404
+
+    return render_to_response('static_templates/%s.html' % template_name, locals(), context_instance=RequestContext(request))

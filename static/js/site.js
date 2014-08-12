@@ -434,6 +434,8 @@ $(document).ready(function(){
         .bind('mouseleave', function(){hideDropdown('.user-menu')});
     }
 
+    // 给不支持placeholder的浏览器添加此属性
+    $('input, textarea').placeholder();
 
     // 提示信息框
     try {

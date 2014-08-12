@@ -27,6 +27,7 @@ urlpatterns = patterns('',
                        url(r'^p/(?P<user_id>\w+)?$', 'www.account.views.user_journey'),
                        url(r'^p/(?P<user_id>\w+)/user_comment/?$', 'www.account.views.user_comment'),
 
+                       url(r'^s/(?P<template_name>.*)$', 'www.misc.views.static_view'),
                        url(r'^500$', 'www.misc.views.test500'),
                        url(r'^static/(?P<path>.*)$', 'django.views.static.serve', {'document_root': settings.MEDIA_ROOT, 'show_indexes': False}),
                        # url(r'^admin/', include(admin.site.urls)),

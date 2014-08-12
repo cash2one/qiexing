@@ -1,0 +1,45 @@
+{% extends "base/base.html" %}
+
+{% block base_css %}
+	{% block css %}{% endblock css %}
+	<style type="text/css">
+	.list-group-item{
+		padding-bottom: 7px;
+		padding-top: 7px;
+	}
+
+	.list-group-item.active, .list-group-item.active:hover, .list-group-item.active:focus{
+		background-color: #f36119;
+		border-color: #f36119;
+	}
+	.list-group-item.active>a{
+		color: #fff;
+	}
+	</style>
+{% endblock %}
+
+{% block base_js %}
+	{% block javascript %}{% endblock javascript %}
+{% endblock %}
+
+{% block container %}
+<div class="col-md-2 pr-0 pt-15">
+	{% block left %}
+	<div class="list-group text-right pr-0">
+		<a href="/s/about" class="list-group-item border-left-0 border-right-0 border-top-0 border-bottom-0 {% if request.path == '/s/about' %} active {% endif %}">
+		关于我们
+		</a>
+		<a href="/s/agreement" class="list-group-item border-left-0 border-right-0 border-top-0 border-bottom-0 {% if request.path == '/s/agreement' %} active {% endif %}">
+		服务条款
+		</a>
+		<a href="/s/contact" class="list-group-item border-left-0 border-right-0 border-top-0 border-bottom-0 {% if request.path == '/s/contact' %} active {% endif %}">
+		联系我们
+		</a>
+	</div>
+	{% endblock left %}
+</div>
+
+<div class="col-md-10  border-left bdc-eee pl-25 pt-15" style="min-height: 500px;">
+	{% block right %}{% endblock right %}
+</div>
+{% endblock container %}
