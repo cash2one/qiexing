@@ -1,4 +1,5 @@
 # -*- coding: utf-8 -*-
+import json
 
 from django.http import Http404
 from django.template import RequestContext
@@ -9,6 +10,7 @@ sb = interface.SightBase()
 
 
 def sight_map(request, template_name="sight/sight_map.html"):
+    sights = json.dumps(sb.get_format_sights_for_map())
 
     return render_to_response(template_name, locals(), context_instance=RequestContext(request))
 

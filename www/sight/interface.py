@@ -32,6 +32,28 @@ class SightBase(object):
             sight.imgs = self.get_sight_imgs(sight)
         return sights
 
+    def get_province_name_by_key(self, province_key):
+        for key in consts.G_PROVINCE:
+            if str(consts.G_PROVINCE[key][0]) == str(province_key):
+                return key
+        raise Exception, u"get_province_name_by_key error"
+
+    def get_format_sights_for_map(self):
+        sights = Sight.objects.all()
+        pcount = len(consts.G_PROVINCE.keys())
+        format_sights = []
+        for i in range(pcount):
+            format_sights.append({})
+
+        for sight in sights:
+            province_name = self.get_province_name_by_key(sight.province_key)
+            if "name" not in format_sights[int(sight.province_key) - 1]:
+                format_sights[int(sight.province_key) - 1]["name"] = province_name
+                format_sights[int(sight.province_key) - 1]["sights"] = [dict(id=sight.id, name=sight.name)]
+            else:
+                format_sights[int(sight.province_key) - 1]["sights"].append(dict(id=sight.id, name=sight.name))
+        return format_sights
+
     def get_sight_by_id(self, id, state=None):
         ps = dict(id=id)
         if state is not None:

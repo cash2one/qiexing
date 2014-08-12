@@ -13,7 +13,6 @@ def config(request):
     """
     import datetime
     from django.conf import settings
-    from www.misc import consts
 
     return {
         'DEBUG': settings.DEBUG,
@@ -23,5 +22,4 @@ def config(request):
         'MAIN_DOMAIN': settings.MAIN_DOMAIN,
         'IMG0_DOMAIN': settings.IMG0_DOMAIN,
         "YEAR": datetime.datetime.now().strftime("%Y"),
-        "ARTICLE_TYPE_LIST": consts.ARTICLE_TYPE_LIST,
     }

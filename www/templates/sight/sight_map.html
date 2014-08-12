@@ -9,20 +9,21 @@
 <script type="text/javascript">
     $(document).ready(function(){
         
-        var SIGHTS = [{
-                name: '四川', 
-                sights: [
-                    {id: '1', name: '青城山'},
-                    {id: '3', name: '武侯祠'},
-                    {id: '4', name: '锦里'}
-                ]
-            }, {
-                name: '湖北',
-                sights: [
-                    {id: '2', name: '黄鹤楼'}
-                ]
-            }],
-            dictActive = {};
+        var SIGHTS = eval({{sights|safe}});
+        // [{
+        //         name: '四川', 
+        //         sights: [
+        //             {id: '1', name: '青城山'},
+        //             {id: '3', name: '武侯祠'},
+        //             {id: '4', name: '锦里'}
+        //         ]
+        //     }, {
+        //         name: '湖北',
+        //         sights: [
+        //             {id: '2', name: '黄鹤楼'}
+        //         ]
+        //     }]
+        var dictActive = {};
 
         _.map(SIGHTS, function(i){
             dictActive[i.name] = true;
