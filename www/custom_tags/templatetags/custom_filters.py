@@ -63,16 +63,13 @@ def get_page_url(url, page=1):
     """
     @attention: 获取分页对应的url
     """
-    urls = url.split("?")
-    url = urls[0]
-    suffix = ("?" + urls[1]) if len(urls) > 1 else ""
-
-    re_pn = re.compile('\/\d+$', re.IGNORECASE)
-    if re_pn.search(url):
-        url = re_pn.sub('/%s' % page, url)
-    else:
-        url += '/%s' % page
-    return url + suffix
+    if url.find('?') == -1:
+        return u'%s?page=%s' % (url, page)
+    if url.find('page=') == -1:
+        return u'%s&page=%s' % (url, page)
+    re_pn = re.compile('page=\d+', re.IGNORECASE)
+    url = re_pn.sub('page=%s' % page, url)
+    return url
 
 
 @register.filter('paging')

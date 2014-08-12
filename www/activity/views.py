@@ -5,6 +5,7 @@ from django.template import RequestContext
 from django.shortcuts import render_to_response
 from django.conf import settings
 
+from common import page
 from www.misc import qiniu_client
 from www.misc.decorators import member_required, staff_required, common_ajax_response
 from www.activity import interface
@@ -14,7 +15,15 @@ apb = interface.ActivityPersonBase()
 
 
 def activity_list(request, template_name='activity/activity_list.html'):
-    activitys = ab.format_activitys(ab.get_all_valid_activitys())
+    activitys = ab.get_all_valid_activitys()
+
+    # 分页
+    page_num = int(request.REQUEST.get('page', 1))
+    page_objs = page.Cpt(activitys, count=10, page=page_num).info
+    activitys = page_objs[0]
+    page_params = (page_objs[1], page_objs[4])
+
+    activitys = ab.format_activitys(activitys)
 
     return render_to_response(template_name, locals(), context_instance=RequestContext(request))
 

@@ -185,6 +185,19 @@ body {
 
 .box-shadow-224{box-shadow: 2px 2px 4px #666;}
 .box-shadow-024{box-shadow: 0px 2px 4px #666;}
+
+/*间隔*/
+.clear  {height:0px;clear:both; font-size:0; overflow:hidden;}
+.blank0 {height:0;clear:both;font-size:0px;overflow:hidden;}
+.blank1 {height:1px;clear:both;font-size:0px;overflow:hidden;}
+.blank2 {height:2px;clear:both;font-size:0px;overflow:hidden;}
+.blank4 {height:4px;clear:both;font-size:0px;overflow:hidden;}
+.blank5 {height:5px;clear:both;font-size:0px;overflow:hidden;}
+.blank10 {height:10px;clear:both;font-size:0px;overflow:hidden;}
+.blank15 {height:15px;clear:both;font-size:0px;overflow:hidden;}
+.blank20 {height:20px;clear:both;font-size:0px;overflow:hidden;}
+.blank30 {height:30px;clear:both;font-size:0px;overflow:hidden;}
+.blank40 {height:40px;clear:both;font-size:0px;overflow:hidden;}
 /*****************************************************/
 .qx-nav>li>a{
 	padding-left: 35px;

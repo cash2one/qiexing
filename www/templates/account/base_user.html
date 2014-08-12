@@ -11,11 +11,11 @@
 {% block container %}
 <div class="col-md-8">
 	<ul class="nav nav-pills pt-15 qx-nav-pills">
-		<li {% if "/user_comment" not in request.path %} class="active" {%endif%}>
-			<a href="/p/5342b85a1d4011e4a940000c290d194c" class="black-blue">Ta的游记</a>
+		<li {% if "/user_answer" not in request.path %} class="active" {%endif%}>
+			<a href="{{user.get_url}}" class="black-blue">{% if is_me %}我{% else %}{{user.get_ta_display}}{% endif %}的游记</a>
 		</li>
-		<li {% if "/user_comment" in request.path %} class="active" {%endif%}>
-			<a href="/p/5342b85a1d4011e4a940000c290d194c/user_comment" class="black-blue">Ta的回复</a>
+		<li {% if "/user_answer" in request.path %} class="active" {%endif%}>
+			<a href="{{user.get_url}}/user_answer" class="black-blue">{% if is_me %}我{% else %}{{user.get_ta_display}}{% endif %}的回复</a>
 		</li>
 	</ul>
 	{% block left %}{% endblock left %}
