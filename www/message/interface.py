@@ -1,21 +1,18 @@
 # -*- coding: utf-8 -*-
 
 import json
-from django.db import transaction
 
 from common import utils, cache, debug
 from www.misc.decorators import cache_required
 from www.misc import consts
-from www.tasks import async_send_email
-from www.account.interface import UserBase
-from www.message.models import UnreadCount, UnreadType, Notice, InviteAnswer, InviteAnswerIndex, GlobalNotice
+from www.message.models import UnreadCount, UnreadType, Notice,  GlobalNotice
 
 
 dict_err = {
-    40100: u'自己不能邀请自己哦',
-    40101: u'最多邀请6人',
-    40102: u'已邀请，请勿重复邀请',
-    40103: u'没有找到对应的通知'
+    60100: u'自己不能邀请自己哦',
+    60101: u'最多邀请6人',
+    60102: u'已邀请，请勿重复邀请',
+    60103: u'没有找到对应的通知'
 }
 dict_err.update(consts.G_DICT_ERROR)
 
@@ -127,107 +124,6 @@ class UnreadCountBase(object):
         return notice
 
 
-class InviteAnswerBase(object):
-
-    def __init__(self):
-        pass
-
-    def format_invite_user(self, show_invite_users, invited_users):
-        from www.custom_tags.templatetags.custom_filters import str_display
-
-        show_invite_users_json = []
-        invited_users_json = []
-        invited_user_ids = [iu.to_user_id for iu in invited_users]
-
-        for siu in show_invite_users:
-            user = UserBase().get_user_by_id(siu.user_id)
-            show_invite_users_json.append(dict(user_id=user.id, user_nick=user.nick, user_avatar=user.get_avatar_65(), gender=user.gender,
-                                               user_des=str_display((user.des or '').strip(), 17), is_invited=siu.user_id in invited_user_ids))
-        for iu in invited_users:
-            invited_users_json.append(dict(user_id=iu.to_user_id, user_nick=UserBase().get_user_by_id(iu.to_user_id).nick))
-        return show_invite_users_json, invited_users_json
-
-    def format_user_received_invites(self, user_received_invites):
-        from www.question.interface import QuestionBase
-
-        ub = UserBase()
-        for uri in user_received_invites:
-            uri.question = QuestionBase().get_question_summary_by_id(uri.question_id)
-            uri.from_users = [ub.get_user_by_id(user_id) for user_id in json.loads(uri.from_user_ids)]
-            uri.from_users.reverse()
-        return user_received_invites
-
-    @transaction.commit_manually(using=DEFAULT_DB)
-    def create_invite(self, from_user_id, to_user_id, question_id):
-        try:
-            from www.question.interface import QuestionBase
-
-            ub = UserBase()
-            try:
-                from_user = ub.get_user_by_id(from_user_id)
-                to_user = ub.get_user_by_id(to_user_id)
-                question = QuestionBase().get_question_by_id(question_id)
-
-                assert from_user and to_user and question
-            except:
-                transaction.rollback(using=DEFAULT_DB)
-                return 99800, dict_err.get(99800)
-
-            if from_user_id == to_user_id:
-                transaction.rollback(using=DEFAULT_DB)
-                return 40100, dict_err.get(40100)
-
-            # 同一个问题最多邀请6个人
-            if InviteAnswerIndex.objects.filter(from_user_id=from_user_id, question_id=question_id).count() >= 6:
-                transaction.rollback(using=DEFAULT_DB)
-                return 40101, dict_err.get(40101)
-
-            # 重复邀请给出提示
-            if InviteAnswerIndex.objects.filter(from_user_id=from_user_id, to_user_id=to_user_id, question_id=question_id):
-                transaction.rollback(using=DEFAULT_DB)
-                return 40102, dict_err.get(40102)
-
-            try:
-                ia = InviteAnswer.objects.create(from_user_ids=json.dumps([from_user_id, ]), to_user_id=to_user_id, question_id=question_id)
-                need_update_unread_count = True
-            except:
-                ia = InviteAnswer.objects.get(to_user_id=to_user_id, question_id=question_id)
-                from_user_ids = json.loads(ia.from_user_ids)
-                if from_user_id not in from_user_ids:
-                    from_user_ids.append(from_user_id)
-                ia.from_user_ids = json.dumps(from_user_ids)
-                ia.save()
-
-                need_update_unread_count = True if ia.is_read else False
-
-            # 建立索引
-            InviteAnswerIndex.objects.create(from_user_id=from_user_id, to_user_id=to_user_id, question_id=question_id)
-
-            # 更新未读消息，新邀请或者邀请已读才更新未读数
-            if need_update_unread_count:
-                UnreadCountBase().update_unread_count(to_user_id, code='invite_answer')
-
-            # 发送提醒邮件
-            context = dict(user=from_user, question=question)
-            async_send_email(to_user.email, u'%s 在智选邀请你回答问题' % (from_user.nick, ), utils.render_email_template('email/invite.html', context), 'html')
-
-            transaction.commit(using=DEFAULT_DB)
-            return 0, dict_err.get(0)
-        except Exception, e:
-            debug.get_debug_detail(e)
-            transaction.rollback(using=DEFAULT_DB)
-            return 99900, dict_err.get(99900)
-
-    def get_user_received_invite(self, to_user_id):
-        return InviteAnswer.objects.filter(to_user_id=to_user_id)
-
-    def get_invited_user_by_question_id(self, from_user_id, question_id):
-        return InviteAnswerIndex.objects.filter(from_user_id=from_user_id, question_id=question_id)
-
-    def update_invite_is_read(self, to_user_id):
-        return InviteAnswer.objects.filter(to_user_id=to_user_id).update(is_read=True)
-
-
 class GlobalNoticeBase(object):
 
     def __init__(self):
@@ -279,11 +175,11 @@ class GlobalNoticeBase(object):
             return 99800, dict_err.get(99800)
 
         if not notice_id:
-            return 40103, dict_err.get(40103)
+            return 60103, dict_err.get(60103)
 
         obj = GlobalNotice.objects.filter(id=notice_id)
         if not obj:
-            return 40103, dict_err.get(40103)
+            return 60103, dict_err.get(60103)
 
         obj = obj[0]
         try:
@@ -301,11 +197,11 @@ class GlobalNoticeBase(object):
 
     def remove_global_notice(self, notice_id):
         if not notice_id:
-            return 40103, dict_err.get(40103)
+            return 60103, dict_err.get(60103)
 
         obj = GlobalNotice.objects.filter(id=notice_id)
         if not obj:
-            return 40103, dict_err.get(40103)
+            return 60103, dict_err.get(60103)
 
         obj.delete()
 

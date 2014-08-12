@@ -21,7 +21,7 @@
 				<a href="{{answer.obj.get_url}}" class="co5 pr-5">{{answer.obj.title|str_display:17}}</a>
 				<span class="pull-right co2 f12">{{answer.create_time}}</span>
 			</div>
-			<div class="pt-5 f12">{{answer.get_summary}}</div>
+			<div class="pt-5 f12">{{answer.get_summary|safe}}</div>
 		</div>
 	</li>
 	{% endfor %}

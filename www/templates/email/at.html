@@ -1,6 +1,7 @@
 {% extends "email/base_email.html" %}
+{% load custom_tags %}
+{% load custom_filters %}
 {% block email_body %}
-
 <a href="{{user.get_full_url}}">
     <img class="img-circle" src="{{user.get_avatar_65}}" />
 </a>
@@ -10,7 +11,6 @@
         <a href="{{user.get_full_url}}" style="padding-right: 5px;">{{user.nick}}</a>在提问中@你：
         <a style="padding-left: 10px;" href="{{MAIN_DOMAIN}}{{answer.question.get_url}}">{{answer.question.title}}</a>
     </div>
-    <div style="padding-top: 10px; padding-bottom: 15px; font-size: 14px">{{answer.get_summary}}</div>
+    <div style="padding-top: 10px; padding-bottom: 15px; font-size: 14px">{{answer.get_summary|safe}}</div>
 </div>
-
 {% endblock %}
