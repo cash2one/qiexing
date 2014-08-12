@@ -19,5 +19,5 @@ def sight_detail(request, sight_id=None, template_name="sight/sight_detail.html"
         raise Http404
 
     sight = sb.format_sights([sight, ])[0]
-    print sight.imgs
+
     return render_to_response(template_name, locals(), context_instance=RequestContext(request))

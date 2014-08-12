@@ -9,63 +9,40 @@
 <script type="text/javascript">
     $(document).ready(function(){
         
+        var SIGHTS = [{
+                name: '四川', 
+                sights: [
+                    {id: '1', name: '青城山'},
+                    {id: '3', name: '武侯祠'},
+                    {id: '4', name: '锦里'}
+                ]
+            }, {
+                name: '湖北',
+                sights: [
+                    {id: '2', name: '黄鹤楼'}
+                ]
+            }],
+            dictActive = {};
+
+        _.map(SIGHTS, function(i){
+            dictActive[i.name] = true;
+        });
+        
+
         var R = Raphael("map", 600, 500);
         //调用绘制地图方法
         paintMap(R);
         
         for (var state in china) {
-            china[state]['path'].color = Raphael.getColor(0.9);
+            china[state]['path'].color = '#f36119'; //Raphael.getColor(0.9);
                     
             (function (st, state) {
-                
-                //获取当前图形的中心坐标
-                var xx = st.getBBox().x + (st.getBBox().width / 2);
-                var yy = st.getBBox().y + (st.getBBox().height / 2);
-                
-                //***修改部分地图文字偏移坐标
-                switch (china[state]['name']) {
-                    case "江苏":
-                        xx += 5;
-                        yy -= 10;
-                        break;
-                    case "河北":
-                        xx -= 10;
-                        yy += 20;
-                        break;
-                    case "天津":
-                        xx += 10;
-                        yy += 10;
-                        break;
-                    case "上海":
-                        xx += 10;
-                        break;
-                    case "广东":
-                        yy -= 10;
-                        break;
-                    case "澳门":
-                        yy += 10;
-                        break;
-                    case "香港":
-                        xx += 20;
-                        yy += 5;
-                        break;
-                    case "甘肃":
-                        xx -= 40;
-                        yy -= 30;
-                        break;
-                    case "陕西":
-                        xx += 5;
-                        yy += 10;
-                        break;
-                    case "内蒙古":
-                        xx -= 15;
-                        yy += 65;
-                        break;
-                    default:
+                if(dictActive[china[state]['name']]){
+                    st.active = true;
+                    st.animate({fill: "#f36119", stroke: "#eee"}, 300);
                 }
-                //写入文字
-                // china[state]['text'] = R.text(xx, yy, china[state]['name']);
-                
+
+                // 添加手形
                 st[0].style.cursor = "pointer";
 
                 st[0].onmouseover = function () {
@@ -74,13 +51,33 @@
                     R.safari();
                 };
                 st[0].onmouseout = function () {
+                    if(st.active){
+                        return;
+                    }
                     st.animate({fill: "#97d6f5", stroke: "#eee"}, 300);
                     //china[state]['text'].toFront();
                     R.safari();
                 };
                 st[0].onclick = function(){
-                    console.log(china, state)
-                    $('.info').fadeIn('fast')
+                    // console.log(china, china[state]['name'])
+
+                    var html = [],
+                        temp = _.filter(SIGHTS, function(i){return i.name == china[state]['name']});
+
+                    if(temp.length > 0){
+                        _.map(
+                            temp[0].sights, 
+                            function(i){
+                                html.push('<li class="col-md-6 pb-5"><a href="/sight/'+i.id+'">'+i.name+'</a></li>')
+                            }
+                        )
+                    } else {
+                        html.push('<span class="pl-5">暂无景点</span>')
+                    }
+                    
+                    $('.info .province').html(china[state]['name']);
+                    $('.info ul').html(html.join(''));
+                    $('.info').fadeIn('fast');
                 }
                 
              })(china[state]['path'], state);
@@ -98,7 +95,7 @@
 {% block container %}
 <div id="map" class="text-center"></div>
 <div class="pa info bgc-fff bdc-ddd border-5" style="left: 440px; top: 200px; display: none;">
-    <div class="pt-10 pl-15 f16">四川<span class="fa fa-times co2 pull-right pr-10 pointer close"></span></div>
+    <div class="pt-10 pl-15 f16"><span class="province">四川</span><span class="fa fa-times co2 pull-right pr-10 pointer close"></span></div>
     <ul class="list-inline row pl-25 pr-15 pt-15 f12 w270">
         <li class="col-md-6 pb-5"><a href="/sight/1">成都</a></li>
         <li class="col-md-6 pb-5"><a href="#">都江堰</a></li>
