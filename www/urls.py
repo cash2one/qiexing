@@ -25,7 +25,7 @@ urlpatterns = patterns('',
                        url(r'^message/', include('www.message.urls')),
 
                        url(r'^p/(?P<user_id>\w+)?$', 'www.account.views.user_journey'),
-                       url(r'^p/(?P<user_id>\w+)/user_comment/?$', 'www.account.views.user_comment'),
+                       url(r'^p/(?P<user_id>\w+)/user_answer$', 'www.account.views.user_answer'),
 
                        url(r'^s/(?P<template_name>.*)$', 'www.misc.views.static_view'),
                        url(r'^500$', 'www.misc.views.test500'),

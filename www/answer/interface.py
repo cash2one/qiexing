@@ -64,10 +64,13 @@ def answer_admin_required(func):
 
 class AnswerBase(object):
 
-    def format_answers(self, answers):
+    def format_answers(self, answers, need_obj=False):
         for answer in answers:
             answer.from_user = answer.get_from_user()
+            answer.to_user = answer.get_to_user()
             answer.content = utils.replace_at_html(answer.content)
+            if need_obj:
+                answer.obj = self.get_obj(answer.obj_id, answer.obj_type)
         return answers
 
     def get_obj(self, obj_id, obj_type):
