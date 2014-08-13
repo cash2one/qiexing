@@ -94,6 +94,36 @@
                                 </li>
                             </ul>
                         </li>
+
+                        <li class="message-menu dropdown">
+                            <a href="#" class="dropdown-toggle" data-toggle="dropdown" style="padding-top: 16px; padding-bottom: 19px;">
+                                <!-- <span class="fa fa-bell"></span> -->
+                                <span class="ml-5 badge">1</span>
+                            </a>
+                            
+                            <ul class="dropdown-menu text-left" role="menu">
+                                <li>
+                                    <a href="{{request.user.get_url}}">
+                                        系统消息<span class="ml-5 badge">1</span>
+                                    </a>
+                                </li>
+                                <li>
+                                    <a href="/account/user_settings">
+                                        收到的赞
+                                    </a>
+                                </li>
+                                <li>
+                                    <a href="/message/system_message">
+                                        收到的回复<span class="ml-5 badge">4</span>
+                                    </a>
+                                </li>
+                                <li>
+                                    <a href="/account/user_settings">
+                                        收到的@
+                                    </a>
+                                </li>
+                            </ul>
+                        </li>
                         {% else %}
                         <li>
                             <div class="un-login-user pt-20">

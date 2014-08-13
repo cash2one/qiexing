@@ -244,7 +244,7 @@ body {
 
 .dropdown-menu{min-width: 140px;}
 
-.dropdown-menu .badge{
+.message-menu .badge{
 	padding: 2px 5px;
 	background-color: #f36119;
 }

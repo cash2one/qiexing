@@ -432,6 +432,15 @@ $(document).ready(function(){
         $('.user-menu .dropdown-menu')
         .bind('mouseenter', function(){showDropdown('.user-menu')})
         .bind('mouseleave', function(){hideDropdown('.user-menu')});
+
+
+        $('.message-menu .dropdown-toggle')
+        .bind('mouseenter', function(){showDropdown('.message-menu')})
+        .bind('mouseleave', function(){hideDropdown('.message-menu')});
+
+        $('.message-menu .dropdown-menu')
+        .bind('mouseenter', function(){showDropdown('.message-menu')})
+        .bind('mouseleave', function(){hideDropdown('.message-menu')});
     }
 
     // 给不支持placeholder的浏览器添加此属性

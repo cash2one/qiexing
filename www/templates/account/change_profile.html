@@ -19,6 +19,13 @@
 {% block javascript %}
 <script type="text/javascript">
 $(document).ready(function(){
+	$('.date').datetimepicker({
+        format: 'yyyy-mm-dd',
+        language: 'zh-CN',
+        minView: 2,
+        autoclose: true
+    });
+
 	// 选择完文件之后自动提交
 	$('.avatar-file').bind('change', function(){
 		$.QXNotice.WarningTopNotice('图片上传中,请不要关闭页面...');
@@ -169,7 +176,7 @@ $(document).ready(function(){
 	<div class="form-group border-bottom bdc-eee pt-5 pb-15">
 		<label class="col-sm-2 control-label">出生日期</label>
 		<div class="col-sm-3">
-			<input type="text" name="birthday" id="birthday-id" class="form-control" value='{{request.user.birthday}}'
+			<input type="text" name="birthday" id="birthday-id" class="form-control date" value='{{request.user.birthday}}'
 			placeholder="" readonly></div>
 	</div>
 	<div class="form-group border-bottom bdc-eee pt-5 pb-15">
