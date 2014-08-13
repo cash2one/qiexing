@@ -15,42 +15,27 @@ $(document).ready(function(){
 {% endblock %}
 
 {% block left %}
+{% if answers %}
 <ul class="list-group">
+	{% for answer in answers %}
 	<li class="list-group-item bdc-eee pl-0 border-left-0 border-right-0">
-		<a href="#">
-			<img class="img-rounded avatar-35 pa" alt="随便玩玩" src="http://qimg0.qiniudn.com/newest_avatar_7c57fbba1e0311e4ae4e000c290d194c!65m65">
+		<a href="{{answer.from_user.get_url}}">
+			<img class="img-rounded avatar-35 pa" alt="{{answer.from_user.nick}}" src="{{answer.from_user.get_avatar_65}}">
 		</a>
 		<div class="pl-45">
 			<div>
-				用户<a href="#" class="co5 pr-5 pl-5">随便</a>评论了你的游记<a href="#" class="co5 pr-5 pl-5">周末去旅行</a>:
+				用户<a href="{{answer.from_user.get_url}}" class="co5 pr-5 pl-5">{{answer.from_user.nick}}</a>回复了你的{{answer.get_obj_type_display}}
+				<a href="{{answer.obj.get_url}}" class="co5 pr-5 pl-5">{{answer.obj.title|str_display:30}}</a>
 			</div>
-			<div class="f12 pt-5">堪称完美的一次旅行啊!</div>
-			<div class="co2 f12 pt-5">2014-08-07 15:22:55</div>
+			<div class="f12 pt-5">{{answer.obj.get_summary}}</div>
+			<div class="co2 f12 pt-5">{{answer.create_time}}</div>
 		</div>
 	</li>
-	<li class="list-group-item bdc-eee pl-0 border-left-0 border-right-0">
-		<a href="#">
-			<img class="img-rounded avatar-35 pa" alt="随便玩玩" src="http://qimg0.qiniudn.com/newest_avatar_7c57fbba1e0311e4ae4e000c290d194c!65m65">
-		</a>
-		<div class="pl-45">
-			<div>
-				用户<a href="#" class="co5 pr-5 pl-5">随便</a>评论了你的游记<a href="#" class="co5 pr-5 pl-5">周末去旅行</a>:
-			</div>
-			<div class="f12 pt-5">堪称完美的一次旅行啊!</div>
-			<div class="co2 f12 pt-5">2014-08-07 15:22:55</div>
-		</div>
-	</li>
-	<li class="list-group-item bdc-eee pl-0 border-left-0 border-right-0">
-		<a href="#">
-			<img class="img-rounded avatar-35 pa" alt="随便玩玩" src="http://qimg0.qiniudn.com/newest_avatar_7c57fbba1e0311e4ae4e000c290d194c!65m65">
-		</a>
-		<div class="pl-45">
-			<div>
-				用户<a href="#" class="co5 pr-5 pl-5">随便</a>评论了你的游记<a href="#" class="co5 pr-5 pl-5">周末去旅行</a>:
-			</div>
-			<div class="f12 pt-5">堪称完美的一次旅行啊!</div>
-			<div class="co2 f12 pt-5">2014-08-07 15:22:55</div>
-		</div>
-	</li>
+	{% endfor %}
 </ul>
+{{page_params|paging:request}}
+{% else %}
+<div class="blank10"></div>
+<div class="alert alert-info popmsg box-shadow-224 border-radius-0">暂无</div>
+{% endif %}
 {% endblock left %}

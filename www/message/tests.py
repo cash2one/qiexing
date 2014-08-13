@@ -11,7 +11,7 @@ sys.path.extend([os.path.abspath(os.path.join(SITE_ROOT, '../')),
 os.environ['DJANGO_SETTINGS_MODULE'] = 'www.settings'
 
 
-user_id = user = '0dda67e6d98811e3ab90685b35d0bf16'
+user_id = user = 'b2d540e11c7511e48083685b35d0bf16'
 
 
 def main():
@@ -22,8 +22,8 @@ def main():
     user_id2 = 'f40527cfd2c611e3b50a685b35d0bf16'
 
     ucb = interface.UnreadCountBase()
-    iab = interface.InviteAnswerBase()
-    gnb = interface.GlobalNoticeBase()
+    # iab = interface.InviteAnswerBase()
+    # gnb = interface.GlobalNoticeBase()
     # print ucb.init_count_info()
     # print ucb.get_unread_type()
     # print ucb.get_unread_count_info(user)
@@ -32,6 +32,7 @@ def main():
     # print ucb.update_unread_count(user, code='system_message', operate="add")
     # print ucb.update_unread_count(user, code='received_like', operate="add")
     # print ucb.update_unread_count(user, code='received_answer', operate="add")
+    print ucb.add_system_message(user_id, content=u"你的活动已经报名成功")
 
     # print iab.update_invite_is_read(to_user_id)
     # print iab.create_invite(from_user_id=user_id2, to_user_id=to_user_id, question_id=8)

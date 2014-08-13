@@ -15,24 +15,20 @@ $(document).ready(function(){
 {% endblock %}
 
 {% block left %}
+{% if system_messages %}
 <ul class="list-group">
+	{% for sm in system_messages %}
 	<li class="list-group-item bdc-eee pl-0 border-left-0 border-right-0">
 		<div>
-			抱歉,你申请的活动<a href="#" class="co5 pr-5 pl-5">周末去旅行</a>未通过，失败原因是：<span class="fb">手机无法接通！</span>
+			{{sm.content|safe}}
 		</div>
-		<div class="co2 f12 pt-5">2014-08-07 15:22:55</div>
+		<div class="co2 f12 pt-5">{{sm.create_time}}</div>
 	</li>
-	<li class="list-group-item bdc-eee pl-0 border-left-0 border-right-0">
-		<div>
-			抱歉,你申请的活动<a href="#" class="co5 pr-5 pl-5">周末去旅行</a>未通过，失败原因是：<span class="fb">手机无法接通！</span>
-		</div>
-		<div class="co2 f12 pt-5">2014-08-07 15:22:55</div>
-	</li>
-	<li class="list-group-item bdc-eee pl-0 border-left-0 border-right-0">
-		<div>
-			恭喜,你申请的活动<a href="#" class="co5 pr-5 pl-5">周末去旅行</a>通过! 请按时参加!
-		</div>
-		<div class="co2 f12 pt-5">2014-08-07 15:22:55</div>
-	</li>
+	{% endfor %}
 </ul>
+{{page_params|paging:request}}
+{% else %}
+<div class="blank10"></div>
+<div class="alert alert-info popmsg box-shadow-224 border-radius-0">暂无</div>
+{% endif %}
 {% endblock left %}
