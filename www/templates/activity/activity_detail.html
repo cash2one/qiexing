@@ -169,6 +169,8 @@ $(document).ready(function(){
 	<li class="pull-right pr-5">
 		<button type="submit" class="btn btn-danger btn-regist-activity">我 要 报 名</button>
 	</li>
+	{% endif %}
+	{% if request.user.id == activity.user.id or request.user.is_staff %}
 	<li class="pull-right pr-5">
 		<a href="javascript:void(0);" class="co2 pl-10 delete-activity" data-activity_id="{{activity.id}}"><span class="fa fa-trash-o pr-3"></span>删除</a>
 	</li>
