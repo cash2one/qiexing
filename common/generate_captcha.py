@@ -19,7 +19,7 @@ def create_validate_code(size=(120, 30),
                          bg_color=(255, 255, 255),
                          fg_color=(0, 0, 255),
                          font_size=18,
-                         font_type="../static_local/fonts/sheepsansbold.ttf",
+                         font_type="../static_local/fonts/arialbd.ttf",
                          length=4,
                          draw_lines=True,
                          n_line=(1, 2),
@@ -84,6 +84,9 @@ def create_validate_code(size=(120, 30),
 
         font = ImageFont.truetype(font_type, font_size)
         font_width, font_height = font.getsize(strs)
+
+        import logging
+        logging.error("%s,%s,%s,%s" % (width, height, font_width, font_height))
 
         draw.text(((width - font_width) / 3, (height - font_height) / 3),
                   strs, font=font, fill=fg_color)
