@@ -340,6 +340,153 @@ if (!String.format) {
     };
 
 
+    /*
+        分页组件
+    */
+    $.QXPagination = {
+        version: '1.0.0',
+        author: 'stranger',
+        description: '分页组件'
+    }
+    /*
+        分页组件
+    */
+    $.QXPagination.PaginationView = Backbone.View.extend({
+        el: '.qx-pagination',
+
+        step: 4,
+
+        totalStep: 10,
+
+        searchUrl: 'search',
+
+        // 防止超出范围
+        _protectRange: function(tempMin, tempMax, min, max){
+            if(tempMin < min){
+                tempMin = min;
+            }
+
+            if(tempMax > max){
+                tempMax = max
+            }
+
+            return [tempMin, tempMax]
+        },
+
+        // 生成分页区间
+        _generateRange: function(current, total){
+            var pages = [], 
+                current = parseInt(current),
+                total = parseInt(total),
+                min = current - this.step,
+                max = current + this.step,
+                temp = [];
+
+            // 防止超出范围
+            temp = this._protectRange(min, max, 1, total);
+            min = temp[0];
+            max = temp[1];
+
+            // 维持列表在 totalStep-1 这个长度
+            var tempCount = max - min + 2;
+            if(tempCount < this.totalStep){
+                if(max >= total){
+                    max = total;
+                    min = max - this.totalStep + 2;
+                } else {
+                    max = this.totalStep - 1;
+                }
+            }
+
+            // 防止超出范围
+            temp = this._protectRange(min, max, 1, total);
+
+            // 生成列表
+            pages = _.range(temp[0], temp[1]+1);
+
+            return pages;
+        },
+
+        render: function(pageIndex, pageCount, searchUrl){
+            var url = searchUrl || this.searchUrl,
+                pageHtml = '',
+                pages = this._generateRange(pageIndex, pageCount);
+            
+            for (var i = 0; i < pages.length; i++) {
+
+                pageHtml += String.format(
+                    '<li {0}><a href="#{1}/{2}">{3}</a></li>', 
+                    pages[i] == pageIndex ? 'class="active"' : '', // 为当前页添加active类
+                    url, 
+                    pages[i], 
+                    pages[i]
+                );
+            };
+
+            // 首页
+            pageHtml = String.format(
+                '<li {0}><a href="{1}">&laquo;</a>', 
+                pageIndex == 1 ? 'class="disabled"' : '',
+                pageIndex == 1 ? 'javascript: void(0);' : ('#' + url + '/' + 1)
+            ) + pageHtml;
+            
+            // 末页
+            pageHtml += String.format(
+                '<li {0}><a href="{1}">&raquo;</a>', 
+                pageIndex == pageCount ? 'class="disabled"' : '',
+                pageIndex == pageCount ? 'javascript: void(0);' : ('#' + url + '/' + pageCount)
+            );
+
+            this.$el.html(pageHtml);
+        }
+    });
+
+
+    /*
+        文本框组件
+    */
+    $.QXTextboxList = {
+        version: '1.0.0',
+        author: 'stranger',
+        description: '文本框组件'
+    };
+    /**/
+    $.QXTextboxList.create = function(selector, options){
+        var temp = new $.TextboxList(selector, {
+            bitsOptions: {
+                box: {deleteButton: true}
+            },
+            unique: true, 
+            max: options.max,
+            plugins: {
+                autocomplete: {
+                    minLength: 2, // 最小字符
+                    queryRemote: true, // 远程查询
+                    placeholder: options.placeholder,
+                    highlight: false,
+                    onlyFromValues: true, // 是否默认选中第一个结果
+                    remote: {
+                        url: options.url, 
+                        param: options.param,
+                        loadPlaceholder: options.loadPlaceholder,
+                    }
+                }
+            }
+
+        });
+
+        return {
+            target: temp,
+            add: function(name, value){
+                temp.add(name, value)
+            },
+            getValues: function(){
+                return _.map(temp.getValues(), function(v){return v[0]});
+            }
+        };
+    };
+
+
 })(jQuery);
 
 

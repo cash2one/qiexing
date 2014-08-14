@@ -23,6 +23,7 @@ urlpatterns = patterns('',
                        url(r'^sight/', include('www.sight.urls')),
                        url(r'^answer/', include('www.answer.urls')),
                        url(r'^message/', include('www.message.urls')),
+                       url(r'^admin/', include('www.admin.urls')),
 
                        url(r'^p/(?P<user_id>\w+)?$', 'www.account.views.user_journey'),
                        url(r'^p/(?P<user_id>\w+)/user_answer$', 'www.account.views.user_answer'),

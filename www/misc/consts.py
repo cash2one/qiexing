@@ -12,4 +12,11 @@ G_DICT_ERROR = {
     0: u'成功'
 }
 
-G_PROVINCE = {u"四川": [1, u"sichuan"], u"重庆": [2, u"chongqing"], }
+G_PROVINCE = {
+    u"澳门": [1, u"aomen"],
+    u"香港": [2, u"hk"],
+    u"台湾": [3, u"taiwan"],
+    u"广东": [4, u"guangdong"],
+    u"广西": [5, u"guangxi"],
+    u"四川": [6, u"sichuan"],
+}
