@@ -16,7 +16,7 @@
 			<div class="col-md-8">
 				<div class="">
 					<h4 class="mt-5">
-						<a href="{{activity.get_url}}" class="fb">{{activity.title}}</a>
+						<a href="{{activity.get_url}}" class="fb">{{activity.title|str_display:20}}</a>
 					</h4>
 				</div>
 				<div class="pt-0">活动发起人: <a href="{{activity.user.get_url}}">{{activity.user.nick}}</a></div>
