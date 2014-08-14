@@ -60,8 +60,9 @@ def upload_img(file_data, img_type='other', file_name=None):
     key = ret.get('key', '')
     # 编辑器上传图片最大宽度为600
     if img_type == 'editor':
-        if int(ret.get('w', 0)) > 600:
-            key += '!600m0'
+        key += '!600m0'
+        # if int(ret.get('w', 0)) > 600:
+        #     key += '!600m0'
     return True, key
 
 

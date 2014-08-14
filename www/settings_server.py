@@ -141,7 +141,7 @@ LOGGING = {
     }
 }
 
-SESSION_COOKIE_AGE = 60 * 60 * 24 * 10
+SESSION_COOKIE_AGE = 60 * 60 * 24 * 30
 SESSION_COOKIE_HTTPONLY = True
 # SESSION_COOKIE_DOMAIN = '.iqiexing.com' if not LOCAL_FLAG else '.a.com'
 

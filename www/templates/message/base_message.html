@@ -26,16 +26,36 @@
 <div class="col-md-8">
 	<ul class="nav nav-pills pt-15 qx-nav-pills">
 		<li {% if "/message/system_message" == request.path %} class="active" {%endif%}>
-			<a href="/message/system_message" class="black-blue">系统消息<span class="ml-5 badge">4</span></a>
+			<a href="/message/system_message" class="black-blue">
+				系统消息
+				{% if unread_count_info.system_message > 0 %}
+				<span class="ml-5 badge">{{unread_count_info.system_message}}</span>
+				{% endif %}
+			</a>
 		</li>
 		<li {% if "/message/received_like" == request.path %} class="active" {%endif%}>
-			<a href="/message/received_like" class="black-blue">收到的赞</a>
+			<a href="/message/received_like" class="black-blue">
+				收到的赞
+				{% if unread_count_info.received_like > 0 %}
+				<span class="ml-5 badge">{{unread_count_info.received_like}}</span>
+				{% endif %}
+			</a>
 		</li>
 		<li {% if "/message/received_answer" == request.path %} class="active" {%endif%}>
-			<a href="/message/received_answer" class="black-blue">收到的回复<span class="ml-5 badge">2</span></a>
+			<a href="/message/received_answer" class="black-blue">
+				收到的回复
+				{% if unread_count_info.received_answer > 0 %}
+				<span class="ml-5 badge">{{unread_count_info.received_answer}}</span>
+				{% endif %}
+			</a>
 		</li>
 		<li {% if "/message/at_answer" == request.path %} class="active" {%endif%}>
-			<a href="/message/at_answer" class="black-blue">收到的@</a>
+			<a href="/message/at_answer" class="black-blue">
+				@提到我的
+				{% if unread_count_info.at_answer > 0 %}
+				<span class="ml-5 badge">{{unread_count_info.at_answer}}</span>
+				{% endif %}
+			</a>
 		</li>
 	</ul>
 	{% block left %}{% endblock left %}

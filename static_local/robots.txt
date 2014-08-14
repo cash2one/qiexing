@@ -8,4 +8,3 @@ Disallow: /admin/*
 Disallow: /500
 Disallow: /search
 Disallow: /logout
-Sitemap: <http://www.zhixuan.com/sitemap.xml>

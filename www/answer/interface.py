@@ -125,7 +125,7 @@ class AnswerBase(object):
 
                                 # 发送提醒邮件
                                 context = dict(user=from_user, answer=answer)
-                                async_send_email(at_user.email, u'%s 在且行回答中@了你' % (from_user.nick, ), utils.render_email_template('email/at.html', context), 'html')
+                                # async_send_email(at_user.email, u'%s 在且行回答中@了你' % (from_user.nick, ), utils.render_email_template('email/at.html', context), 'html')
 
             # 更新未读消息
             if from_user_id != to_user_id:
@@ -134,7 +134,7 @@ class AnswerBase(object):
                 # 发送提醒邮件
                 to_user = UserBase().get_user_by_id(to_user_id)
                 context = dict(user=from_user, answer=answer)
-                async_send_email(to_user.email, u'%s 在且行回答了你的提问' % (from_user.nick, ), utils.render_email_template('email/answer.html', context), 'html')
+                # async_send_email(to_user.email, u'%s 在且行回答了你的提问' % (from_user.nick, ), utils.render_email_template('email/answer.html', context), 'html')
 
             # 更新用户回答统计总数
             UserCountBase().update_user_count(user_id=from_user_id, code='user_answer_count')

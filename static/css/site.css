@@ -5,6 +5,10 @@ body {
 	color: #222;
 }
 
+.hidden{visibility:hidden}
+.auto-hide{display: none;}
+.none{display:none}
+.block{display:block;}
 .pointer{cursor: pointer;}
 
 .fb{font-weight: bold;}
