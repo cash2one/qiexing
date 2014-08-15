@@ -20,3 +20,36 @@ G_PROVINCE = {
     u"广西": [5, u"guangxi"],
     u"四川": [6, u"sichuan"],
 }
+
+
+PERMISSIONS = [
+    {'code': 'permission_manage', 'name': u'权限管理', 'parent': None},
+    {'code': 'add_user_permission', 'name': u'添加用户权限', 'parent': 'permission_manage'},
+    {'code': 'query_user_permission', 'name': u'查询用户权限', 'parent': 'permission_manage'},
+    {'code': 'modify_user_permission', 'name': u'修改用户权限', 'parent': 'permission_manage'},
+    {'code': 'cancel_admin', 'name': u'取消管理员', 'parent': 'permission_manage'},
+
+    {'code': 'user_manage', 'name': u'用户管理', 'parent': None},
+    #{'code': 'add_user', 'name': u'添加用户', 'parent': 'user_manage'},
+    {'code': 'query_user', 'name': u'查询用户', 'parent': 'user_manage'},
+    {'code': 'modify_user', 'name': u'修改用户', 'parent': 'user_manage'},
+    {'code': 'remove_user', 'name': u'删除用户', 'parent': 'user_manage'},
+
+    {'code': 'friendly_link_manage', 'name': u'友情链接管理', 'parent': None},
+    {'code': 'add_friendly_link', 'name': u'添加友情链接', 'parent': 'friendly_link_manage'},
+    {'code': 'query_friendly_link', 'name': u'查询友情链接', 'parent': 'friendly_link_manage'},
+    {'code': 'modify_friendly_link', 'name': u'修改友情链接', 'parent': 'friendly_link_manage'},
+    {'code': 'remove_friendly_link', 'name': u'删除友情链接', 'parent': 'friendly_link_manage'},
+
+    {'code': 'sight_manage', 'name': u'景点管理', 'parent': None},
+    {'code': 'add_sight', 'name': u'添加景点', 'parent': 'sight_manage'},
+    {'code': 'query_sight', 'name': u'查询景点', 'parent': 'sight_manage'},
+    {'code': 'modify_sight', 'name': u'修改景点', 'parent': 'sight_manage'},
+    {'code': 'remove_sight', 'name': u'删除景点', 'parent': 'sight_manage'},
+
+    # {'code': 'friendly_link_manage', 'name': u'报名管理', 'parent': None},
+    # {'code': 'add_friendly_link', 'name': u'添加友情链接', 'parent': 'friendly_link_manage'},
+    # {'code': 'query_friendly_link', 'name': u'查询友情链接', 'parent': 'friendly_link_manage'},
+    # {'code': 'modify_friendly_link', 'name': u'修改友情链接', 'parent': 'friendly_link_manage'},
+    # {'code': 'remove_friendly_link', 'name': u'删除友情链接', 'parent': 'friendly_link_manage'},
+]

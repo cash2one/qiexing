@@ -11,17 +11,19 @@ from django.conf import settings
 
 from www.misc import qiniu_client
 from common import utils, page
+from misc.decorators import staff_required, common_ajax_response, verify_permission
 
 from www.sight.interface import SightBase
 
 
+@verify_permission('')
 def sight(request, template_name='admin/sight.html'):
     from www.misc.consts import G_PROVINCE
     province_dict = [{'value': G_PROVINCE[x][0], 'name': x} for x in G_PROVINCE.keys()]
     return render_to_response(template_name, locals(), context_instance=RequestContext(request))
 
 
-#@verify_permission('add_stock')
+@verify_permission('add_sight')
 def add_sight(request):
     name = request.REQUEST.get('name')
     province = request.REQUEST.get('province')
@@ -42,6 +44,7 @@ def add_sight(request):
     return HttpResponseRedirect(url)
 
 
+@verify_permission('query_sight')
 def get_province_by_name(request):
     name = request.REQUEST.get('province_name', '')
 
@@ -87,6 +90,7 @@ def format_sight(objs, num):
     return data
 
 
+@verify_permission('query_sight')
 def search(request):
     data = []
     sb = SightBase()
@@ -113,6 +117,7 @@ def search(request):
     )
 
 
+@verify_permission('query_sight')
 def get_sight_by_id(request):
 
     sight_id = request.REQUEST.get('sight_id')
@@ -127,6 +132,7 @@ def get_sight_by_id(request):
     return HttpResponse(json.dumps(data), mimetype='application/json')
 
 
+@verify_permission('modify_sight')
 def modify_sight(request):
     sight_id = request.REQUEST.get('sight_id')
     name = request.REQUEST.get('name')
