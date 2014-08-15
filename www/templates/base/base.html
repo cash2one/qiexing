@@ -67,7 +67,7 @@
                         <li class="user-menu dropdown">
                             <a href="{{request.user.get_url}}" class="dropdown-toggle user w140" data-toggle="dropdown" title="{{request.user.nick}}" style="padding-top: 12px; padding-bottom: 13px;">
                                 <img alt="{{request.user.nick}}" class="avatar-25 img-circle user" src="{{request.user.get_avatar_25}}">
-                                <span class="pl-0">{{request.user.nick|str_display:5}}</span>
+                                <span class="pl-0">{{request.user.nick|str_display:4}}</span>
                             </a>
                             
                             <ul class="dropdown-menu text-left" role="menu">
