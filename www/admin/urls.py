@@ -39,3 +39,10 @@ urlpatterns += patterns('www.admin.views_permission',
                         url(r'^permission/get_all_administrators$', 'get_all_administrators'),
                         url(r'^permission$', 'permission'),
                         )
+
+# 用户
+urlpatterns += patterns('www.admin.views_sign',
+
+                        url(r'^sign/search$', 'search'),
+                        url(r'^sign$', 'sign'),
+                        )

@@ -1,0 +1,232 @@
+{% extends "admin/home.html" %}
+{% load custom_tags %}
+{% load custom_filters %}
+{% block title %}报名管理{% endblock %}
+
+{% block css %}
+<style type="text/css">
+</style>
+{% endblock %}
+
+{% block javascript %}
+<script type="text/javascript">
+$(document).ready(function(){
+    // models
+    var Sign = Backbone.Model.extend({
+
+        // 默认值
+        defaults: {
+            'num': ''
+        }
+
+    });
+
+    // collections
+    var Signs = Backbone.Collection.extend({
+        model: Sign,
+
+        _modelMaps: {
+            'num': 'num',
+            'signId': 'sign_id',
+            'userId': 'user_id',
+            'userName': 'user_name',
+            'activityId': 'activity_id',
+            'activityName': 'activity_name',
+            'realName': 'real_name',
+            'mobile': 'mobile',
+            'partnerCount': 'partner_count',
+            'state': 'state'
+        },
+
+        // 查询
+        search: function(state, name, pageIndex){
+            var me = this;
+
+            ajaxSend(
+                "/admin/sign/search", 
+                {'page_index': pageIndex||1, 'name': name||'', 'state': state||0}, 
+                function(data){
+                    me.pageIndex = pageIndex||1;
+                    me.pageCount = data.page_count;
+                    me.name = name;
+                    me.state = state;
+
+                    me.reset($.QXUtils.dictMapParse(data.data, me._modelMaps))
+                }
+            );
+        }
+        
+    });
+
+    // listView
+    var ListView = Backbone.View.extend({
+        el: '#sign_list',
+
+        pagination: new $.QXPagination.PaginationView(),
+
+        template: _.template($('#sign_template').html()),
+
+        initialize: function(){
+            this.listenTo(this.collection, 'reset', this.render);
+        },
+
+        events: {
+            'click .search': 'searchSign',
+            'click .ok': 'pass',
+            'click .cancel': 'cancel'
+        },
+
+        // 渲染函数
+        render: function(){
+            var data = this.collection.toJSON();
+
+            this.showPanel();
+            this.$('tbody').html(this.template({'signs': data}));
+            this.pagination.render(
+                this.collection.pageIndex||1, 
+                this.collection.pageCount, 
+                'search/' + this.collection.name
+            );
+        },
+
+        // 显示面板
+        showPanel: function(){
+            $('.qx-nav-pills a[href="#sign_list"]').tab('show');
+        },
+
+        searchSign: function(){
+            var name = this.$('.key-word').val(),
+                state = this.$('.state').val();
+
+            router.navigate('/search/'+state+'/'+name+'/1', {trigger: true});
+        },
+
+        pass: function(sender){
+            var target = $(sender.currentTarget),
+                signId = target.data('sign_id');
+
+                console.log(signId)
+                target.parent().parent().remove();
+        },
+
+        cancel: function(sender){
+            var target = $(sender.currentTarget),
+                signId = target.data('sign_id');
+
+                console.log(signId)
+
+                var reason = prompt('审核失败原因:');
+                if(reason){
+                    console.log(reason)
+                } else {
+                    $.QXNotice.WarningTopNotice("请填写审核失败原因");
+                }
+        }
+
+    });
+
+
+    // router
+    var Router = Backbone.Router.extend({
+
+        routes: {
+            "":                     		"search",
+            "search/(:state)/(:name)/:pageIndex":    "search",
+        },
+
+        // 查询
+        search: function(state, name, pageIndex){
+            signs.search(state, name, pageIndex||1);
+        }
+        
+    });
+    
+    // 初始化
+    var signs = new Signs(),
+        listView = new ListView({'collection': signs}),
+        router = new Router();
+ 
+    Backbone.history.start();
+
+});
+
+</script>
+{% endblock %}
+
+{% block right %}
+<ul class="nav nav-pills pt-15 qx-nav-pills">
+    <li class="active">
+        <a href="#sign_list" class="black-blue" data-toggle="pill">报名人员列表</a>
+    </li>
+</ul>
+
+<div class="tab-content">
+    <!-- 客户经理列表 -->
+    <div class="tab-pane fade pt-15 in active" id="sign_list">
+        <div class="pl-0 pr-10 pb-10 col-md-2">
+            <select class="form-control input-sm state">
+                <option value="-1">未通过列表</option>
+                <option value="0" selected="selected">未审核列表</option>
+                <option value="1">已通过列表</option>
+            </select>
+        </div>
+        <div class="pl-0 pr-0 pb-10 col-md-3">
+            <div class="input-group input-group-sm">
+                <input type="text" class="form-control border-radius-0 key-word" placeholder="输入用户名称..." />
+                <span class="input-group-btn">
+                    <button class="btn btn-default search" type="button">查询</button>
+                </span>
+            </div>
+        </div>
+        <table class="table table-hover">
+            <thead>
+                <tr>
+                    <th>#</th>
+                    <th>用户名称</th>
+                    <th>活动名称</th>
+                    <th>真实姓名</th>
+                    <th>联系电话</th>
+                    <th>预计人数</th>
+                    <th>状态</th>
+                </tr>
+            </thead>
+            <tbody>
+                
+            </tbody>
+        </table>
+
+        <div class="text-center">
+            <ul class="pagination pagination-sm qx-pagination">
+                
+            </ul>
+        </div>
+    </div>
+</div>
+
+<!-- 客户经理列表 -->
+<script type="text/template" id="sign_template">
+    <% _.each(signs, function(sign){ %>
+        <tr class="pointer" data-sign_id="<%= sign.signId %>">
+            <td><%= sign.num %></td>
+            <td><%= sign.userName %></td>
+            <td><%= sign.activityName %></td>
+            <td><%= sign.realName %></td>
+            <td><%= sign.mobile %></td>
+            <td><%= sign.partnerCount %></td>
+            <td>
+                <% if (sign.state == -1) { %>
+                    <span class="co8">通过</span>
+                <% } %>
+                <% if (sign.state == 0) { %>
+                    <button type="button" data-sign_id="<%= sign.signId %>" class="btn btn-default btn-sm cancel">失败</button>
+                    <button type="button" data-sign_id="<%= sign.signId %>" class="btn btn-danger btn-sm ok">通过</button>
+                <% } %>
+                <% if (sign.state == 1) { %>
+                    <span class="co9">通过</span>
+                <% } %>
+            </td>
+        </tr>
+    <% }) %>
+</script>
+
+{% endblock right %}

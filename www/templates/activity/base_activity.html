@@ -5,6 +5,13 @@
 {% endblock %}
 
 {% block base_js %}
+<script type="text/javascript">
+$(document).ready(function(){
+	$('.create-activity').bind('click', function(){
+		window.location.href = $(this).parent().attr('href');
+	});
+});
+</script>
 	{% block javascript %}{% endblock javascript %}
 {% endblock %}
 
@@ -16,7 +23,7 @@
 <div class="col-md-4 pl-70 pt-15">
 	{% block right %}
 	<a href="/activity/create_activity">
-		<button type="button" class="btn btn-danger btn-lg btn-block">+ 发 起 活 动</button>
+		<button type="button" class="btn btn-danger btn-lg btn-block create-activity">+ 发 起 活 动</button>
 	</a>
 	{% endblock right %}
 </div>

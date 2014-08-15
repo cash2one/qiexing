@@ -259,3 +259,10 @@ class ActivityPersonBase(object):
 
     def is_user_in_activity(self, activity, user_id):
         return True if ActivityPerson.objects.filter(activity=activity, user_id=user_id) else False
+
+    def get_sign_infos_for_admin(self, state=0, name=""):
+        qs = {'state': state}
+        if name:
+            qs.update({'real_name': name})
+
+        return ActivityPerson.objects.filter(**qs)
