@@ -188,7 +188,7 @@ $(document).ready(function(){
                     me.showPanel();
                 } else {
                     setTimeout(function(){history.go(-1);}, 3000);
-                    $.ZXMsg.alert('提示', '没有找到对应的景点!');
+                    $.QXNotice.ErrorTopNotice('没有找到对应的景点!');
                 }
             });
         },
@@ -210,7 +210,7 @@ $(document).ready(function(){
                         if(data.errcode === 0){
                             listView.searchSight();
                         } else {
-                            $.ZXMsg.alert('提示', data.errmsg);
+                            $.QXNotice.ErrorTopNotice(data.errmsg);
                         }
                     });
                 }

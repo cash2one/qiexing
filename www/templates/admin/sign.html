@@ -73,7 +73,7 @@ $(document).ready(function(){
         events: {
             'click .search': 'searchSign',
             'click .ok': 'pass',
-            'click .cancel': 'cancel'
+            'click .fail': 'fail'
         },
 
         // 渲染函数
@@ -105,22 +105,43 @@ $(document).ready(function(){
             var target = $(sender.currentTarget),
                 signId = target.data('sign_id');
 
-                console.log(signId)
-                target.parent().parent().remove();
+            ajaxSend(
+                "/admin/sign/sign_in_pass", 
+                {"sign_id": signId, 'state': 1}, 
+                function(data){
+                    if(data.errcode === 0){
+                        target.parent().parent().remove();
+                    } else {
+                        $.QXNotice.ErrorTopNotice(data.errmsg);
+                    }
+                }
+            );
+                
         },
 
-        cancel: function(sender){
+        fail: function(sender){
             var target = $(sender.currentTarget),
                 signId = target.data('sign_id');
 
                 console.log(signId)
 
-                var reason = prompt('审核失败原因:');
-                if(reason){
-                    console.log(reason)
-                } else {
-                    $.QXNotice.WarningTopNotice("请填写审核失败原因");
-                }
+            var reason = prompt('审核失败原因:');
+            if(reason){
+                ajaxSend(
+                    "/admin/sign/sign_in_fail", 
+                    {"sign_id": signId, 'state': -1, 'reason': reason}, 
+                    function(data){
+                        if(data.errcode === 0){
+                            target.parent().parent().remove();
+                        } else {
+                            $.QXNotice.ErrorTopNotice(data.errmsg);
+                        }
+                    }
+                );
+            } else {
+                $.QXNotice.WarningTopNotice("请填写审核失败原因");
+            }
+
         }
 
     });
@@ -218,7 +239,7 @@ $(document).ready(function(){
                     <span class="co8">通过</span>
                 <% } %>
                 <% if (sign.state == 0) { %>
-                    <button type="button" data-sign_id="<%= sign.signId %>" class="btn btn-default btn-sm cancel">失败</button>
+                    <button type="button" data-sign_id="<%= sign.signId %>" class="btn btn-default btn-sm fail">失败</button>
                     <button type="button" data-sign_id="<%= sign.signId %>" class="btn btn-danger btn-sm ok">通过</button>
                 <% } %>
                 <% if (sign.state == 1) { %>

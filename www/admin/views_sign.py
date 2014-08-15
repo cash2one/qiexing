@@ -71,3 +71,20 @@ def search(request):
         json.dumps({'data': data, 'page_count': page_objs[4], 'total_count': page_objs[5]}),
         mimetype='application/json'
     )
+
+
+@common_ajax_response
+def sign_in_pass(request):
+    sign_id = request.REQUEST.get('sign_id')
+    state = int(request.REQUEST.get('state'))
+
+    return ActivityPersonBase().set_join_state(request.user, sign_id, state)
+
+
+@common_ajax_response
+def sign_in_fail(request):
+    sign_id = request.REQUEST.get('sign_id')
+    state = int(request.REQUEST.get('state'))
+    reason = request.REQUEST.get('reason')
+
+    return ActivityPersonBase().set_join_state(request.user, sign_id, state, reason)

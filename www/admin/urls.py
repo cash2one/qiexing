@@ -43,6 +43,8 @@ urlpatterns += patterns('www.admin.views_permission',
 # 用户
 urlpatterns += patterns('www.admin.views_sign',
 
+                        url(r'^sign/sign_in_pass$', 'sign_in_pass'),
+                        url(r'^sign/sign_in_fail$', 'sign_in_fail'),
                         url(r'^sign/search$', 'search'),
                         url(r'^sign$', 'sign'),
                         )

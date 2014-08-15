@@ -8,7 +8,7 @@ from common import utils, debug
 from www.misc.decorators import cache_required
 from www.misc import consts
 # from www.tasks import async_send_email
-# from www.message.interface import UnreadCountBase
+from www.message.interface import UnreadCountBase
 from www.account.interface import UserBase
 from www.journey.interface import JourneyBase
 from www.activity.models import Activity, ActivityPerson
@@ -219,9 +219,16 @@ class ActivityPersonBase(object):
             ActivityPerson.objects.create(activity=activity, user_id=user_id, real_name=real_name, mobile=mobile,
                                           partner_count=partner_count, state=state)
 
+            user = UserBase().get_user_by_id(user_id)
+
             if state > 0:
                 activity.person_count += 1
                 activity.save()
+            else:
+                UnreadCountBase().add_system_message(
+                    activity.user_id,
+                    content=u'用户<a href="/p/%s" class="co5 pr-5 pl-5" >%s</a>申请报名你创建的活动:<a class="co5 pr-5 pl-5" href="/activity/%s">%s</a>' % (user.id, user.nick, activity.id, activity.title)
+                )
 
             transaction.commit(using=ACTIVITY_DB)
             return 0, dict_err.get(0)
@@ -231,7 +238,7 @@ class ActivityPersonBase(object):
             return 99900, dict_err.get(99900)
 
     @transaction.commit_manually(using=ACTIVITY_DB)
-    def set_join_state(self, request_user, activity_person_key_id, state):
+    def set_join_state(self, request_user, activity_person_key_id, state, reason=None):
         try:
             try:
                 ap = ActivityPerson.objects.select_related("activity").get(id=activity_person_key_id)
@@ -240,12 +247,26 @@ class ActivityPersonBase(object):
                 return 30807, dict_err.get(30807)
             activity = ap.activity
 
+            # 审核通过
             if state == 1 and ap.state == 0:
                 activity.person_count += 1
                 activity.save()
+                UnreadCountBase().add_system_message(
+                    ap.user_id,
+                    content=u'你报名的活动<a class="co5 pr-5 pl-5" href="/activity/%s">%s</a>审核成功!请准时参加!' % (ap.activity.id, ap.activity.title)
+                )
+
+            # 取消报名
             if state == 0 and ap.state == 1:
                 activity.person_count -= 1
                 activity.save()
+
+            # 审核失败
+            if state == -1 and ap.state == 0:
+                UnreadCountBase().add_system_message(
+                    ap.user_id,
+                    content=u'你报名的活动<a class="co5 pr-5 pl-5" href="/activity/%s">%s</a>审核失败!失败原因:<span class="fb">%s</span>' % (ap.activity.id, ap.activity.title, reason)
+                )
 
             ap.state = state
             ap.save()
