@@ -202,11 +202,11 @@ class ActivityPersonBase(object):
         return activity_persons
 
     def get_activity_persons_by_activity(self, activity):
-        return ActivityPerson.objects.filter(activity=activity, state=True)
+        return ActivityPerson.objects.filter(activity=activity, state=1)
 
     @activity_required
     @transaction.commit_manually(using=ACTIVITY_DB)
-    def join_activity(self, activity, user_id, real_name, mobile, partner_count, state=False):
+    def join_activity(self, activity, user_id, real_name, mobile, partner_count, state=0):
         try:
             if not all((user_id, real_name, mobile)):
                 transaction.rollback(using=ACTIVITY_DB)
@@ -219,7 +219,7 @@ class ActivityPersonBase(object):
             ActivityPerson.objects.create(activity=activity, user_id=user_id, real_name=real_name, mobile=mobile,
                                           partner_count=partner_count, state=state)
 
-            if state:
+            if state > 0:
                 activity.person_count += 1
                 activity.save()
 
@@ -240,10 +240,10 @@ class ActivityPersonBase(object):
                 transaction.rollback(using=ACTIVITY_DB)
                 return 30807, dict_err.get(30807)
 
-            if state == True and ap.state == False:
+            if state == 1 and ap.state == 0:
                 activity.person_count += 1
                 activity.save()
-            if state == False and ap.state == True:
+            if state == 0 and ap.state == 1:
                 activity.person_count -= 1
                 activity.save()
 

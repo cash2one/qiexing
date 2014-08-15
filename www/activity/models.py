@@ -41,12 +41,13 @@ class Activity(models.Model):
 
 
 class ActivityPerson(models.Model):
+    state_choices = ((0, u"未审核"), (1, u"审核通过"), (-1, u"审核未通过"))
     activity = models.ForeignKey(Activity)
     user_id = models.CharField(max_length=32, db_index=True)
     real_name = models.CharField(max_length=16)
     mobile = models.CharField(max_length=16)
     partner_count = models.IntegerField()
-    state = models.BooleanField(default=False, db_index=True)
+    state = models.IntegerField(default=0, db_index=True, choices=state_choices)
     create_time = models.DateTimeField(db_index=True, auto_now_add=True)
 
     class Meta:
