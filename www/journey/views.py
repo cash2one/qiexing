@@ -16,8 +16,12 @@ lb = interface.LikeBase()
 
 def home(request, template_name='journey/home.html'):
     from www.activity.interface import ActivityBase
+    from www.admin.interface import FriendlyLinkBase
+
     activitys = ActivityBase().get_all_valid_activitys()[:3]
     journeys = jb.format_journeys(jb.get_all_journeys_for_home_page()[:4])
+
+    links = FriendlyLinkBase().get_friendly_link_by_link_type(link_type=3)
 
     return render_to_response(template_name, locals(), context_instance=RequestContext(request))
 
