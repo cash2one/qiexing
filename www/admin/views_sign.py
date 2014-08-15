@@ -17,7 +17,7 @@ from www.activity.interface import ActivityPersonBase, ActivityBase
 from www.account.interface import UserBase
 
 
-# @verify_permission('')
+@verify_permission('')
 def sign(request, template_name='admin/sign.html'):
 
     return render_to_response(template_name, locals(), context_instance=RequestContext(request))
@@ -49,7 +49,7 @@ def format_sign(objs, num):
     return data
 
 
-# @verify_permission('query_sign')
+@verify_permission('query_sign')
 def search(request):
     data = []
     apb = ActivityPersonBase()
@@ -73,6 +73,7 @@ def search(request):
     )
 
 
+@verify_permission('sign_in_pass')
 @common_ajax_response
 def sign_in_pass(request):
     sign_id = request.REQUEST.get('sign_id')
@@ -81,6 +82,7 @@ def sign_in_pass(request):
     return ActivityPersonBase().set_join_state(request.user, sign_id, state)
 
 
+@verify_permission('sign_in_fail')
 @common_ajax_response
 def sign_in_fail(request):
     sign_id = request.REQUEST.get('sign_id')

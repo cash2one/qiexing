@@ -236,7 +236,7 @@ $(document).ready(function(){
             <td><%= sign.partnerCount %></td>
             <td>
                 <% if (sign.state == -1) { %>
-                    <span class="co8">通过</span>
+                    <span class="co8">审核失败</span>
                 <% } %>
                 <% if (sign.state == 0) { %>
                     <button type="button" data-sign_id="<%= sign.signId %>" class="btn btn-default btn-sm fail">失败</button>

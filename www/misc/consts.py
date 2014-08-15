@@ -47,6 +47,11 @@ PERMISSIONS = [
     {'code': 'modify_sight', 'name': u'修改景点', 'parent': 'sight_manage'},
     {'code': 'remove_sight', 'name': u'删除景点', 'parent': 'sight_manage'},
 
+    {'code': 'sign_manage', 'name': u'报名管理', 'parent': None},
+    {'code': 'sign_in_pass', 'name': u'报名通过', 'parent': 'sign_manage'},
+    {'code': 'sign_in_fail', 'name': u'报名失败', 'parent': 'sign_manage'},
+    {'code': 'query_sign', 'name': u'查询报名列表', 'parent': 'sign_manage'},
+
     # {'code': 'friendly_link_manage', 'name': u'报名管理', 'parent': None},
     # {'code': 'add_friendly_link', 'name': u'添加友情链接', 'parent': 'friendly_link_manage'},
     # {'code': 'query_friendly_link', 'name': u'查询友情链接', 'parent': 'friendly_link_manage'},
