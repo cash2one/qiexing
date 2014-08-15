@@ -217,8 +217,8 @@ if (!String.format) {
                 url,
                 (clearTitle.length >= 110) ? (clearTitle.substring(0, 110) + '...') : clearTitle,
                 pic ? pic : '',
-                '266639437',
-                '5083374708'
+                '504150080',
+                '5251589524'
             );
 
         notOpenWin = notOpenWin ? notOpenWin : false;

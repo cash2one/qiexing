@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 
 import datetime
+import time
 from django.db import transaction
 from django.utils.encoding import smart_unicode
 from django.conf import settings
@@ -9,7 +10,7 @@ from common import utils, debug, validators, cache
 from www.misc.decorators import cache_required
 from www.misc import consts
 from www.tasks import async_send_email
-from www.account.models import User, Profile, UserCount, LastActive
+from www.account.models import User, Profile, UserCount, LastActive, ExternalToken
 
 dict_err = {
     10100: u'邮箱重复',
@@ -428,6 +429,62 @@ class UserBase(object):
         if not nick:
             return []
         return Profile.objects.filter(nick__icontains=nick)[:200]
+
+    def get_user_by_external_info(self, source, access_token, external_user_id,
+                                  refresh_token, nick, ip, expire_time,
+                                  user_url='', gender=0):
+        assert all((source, access_token, external_user_id, nick))
+        et = self.get_external_user(source, access_token, external_user_id, refresh_token)
+        if et:
+            return True, self.get_user_by_id(et.user_id)
+        else:
+            email = '%s_%s@mriqiexing.com' % (source, int(time.time() * 1000))
+            nick = self.generate_nick_by_external_nick(nick)
+            if not nick:
+                return False, u'生成名称异常'
+            expire_time = time.strftime('%Y-%m-%d %H:%M:%S', time.localtime(int(time.time()) + int(expire_time)))
+            errcode, result = self.regist_user(email=email, nick=nick, password=email, re_password=email, ip=ip, source=1, gender=gender)
+            if errcode == 0:
+                user = result
+                ExternalToken.objects.create(source=source, external_user_id=external_user_id,
+                                             access_token=access_token, refresh_token=refresh_token, user_url=user_url,
+                                             nick=nick, user_id=user.id, expire_time=expire_time
+                                             )
+                return True, user
+            else:
+                return False, result
+
+    def generate_nick_by_external_nick(self, nick):
+        if not self.get_user_by_nick(nick):
+            return nick
+        else:
+            for i in xrange(3):
+                new_nick = '%s_%s' % (nick, i)
+                if not self.get_user_by_nick(new_nick):
+                    return new_nick
+            for i in xrange(10):
+                return '%s_%s' % (nick,  str(int(time.time() * 1000))[-3:])
+
+    def get_external_user(self, source, access_token, external_user_id, refresh_token):
+        assert all((source, access_token, external_user_id))
+
+        et = None
+        ets = list(ExternalToken.objects.filter(source=source, external_user_id=external_user_id))
+        if ets:
+            et = ets[0]
+            if et.access_token != access_token:
+                et.access_token = access_token
+                et.refresh_token = refresh_token
+                et.save()
+        else:
+            ets = list(ExternalToken.objects.filter(source=source, access_token=access_token))
+            if ets:
+                et = ets[0]
+                if et.external_user_id != external_user_id:
+                    et.external_user_id = external_user_id
+                    et.refresh_token = refresh_token
+                    et.save()
+        return et
 
 
 def user_profile_required(func):

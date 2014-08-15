@@ -143,7 +143,7 @@ class UserCount(models.Model):
     following_count = models.IntegerField(default=0, db_index=True)
     follower_count = models.IntegerField(default=0, db_index=True)
 
-"""
+
 class ExternalToken(models.Model):
     user_id = models.CharField(max_length=32, db_index=True)
     source = models.CharField(max_length=16, db_index=True)
@@ -161,6 +161,7 @@ class ExternalToken(models.Model):
         unique_together = [("source", "access_token"), ("source", "external_user_id")]
 
 
+"""
 class Invitation(models.Model):
     user_id = models.CharField(max_length=32, unique=True)
     code = models.CharField(max_length=32, unique=True)
