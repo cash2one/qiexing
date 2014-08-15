@@ -230,15 +230,15 @@ class ActivityPersonBase(object):
             transaction.rollback(using=ACTIVITY_DB)
             return 99900, dict_err.get(99900)
 
-    @activity_required
     @transaction.commit_manually(using=ACTIVITY_DB)
-    def set_join_state(self, activity, request_user, activity_person_key_id, state):
+    def set_join_state(self, request_user, activity_person_key_id, state):
         try:
             try:
-                ap = ActivityPerson.objects.get(id=activity_person_key_id)
+                ap = ActivityPerson.objects.select_related("activity").get(id=activity_person_key_id)
             except ActivityPerson.DoesNotExist:
                 transaction.rollback(using=ACTIVITY_DB)
                 return 30807, dict_err.get(30807)
+            activity = ap.activity
 
             if state == 1 and ap.state == 0:
                 activity.person_count += 1
