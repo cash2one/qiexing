@@ -45,3 +45,10 @@ class FriendlyLink(models.Model):
     class Meta:
         unique_together = [("name", "city_id", 'link_type'), ]
         ordering = ["-sort_num", "id"]
+
+
+class HomeCover(models.Model):
+    img = models.CharField(max_length=256)
+
+    class Meta:
+        ordering = ["-id", ]

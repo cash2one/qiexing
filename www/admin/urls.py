@@ -5,6 +5,8 @@ from django.conf.urls import patterns, url
 
 urlpatterns = patterns('www.admin.views',
                        url(r'^$', 'home'),
+                       url(r'^home_cover/save_home_cover$', 'save_home_cover'),
+                       url(r'^home_cover$', 'home_cover'),
                        )
 
 
@@ -28,6 +30,17 @@ urlpatterns += patterns('www.admin.views_user',
                         url(r'^user/get_user_by_id$', 'get_user_by_id'),
                         url(r'^user/search$', 'search'),
                         url(r'^user$', 'user'),
+                        )
+
+# 友情链接
+urlpatterns += patterns('www.admin.views_friendly_link',
+
+                        url(r'^friendly_link/modify_friendly_link$', 'modify_friendly_link'),
+                        url(r'^friendly_link/remove_friendly_link$', 'remove_friendly_link'),
+                        url(r'^friendly_link/get_friendly_link_by_id$', 'get_friendly_link_by_id'),
+                        url(r'^friendly_link/add_friendly_link$', 'add_friendly_link'),
+                        url(r'^friendly_link/search$', 'search'),
+                        url(r'^friendly_link$', 'friendly_link'),
                         )
 
 # 权限

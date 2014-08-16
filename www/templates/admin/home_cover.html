@@ -1,0 +1,55 @@
+{% extends "admin/home.html" %}
+{% load custom_tags %}
+{% load custom_filters %}
+{% block title %}首页封面管理{% endblock %}
+
+{% block css %}
+<style type="text/css">
+</style>
+{% endblock %}
+
+{% block javascript %}
+<script type="text/javascript">
+$(document).ready(function(){
+    var editor = createEditor('#cover_editor');
+
+    $('.save').bind('click', function(){
+        ajaxSend(
+            "/admin/home_cover/save_home_cover", 
+            {'cover': editor.html()},
+            function(data){
+                if(data.errcode === 0){
+                    $.QXNotice.SuccessTopNotice('操作成功');
+                } else {
+                    $.QXNotice.ErrorTopNotice(data.errmsg);
+                }
+            }
+        );
+    });
+});
+
+</script>
+{% endblock %}
+
+{% block right %}
+<ul class="nav nav-pills pt-15 qx-nav-pills">
+    <li class="active">
+        <a href="#modify_home_cover" class="black-blue" data-toggle="pill">首页封面</a>
+    </li>
+</ul>
+
+<div class="tab-content">
+    
+    <div class="tab-pane fade in active pt-15 pb-15" id="modify_home_cover">
+        <textarea name="cover" rows="6" id="cover_editor" class="form-control" style="height: 300px;">
+            {% for x in covers %}
+            <p><img src="{{x}}"></p>
+            {% endfor %}
+        </textarea>
+        <div class="pt-15">
+            <button type="button" class="btn btn-danger save">保存</button>
+        </div>
+    </div>
+</div>
+
+{% endblock right %}

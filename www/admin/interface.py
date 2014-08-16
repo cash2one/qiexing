@@ -6,7 +6,7 @@ from django.db import transaction
 from common import debug
 from www.misc import consts
 
-from admin.models import Permission, UserPermission, FriendlyLink
+from admin.models import Permission, UserPermission, FriendlyLink, HomeCover
 from account.interface import UserBase
 
 dict_err = {}
@@ -85,15 +85,14 @@ class FriendlyLinkBase(object):
     def format_friendly_links(self, friendly_links):
         return friendly_links
 
-    def add_friendly_link(self, name, href, link_type=0, city_id=None, img=None, des=None, sort_num=0):
+    def add_friendly_link(self, name, href, link_type=0, des=None, sort_num=0):
         try:
             try:
                 assert name and href
-                if link_type == 0:
-                    assert city_id
+
             except:
                 return 99800, dict_err.get(99800)
-            obj = FriendlyLink.objects.create(name=name, href=href, city_id=city_id, img=img, link_type=link_type, sort_num=sort_num, des=des)
+            obj = FriendlyLink.objects.create(name=name, href=href, link_type=link_type, sort_num=sort_num, des=des)
 
             # 更新缓存
             self.get_all_friendly_link(must_update_cache=True)
@@ -166,3 +165,28 @@ class FriendlyLinkBase(object):
 
         self.get_all_friendly_link(must_update_cache=True)
         return 0, dict_err.get(0)
+
+
+class CoverBase(object):
+
+    def __init__(self):
+        pass
+
+    def save_home_cover(self, imgs):
+        if not imgs:
+            return 99800, dict_err.get(99800)
+
+        try:
+            HomeCover.objects.all().delete()
+
+            for img in imgs:
+                HomeCover.objects.create(img=img)
+
+        except Exception, e:
+            debug.get_debug_detail(e)
+            return 99900, dict_err.get(99900)
+
+        return 0, dict_err.get(0)
+
+    def get_home_cover(self):
+        return [x.img.replace('!600m0', '') for x in HomeCover.objects.all()]

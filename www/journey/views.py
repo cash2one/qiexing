@@ -8,7 +8,7 @@ from django.shortcuts import render_to_response
 from common import utils, page
 from www.journey import interface
 from www.misc.decorators import member_required, staff_required, common_ajax_response
-
+from www.admin.interface import CoverBase
 
 jb = interface.JourneyBase()
 lb = interface.LikeBase()
@@ -22,6 +22,8 @@ def home(request, template_name='journey/home.html'):
     journeys = jb.format_journeys(jb.get_all_journeys_for_home_page()[:4])
 
     links = FriendlyLinkBase().get_friendly_link_by_link_type(link_type=3)
+
+    covers = CoverBase().get_home_cover()
 
     return render_to_response(template_name, locals(), context_instance=RequestContext(request))
 

@@ -80,9 +80,7 @@ PERMISSIONS = [
     {'code': 'sign_in_fail', 'name': u'报名失败', 'parent': 'sign_manage'},
     {'code': 'query_sign', 'name': u'查询报名列表', 'parent': 'sign_manage'},
 
-    # {'code': 'friendly_link_manage', 'name': u'报名管理', 'parent': None},
-    # {'code': 'add_friendly_link', 'name': u'添加友情链接', 'parent': 'friendly_link_manage'},
-    # {'code': 'query_friendly_link', 'name': u'查询友情链接', 'parent': 'friendly_link_manage'},
-    # {'code': 'modify_friendly_link', 'name': u'修改友情链接', 'parent': 'friendly_link_manage'},
-    # {'code': 'remove_friendly_link', 'name': u'删除友情链接', 'parent': 'friendly_link_manage'},
+    {'code': 'cover_manage', 'name': u'首页封面管理', 'parent': None},
+    {'code': 'save_home_cover', 'name': u'修改首页封面', 'parent': 'cover_manage'},
+
 ]
