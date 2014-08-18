@@ -94,10 +94,11 @@ def get_next_url(request):
                             # referrer的query参数不能丢失
                             next_url = referrer + '?' + list(urlparse(referrer))[4]
     # 部分链接不能跳转
+    next_url = next_url or "/"
     for key in ("regist", "create"):
         if next_url.find(key) == -1:
             next_url = "/"
-    return next_url or '/'
+    return next_url
 
 
 def filter_script(htmlstr):
