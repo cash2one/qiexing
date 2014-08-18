@@ -4,6 +4,14 @@
 
 {% block title %}{{activity.title}}{% endblock title %}
 
+{% block css %}
+<style type="text/css">
+.activity-content p{
+	margin: 0px;
+}
+</style>
+{% endblock %}
+
 {% block javascript %}
 <script type="text/javascript">
 $(document).ready(function(){
@@ -247,7 +255,7 @@ $(document).ready(function(){
 <div class="tab-content">
 	<!-- 活动详情 -->
 	<div class="tab-pane fade pt-15 in active" id="activity_detail">
-		<div class="activity-content">{{activity.content|safe}}</div>
+		<div class="activity-content line-height-25">{{activity.content|safe}}</div>
 
 		<!-- 回复区 -->
 		{{answers_list_params|answers_list:request}}

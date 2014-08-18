@@ -108,6 +108,7 @@ body {
 .w250{width: 250px;}
 .h215{height: 215px;}
 
+.border-1{border: solid 1px;}
 .border-5{border: solid 5px;}
 .border-left-0{border-left: 0;}
 .border-right-0{border-right: 0;}
@@ -124,6 +125,7 @@ body {
 .bdc-fff{border-color: #fff;}
 .bdc-39B2E2{border-color: #39B2E2;}
 .bdc-E67E22{border-color: #E67E22;}
+.bdc-f36119{border-color: #f36119;}
 
 .pa{position: absolute;}
 .pr{position: relative;}

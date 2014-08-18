@@ -23,6 +23,22 @@
 </div>
 
 <div class="col-md-4 pl-70 pt-15">
-	{% block right %}{% endblock right %}
+	{% block right %}
+	<div class="text-center pt-15">
+		<img class="bdc-ddd border-1 pl-3 pt-3 pr-3 pb-3" src="{{user.get_avatar}}">
+	</div>
+	<div class="pt-15">
+		<span>昵称：</span><span class="pl-10">{{user.nick}}</span>
+	</div>
+	<div>
+		<span>个人简介：</span><span class="pl-10">{{user.des}}</span>
+	</div>
+	<div>
+		<span>发表游记：</span><span class="pl-10">28 篇</span>
+	</div>
+	<div>
+		<span>参与活动：</span><span class="pl-10">30 次</span>
+	</div>
+	{% endblock right %}
 </div>
 {% endblock container %}

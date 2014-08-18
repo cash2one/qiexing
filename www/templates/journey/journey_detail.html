@@ -3,6 +3,14 @@
 {% load custom_filters %}
 {% block title %}{{journey.title}}{% endblock title %}
 
+{% block css %}
+<style type="text/css">
+.content p{
+	margin: 0px;
+}
+</style>
+{% endblock %}
+
 {% block javascript %}
 <script type="text/javascript">
 $(document).ready(function(){
@@ -111,7 +119,7 @@ $(document).ready(function(){
 			<span class="co2 f12 pl-5">({{journey.user.des|default:"暂无简介"}})</span>
 			<span class="co2 f12 pull-right">发表于 {{journey.create_time}}</span>
 		</div>
-		<div class="pt-15 line-height-25">{{journey.content|safe}}</div>
+		<div class="content pt-15 line-height-25">{{journey.content|safe}}</div>
 
 		<!-- 弹出层 -->
 		<div class="modal fade" id="edit_journey_modal">

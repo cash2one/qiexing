@@ -19,7 +19,7 @@
 {% block javascript %}
 <script type="text/javascript">
 $(document).ready(function(){
-	$('.date').datetimepicker({
+	$('.birthday').datetimepicker({
         format: 'yyyy-mm-dd',
         language: 'zh-CN',
         minView: 2,
@@ -176,8 +176,8 @@ $(document).ready(function(){
 	<div class="form-group border-bottom bdc-eee pt-5 pb-15">
 		<label class="col-sm-2 control-label">出生日期</label>
 		<div class="col-sm-3">
-			<input type="text" name="birthday" id="birthday-id" class="form-control date" value='{{request.user.birthday}}'
-			placeholder="" readonly></div>
+			<input type="text" name="birthday" id="birthday-id" class="form-control birthday" value='{{request.user.birthday}}'
+			placeholder="" readonly required></div>
 	</div>
 	<div class="form-group border-bottom bdc-eee pt-5 pb-15">
 		<label for="inputPassword" class="col-sm-2 control-label">个人简介</label>
