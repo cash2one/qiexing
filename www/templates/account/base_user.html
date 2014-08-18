@@ -27,18 +27,14 @@
 	<div class="text-center pt-15">
 		<img class="bdc-ddd border-1 pl-3 pt-3 pr-3 pb-3" src="{{user.get_avatar}}">
 	</div>
-	<div class="pt-15">
-		<span>昵称：</span><span class="pl-10">{{user.nick}}</span>
-	</div>
-	<div>
-		<span>个人简介：</span><span class="pl-10">{{user.des}}</span>
-	</div>
-	<div>
-		<span>发表游记：</span><span class="pl-10">28 篇</span>
-	</div>
-	<div>
-		<span>参与活动：</span><span class="pl-10">30 次</span>
-	</div>
+	<div class="username text-center">
+        <h3 class="ff-yahei fb">{{user.nick}}</h3>
+    </div>
+    <div class="desc text-center">
+        <p>{{user.des|default:"忙着发财，没能留下点介绍信息"}}</p>
+        {% if is_me and not user.des %}<a class="co5" href="/account/user_settings#set_des">立即设置</a>{% endif %}
+    </div>
+
 	{% endblock right %}
 </div>
 {% endblock container %}
