@@ -216,8 +216,8 @@ class ActivityPersonBase(object):
                 transaction.rollback(using=ACTIVITY_DB)
                 return 30806, dict_err.get(30806)
 
-            ActivityPerson.objects.create(activity=activity, user_id=user_id, real_name=real_name, mobile=mobile,
-                                          partner_count=partner_count, state=state)
+            ap = ActivityPerson.objects.create(activity=activity, user_id=user_id, real_name=real_name, mobile=mobile,
+                                               partner_count=partner_count, state=state)
 
             user = UserBase().get_user_by_id(user_id)
 
@@ -227,7 +227,8 @@ class ActivityPersonBase(object):
             else:
                 UnreadCountBase().add_system_message(
                     activity.user_id,
-                    content=u'用户<a href="/p/%s" class="co5 pr-5 pl-5" >%s</a>申请报名你创建的活动:<a class="co5 pr-5 pl-5" href="/activity/%s">%s</a>' % (user.id, user.nick, activity.id, activity.title)
+                    content=u'用户<a href="/p/%s" class="co5 pr-5 pl-5" >%s</a>申请报名你创建的活动:<a class="co5 pr-5 pl-5" href="/activity/%s">%s</a>, 立刻去<a class="co5 pr-5 pl-5" href="/admin/sign#search/0/%s/1">审核</a>' % (
+                        user.id, user.nick, activity.id, activity.title, real_name)
                 )
 
             transaction.commit(using=ACTIVITY_DB)
