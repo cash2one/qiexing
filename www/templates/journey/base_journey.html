@@ -1,56 +1,33 @@
 {% extends "base/base.html" %}
-
+{% load custom_tags %}
+{% load custom_filters %}
 {% block base_css %}
-	{% block css %}{% endblock css %}
+    {% block css %}{% endblock css %}
 {% endblock %}
 
 {% block base_js %}
 <script type="text/javascript">
 $(document).ready(function(){
-	$('.write-journey').bind('click', function(){
-		window.location.href = $(this).parent().attr('href');
-	});
+    $('.write-journey').bind('click', function(){
+        window.location.href = $(this).parent().attr('href');
+    });
 });
 </script>
-	{% block javascript %}{% endblock javascript %}
+    {% block javascript %}{% endblock javascript %}
 {% endblock %}
 
 {% block container %}
 <div class="col-md-8">
-	{% block left %}{% endblock left %}
+    {% block left %}{% endblock left %}
 </div>
 
 <div class="col-md-4 pl-70 pt-15">
-	{% block right %}
-	<a href="/journey/write_journey">
-		<button type="button" class="btn btn-danger btn-lg btn-block write-journey">+ 写 游 记</button>
-	</a>
-
-	<div class="border-bottom bdc-ddd pt-25 pb-5 pl-0">
-        <span class="f16 fb">热门活动推荐</span>
-    </div>
-	<ul class="list-group pt-0">
-	    <li class="list-group-item pl-0 pr-0 border-left-0 border-right-0 bdc-eee">
-	        <div class="border-left-4 bdc-f36119 pl-15">
-                <a class="black-blue f14" href="/kaihu/news/1178">青海湖·祁连山·休闲行摄探索之旅</a>
-	        </div>
-	    </li>
-	    <li class="list-group-item pl-0 pr-0 border-left-0 border-right-0 bdc-eee">
-	        <div class="border-left-4 bdc-f36119 pl-15">
-                <a class="black-blue f14" href="/kaihu/news/1178">暑假《我们一群学生的张家界自助游》经历回忆录</a>
-	        </div>
-	    </li>
-	    <li class="list-group-item pl-0 pr-0 border-left-0 border-right-0 bdc-eee">
-	        <div class="border-left-4 bdc-f36119 pl-15">
-                <a class="black-blue f14" href="/kaihu/news/1178">未能赴的小五之约（2014年7月15日-16日）</a>
-	        </div>
-	    </li>
-	    <li class="list-group-item pl-0 pr-0 border-left-0 border-right-0 bdc-eee">
-	        <div class="border-left-4 bdc-f36119 pl-15">
-                <a class="black-blue f14" href="/kaihu/news/1178">心影随行——七夕游南太行</a>
-	        </div>
-	    </li>
-	</ul>
-	{% endblock right %}
+    {% block right %}
+    <a href="/journey/write_journey">
+        <button type="button" class="btn btn-danger btn-lg btn-block write-journey">+ 写 游 记</button>
+    </a>
+    <div class="blank20"></div>
+    {% hot_activity %}
+    {% endblock right %}
 </div>
 {% endblock container %}

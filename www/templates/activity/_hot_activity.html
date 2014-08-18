@@ -1,0 +1,14 @@
+{% load custom_tags %}
+{% load custom_filters %}
+<div class="border-bottom bdc-ddd pt-25 pb-5 pl-0">
+    <span class="f16 fb">热门活动推荐</span>
+</div>
+<ul class="list-group pt-0">
+	{% for activity in activitys %}
+    <li class="list-group-item pl-0 pr-0 border-left-0 border-right-0 bdc-eee">
+        <div class="border-left-4 bdc-f36119 pl-15">
+            <a class="black-blue f14" href="{{activity.get_url}}">{{activity.title|str_display:30}}</a>
+        </div>
+    </li>
+    {% endfor %}
+</ul>
