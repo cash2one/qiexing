@@ -380,5 +380,10 @@ label.error{
     border-bottom: 2px solid #f36119;
 }
 
+.nav-pills>li.active>a, .nav-pills>li.active>a:hover, .nav-pills>li.active>a:focus{
+  background-color: transparent;
+  color: #f36119;
+}
+
 .answer-content a{color: #f36119;}
 .answer-content p{margin: 0;}
