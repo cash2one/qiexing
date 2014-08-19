@@ -104,6 +104,54 @@ $(document).ready(function(){
         }
     });
 
+
+	$('.set-top').bind('click', function(){
+ 		var me = $(this),
+ 			journey_id = me.data('journey_id');
+
+		g_ajax_processing_obj_id = me.setUUID().attr('id');
+
+ 		ajaxSend(
+            "/journey/set_top",
+            {'journey_id': journey_id},
+            function(data){
+            	if(data.errcode === 0){
+                    $.QXNotice.SuccessTopNotice('操作成功! 3秒后页面跳转');
+
+	                window.setTimeout(function(){
+	                	window.location.href = "/journey/{{journey.id}}";
+	                }, 3000);
+
+                } else {
+                    $.QXNotice.ErrorTopNotice(data.errmsg);
+                }
+            } 
+         );
+ 	});
+
+ 	$('.cancel-top').bind('click', function(){
+ 		var me = $(this),
+ 			journey_id = me.data('journey_id');
+
+		g_ajax_processing_obj_id = me.setUUID().attr('id');
+
+ 		ajaxSend(
+            "/journey/cancel_top",
+            {'journey_id': journey_id},
+            function(data){
+            	if(data.errcode === 0){
+                    $.QXNotice.SuccessTopNotice('操作成功! 3秒后页面跳转');
+
+	                window.setTimeout(function(){
+	                	window.location.href = "/journey/{{journey.id}}";
+	                }, 3000);
+
+                } else {
+                    $.QXNotice.ErrorTopNotice(data.errmsg);
+                }
+            } 
+         );
+ 	});
 	
 });
 </script>
@@ -112,7 +160,10 @@ $(document).ready(function(){
 {% block left %}
 <div class="row pl-15 pr-15 pt-25">
 	<a href="{{journey.user.get_url}}"><img class="img-rounded avatar-55 pa" src="{{journey.user.get_avatar_65}}" alt="{{journey.user.nick}}"></a>
-	<div class="pl-75">
+	<div class="pl-75 pr">
+		{% if journey.sort_num > 0 %}
+		<img src="/static/img/jinghua1.png" class="pa" style="right: 10px;">
+		{% endif %}
 		<div class="f16 fb title">{{journey.title}}</div>
 		<div class="pt-10">
 			<a href="{{journey.user.get_url}}" class="f12">{{journey.user.nick}}</a>
@@ -154,8 +205,15 @@ $(document).ready(function(){
 				</button>
 			</div>
 			<div class="col-md-8 text-right f12 pt-25">
+				{% if request.user.is_staff %}
+					{% if journey.sort_num > 0 %}
+					<a href="javascript:void(0);" class="co5 cancel-top" data-journey_id="{{journey.id}}"><span class="fa fa-star-o pr-3"></span>取消置顶</a>
+					{% else %}
+					<a href="javascript:void(0);" class="co2 set-top" data-journey_id="{{journey.id}}"><span class="fa fa-star-o pr-3"></span>置顶游记</a>
+					{% endif %}
+				{% endif %}
 				{% if request.user.id == journey.user.id or request.user.is_staff %}
-				<a href="javascript:void(0);" class="co2" data-toggle="modal" data-target="#edit_journey_modal" data-backdrop="static"><span class="fa fa-edit pr-3"></span>修改</a>
+				<a href="javascript:void(0);" class="co2" data-toggle="modal" data-target="#edit_journey_modal" data-backdrop="static"><span class="fa fa-edit pr-3 pl-10 "></span>修改</a>
 				<a href="javascript:void(0);" class="co2 pl-10 delete-journey" data-journey_id="{{journey.id}}"><span class="fa fa-trash-o pr-3"></span>删除</a>
 				{% endif %}
 				<a class="border-block-blue ml-5 pl-5 pr-5 pt-2 pb-2 share-qq" href="javascript: void(0);">

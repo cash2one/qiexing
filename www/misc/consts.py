@@ -86,4 +86,6 @@ PERMISSIONS = [
     {'code': 'remove_home_cover', 'name': u'删除首页封面', 'parent': 'cover_manage'},
     {'code': 'add_home_cover', 'name': u'添加首页封面', 'parent': 'cover_manage'},
 
+    {'code': 'static_manage', 'name': u'静态页面管理', 'parent': None},
+    {'code': 'save_static_page', 'name': u'修改静态页面', 'parent': 'static_manage'},
 ]
