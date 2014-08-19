@@ -280,6 +280,26 @@ class JourneyBase(object):
             return []
         return Journey.objects.filter(user_id=user_id, title__icontains=title, state=True)[:200]
 
+    @journey_required
+    def set_top(self, journey):
+        try:
+            journeys = Journey.objects.filter(state=True).order_by("-sort_num")
+            max_sort_num = 1 if not journeys else (journeys[0].sort_num + 1)
+            journey.sort_num = max_sort_num
+            journey.save()
+
+            return 0, dict_err.get(0)
+        except Exception, e:
+            debug.get_debug_detail(e)
+            return 99900, dict_err.get(99900)
+
+    @journey_required
+    def cancel_top(self, journey):
+        journey.sort_num = 0
+        journey.save()
+
+        return 0, dict_err.get(0)
+
 
 class LikeBase(object):
 

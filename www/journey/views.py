@@ -128,13 +128,13 @@ def remove_journey(request):
 
 @staff_required
 @common_ajax_response
-def set_important(request):
+def set_top(request):
     journey_id = request.POST.get('journey_id', '').strip()
-    return jb.set_important(journey_id, request.user)
+    return jb.set_top(journey_id)
 
 
 @staff_required
 @common_ajax_response
-def cancel_important(request):
+def cancel_top(request):
     journey_id = request.POST.get('journey_id', '').strip()
-    return jb.cancel_important(journey_id, request.user)
+    return jb.cancel_top(journey_id)

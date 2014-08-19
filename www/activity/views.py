@@ -122,3 +122,17 @@ def join_activity(request):
     mobile = request.POST.get('mobile', '').strip()
     partner_count = request.POST.get('partner_count', '').strip()
     return apb.join_activity(activity_id, request.user.id, real_name, mobile, partner_count)
+
+
+@staff_required
+@common_ajax_response
+def set_top(request):
+    activity_id = request.POST.get('activity_id', '').strip()
+    return ab.set_top(activity_id)
+
+
+@staff_required
+@common_ajax_response
+def cancel_top(request):
+    activity_id = request.POST.get('activity_id', '').strip()
+    return ab.cancel_top(activity_id)

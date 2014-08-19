@@ -11,6 +11,6 @@ urlpatterns = patterns('www.journey.views',
                        url(r'^like_journey$', 'like_journey'),
                        url(r'^remove_journey$', 'remove_journey'),
 
-                       url(r'^set_important$', 'set_important'),
-                       url(r'^cancel_important$', 'cancel_important'),
+                       url(r'^set_top$', 'set_top'),
+                       url(r'^cancel_top$', 'cancel_top'),
                        )
