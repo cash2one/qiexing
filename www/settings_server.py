@@ -24,7 +24,7 @@ MAIN_DOMAIN = 'http://www.%s' % SERVER_DOMAIN
 
 IMG0_DOMAIN = 'http://qimg0.qiniudn.com'
 
-EMAIL_FROM = u'"且行" <service@iqiexing.com>'
+EMAIL_FROM = u'"且行户外" <service@iqiexing.com>'
 EMAIL_HOST_USER = 'service@iqiexing.com'
 EMAIL_HOST_PASSWORD = ''
 EMAIL_HOST = 'smtp.exmail.qq.com'

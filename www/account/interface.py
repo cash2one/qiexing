@@ -281,7 +281,7 @@ class UserBase(object):
 
         if not cache_obj.get_time_is_locked(key, 60):
             context = {'verify_url': '%s/account/user_settings/verify_email?code=%s' % (settings.MAIN_DOMAIN, code), }
-            async_send_email(user.email, u'且行邮箱验证', utils.render_email_template('email/verify_email.html', context), 'html')
+            async_send_email(user.email, u'且行户外邮箱验证', utils.render_email_template('email/verify_email.html', context), 'html')
 
     def check_email_confim_code(self, user, code):
         '''
@@ -324,7 +324,7 @@ class UserBase(object):
 
         if not cache_obj.get_time_is_locked(key, 60):
             context = {'reset_url': '%s/reset_password?code=%s' % (settings.MAIN_DOMAIN, code), }
-            async_send_email(email, u'且行找回密码', utils.render_email_template('email/reset_password.html', context), 'html')
+            async_send_email(email, u'且行户外找回密码', utils.render_email_template('email/reset_password.html', context), 'html')
         return 0, dict_err.get(0)
 
     def get_user_by_code(self, code):
