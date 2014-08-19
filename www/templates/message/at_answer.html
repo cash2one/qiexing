@@ -27,7 +27,7 @@ $(document).ready(function(){
 				用户<a href="{{answer.from_user.get_url}}" class="co5 pr-5 pl-5">{{answer.from_user.nick}}</a>
 				在{{answer.get_obj_type_display}}<a href="{{answer.obj.get_url}}" class="co5 pr-5 pl-5">{{answer.obj.title|str_display:25}}</a> 的回复中@了你:
 			</div>
-			<div class="f12 pt-5">{{answer.get_summanry}}</div>
+			<div class="f12 pt-5">{{answer.get_summary}}</div>
 			<div class="co2 f12 pt-5">{{answer.create_time}}</div>
 		</div>
 	</li>

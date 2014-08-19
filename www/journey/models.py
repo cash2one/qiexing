@@ -25,7 +25,7 @@ class Journey(models.Model):
     create_time = models.DateTimeField(db_index=True, auto_now_add=True)
 
     class Meta:
-        ordering = ["-sort_num", '-like_count', "-last_answer_time"]
+        ordering = ["-sort_num",  "-create_time"]
 
     def get_url(self):
         return u'/journey/%s' % self.id
