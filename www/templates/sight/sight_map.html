@@ -86,8 +86,16 @@
                 };
                 st[0].onclick = function(e){
                     // console.log(china, china[state]['name'])
-                    console.log(e)
-                    show(china[state]['name'], e.x-150, e.y-200);
+                    var left = 0, top = 0;
+
+                    if(e){
+                        left = e.pageX - 200;
+                        top = e.pageY - 180;
+                    } else {
+                        left = window.event.clientX - 200;
+                        top = window.event.clientY - 180;
+                    }
+                    show(china[state]['name'], left, top);
                 }
                 
              })(china[state]['path'], state);
