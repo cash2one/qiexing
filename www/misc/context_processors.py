@@ -13,6 +13,7 @@ def config(request):
     """
     import datetime
     from django.conf import settings
+    from www.admin.interface import StaticPageBase
 
     return {
         'DEBUG': settings.DEBUG,
@@ -22,4 +23,5 @@ def config(request):
         'MAIN_DOMAIN': settings.MAIN_DOMAIN,
         'IMG0_DOMAIN': settings.IMG0_DOMAIN,
         "YEAR": datetime.datetime.now().strftime("%Y"),
+        "STATIC_PAGE_CONTENT": StaticPageBase().get_static_page(),
     }

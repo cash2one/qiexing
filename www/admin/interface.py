@@ -3,11 +3,12 @@
 from django.db.models import Count
 from django.db import transaction
 
-from common import debug
+from common import debug, cache
 from www.misc import consts
+from www.misc.decorators import cache_required
 
-from admin.models import Permission, UserPermission, FriendlyLink, HomeCover, StaticPage
-from account.interface import UserBase
+from www.admin.models import Permission, UserPermission, FriendlyLink, HomeCover, StaticPage
+from www.account.interface import UserBase
 
 dict_err = {}
 
@@ -101,6 +102,7 @@ class FriendlyLinkBase(object):
             return 99900, dict_err.get(99900)
         return 0, obj.id
 
+    @cache_required(cache_key='all_friendly_link', expire=0, cache_config=cache.CACHE_STATIC)
     def get_all_friendly_link(self, state=True, must_update_cache=False):
         objects = FriendlyLink.objects.all()
         if state != None:
@@ -234,7 +236,8 @@ class StaticPageBase(object):
     def __init__(self):
         pass
 
-    def get_static_page(self):
+    @cache_required(cache_key='static_page_content', expire=0, cache_config=cache.CACHE_STATIC)
+    def get_static_page(self, must_update_cache=False):
         data = StaticPage.objects.all()
         if data:
             data = data[0]
@@ -260,6 +263,7 @@ class StaticPageBase(object):
                     agreement=agreement,
                     contact=contact
                 )
+            self.get_static_page(must_update_cache=True)
 
         except Exception, e:
             debug.get_debug_detail(e)
