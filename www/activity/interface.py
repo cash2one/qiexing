@@ -190,6 +190,26 @@ class ActivityBase(object):
                                     activity_user_avatar=user.get_avatar_65(), activity_user_nick=user.nick, activity_user_des=user.des or '')
         return activity_summary
 
+    @activity_required
+    def set_top(self, activity):
+        try:
+            activitys = Activity.objects.filter(state=True).order_by("-sort_num")
+            max_sort_num = 1 if not activitys else (activitys[0].sort_num + 1)
+            activity.sort_num = max_sort_num
+            activity.save()
+
+            return 0, dict_err.get(0)
+        except Exception, e:
+            debug.get_debug_detail(e)
+            return 99900, dict_err.get(99900)
+
+    @activity_required
+    def cancel_top(self, activity):
+        activity.sort_num = 0
+        activity.save()
+
+        return 0, dict_err.get(0)
+
 
 class ActivityPersonBase(object):
 

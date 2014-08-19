@@ -26,7 +26,8 @@ def main():
     request_user = User.objects.get(id=user_id)
     # user_id_1 = u"48f23e751c7c11e494eb685b35d0bf16"
     # print apb.join_activity(activity, user_id, real_name=u"简单的快乐", mobile=u"13005012270", partner_count=5, state=True)
-    print apb.set_join_state(activity, request_user, 2, True)
+    # print apb.set_join_state(activity, request_user, 2, True)
+    print ab.cancel_top(1)
 
 
 if __name__ == '__main__':
