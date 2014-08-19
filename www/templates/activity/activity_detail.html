@@ -51,7 +51,11 @@ $(document).ready(function(){
     $('.delete-activity').bind('click', function(){
     	var me = $(this);
 
+
     	if(confirm('确认删除此活动?')){
+
+    		g_ajax_processing_obj_id = me.setUUID().attr('id');
+
     		ajaxSend(
                 "/activity/remove_activity", 
                 {'activity_id': me.data('activity_id')}, 
@@ -88,6 +92,9 @@ $(document).ready(function(){
     	if(!$('.regist-form').valid()){
     		return false;
     	}
+    	
+    	g_ajax_processing_obj_id = me.setUUID().attr('id');
+
     	ajaxSend(
             "/activity/join_activity", 
             $.QXUtils.formToDict('.regist-form'),
@@ -103,19 +110,72 @@ $(document).ready(function(){
 
                 window.setTimeout(function(){
                 	window.location.href = "/activity/{{activity.id}}";
-                }, 3000)
+                }, 3000);
                 
             }
         );
     });
 
  
+
+ 	$('.set-top').bind('click', function(){
+ 		var me = $(this),
+ 			activity_id = me.data('activity_id');
+
+		g_ajax_processing_obj_id = me.setUUID().attr('id');
+
+ 		ajaxSend(
+            "/activity/set_top",
+            {'activity_id': activity_id},
+            function(data){
+            	if(data.errcode === 0){
+                    $.QXNotice.SuccessTopNotice('操作成功! 3秒后页面跳转');
+
+	                window.setTimeout(function(){
+	                	window.location.href = "/activity/{{activity.id}}";
+	                }, 3000);
+
+                } else {
+                    $.QXNotice.ErrorTopNotice(data.errmsg);
+                }
+            } 
+         );
+ 	});
+
+ 	$('.cancel-top').bind('click', function(){
+ 		var me = $(this),
+ 			activity_id = me.data('activity_id');
+
+		g_ajax_processing_obj_id = me.setUUID().attr('id');
+
+ 		ajaxSend(
+            "/activity/cancel_top",
+            {'activity_id': activity_id},
+            function(data){
+            	if(data.errcode === 0){
+                    $.QXNotice.SuccessTopNotice('操作成功! 3秒后页面跳转');
+
+	                window.setTimeout(function(){
+	                	window.location.href = "/activity/{{activity.id}}";
+	                }, 3000);
+
+                } else {
+                    $.QXNotice.ErrorTopNotice(data.errmsg);
+                }
+            } 
+         );
+ 	});
+
 });
 </script>
 {% endblock %}
 
 {% block left %}
 <div class="row pt-25 pr">
+	{% if activity.sort_num > 0 %}
+	<img src="/static/img/jinghua1.png" class="pa" style="right: 10px;">
+	{% endif %}
+
 	<div class="col-md-6">
 		<img class="w350 h200 pl-3 pr-3 pt-3 pb-3" src="{{activity.activity_cover}}" alt="{{activity.title}}"></div>
 	<div class="col-md-6">
@@ -185,6 +245,15 @@ $(document).ready(function(){
 	</li>
 	<li class="pull-right pr-5">
 		<a href="javascript:void(0);" class="co2" data-toggle="modal" data-target="#edit_activity_modal" data-backdrop="static"><span class="fa fa-edit pr-3"></span>修改</a>
+	</li>
+	{% endif %}
+	{% if request.user.is_staff %}
+	<li class="pull-right pr-5">
+		{% if activity.sort_num > 0 %}
+		<a href="javascript:void(0);" class="co5 cancel-top" data-activity_id="{{activity.id}}"><span class="fa fa-star-o pr-3"></span>取消置顶</a>
+		{% else %}
+		<a href="javascript:void(0);" class="co2 set-top" data-activity_id="{{activity.id}}"><span class="fa fa-star-o pr-3"></span>置顶活动</a>
+		{% endif %}
 	</li>
 	{% endif %}
 </ul>

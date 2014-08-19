@@ -18,7 +18,7 @@ def home(request):
     return HttpResponseRedirect('/admin/sight')
 
 
-@verify_permission('')
+@verify_permission('save_static_page')
 def static_page(request, template_name='admin/static_page.html'):
 
     if request.method == "POST":

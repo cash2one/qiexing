@@ -13,7 +13,10 @@
 					<img class="w h155 pl-3 pr-3 pt-3 pb-3" src="{{activity.activity_cover}}" alt="{{activity.title}}">
 				</a>
 			</div>
-			<div class="col-md-8">
+			<div class="col-md-8 pr">
+				{% if activity.sort_num > 0 %}
+				<img src="/static/img/jinghua2.png" class="pa" style="right: 10px;">
+				{% endif %}
 				<div class="">
 					<h4 class="mt-5">
 						<a href="{{activity.get_url}}" class="fb">{{activity.title|str_display:24}}</a>

@@ -86,13 +86,15 @@
                 };
                 st[0].onclick = function(e){
                     // console.log(china, china[state]['name'])
-                    var left = 0, top = 0;
+                    var left = 0, 
+                        top = 0, 
+                        offsetLeft = ($(window).width() - $('.container').width()) / 2;
 
                     if(e){
-                        left = e.pageX - 200;
+                        left = e.pageX - offsetLeft - 100;
                         top = e.pageY - 180;
                     } else {
-                        left = window.event.clientX - 200;
+                        left = window.event.clientX - offsetLeft - 100;
                         top = window.event.clientY - 180;
                     }
                     show(china[state]['name'], left, top);
