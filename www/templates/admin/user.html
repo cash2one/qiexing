@@ -60,6 +60,7 @@ $(document).ready(function(){
             'lastActive': 'last_active',
             'state': 'state',
             'ip': 'ip',
+            'source': 'source',
             'registerDate': 'register_date'
         },
 
@@ -298,6 +299,7 @@ $(document).ready(function(){
                     <th>头像</th>
                     <th>用户名称</th>
                     <th>邮箱</th>
+                    <th>来源</th>
                     <th>是否管理员</th>
                     <th>上次活跃时间</th>
                 </tr>
@@ -332,6 +334,9 @@ $(document).ready(function(){
         <td class="pointer" data-user_id="<%= user.userId %>"><%= user.userNick %></td>
         <td>
             <%= user.userEmail %>
+        </td>
+        <td>
+            <%= user.source %>
         </td>
         <td>
             <% if (user.isAdmin) { %>

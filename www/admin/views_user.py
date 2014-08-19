@@ -64,6 +64,7 @@ def search(request):
             'is_admin': user.is_admin,
             'last_active': str(user.last_active),
             'state': user.state,
+            'source': user.source_display,
             'ip': user.ip
         })
 
@@ -94,6 +95,7 @@ def get_user_by_id(request):
             'is_admin': user.is_admin,
             'last_active': str(user.last_active),
             'state': user.state,
+            'source': user.source_display,
             'ip': user.ip,
             'register_date': str(user.create_time)
         }
