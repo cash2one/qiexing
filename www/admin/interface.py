@@ -6,7 +6,7 @@ from django.db import transaction
 from common import debug
 from www.misc import consts
 
-from admin.models import Permission, UserPermission, FriendlyLink, HomeCover
+from admin.models import Permission, UserPermission, FriendlyLink, HomeCover, StaticPage
 from account.interface import UserBase
 
 dict_err = {}
@@ -227,3 +227,40 @@ class CoverBase(object):
             return 99900, dict_err.get(99900)
 
         return 0, dict_err.get(0)
+
+
+class StaticPageBase(object):
+
+    def __init__(self):
+        pass
+
+    def get_static_page(self):
+        data = StaticPage.objects.all()
+        if data:
+            data = data[0]
+        return data
+
+    def save_static_page(self, footer_about='', about='', agreement='', contact=''):
+        obj = StaticPage.objects.all()
+
+        try:
+
+            if obj:
+                obj = obj[0]
+
+                obj.footer_about = footer_about
+                obj.about = about
+                obj.agreement = agreement
+                obj.contact = contact
+                obj.save()
+            else:
+                obj = StaticPage.objects.create(
+                    footer_about=footer_about,
+                    about=about,
+                    agreement=agreement,
+                    contact=contact
+                )
+
+        except Exception, e:
+            debug.get_debug_detail(e)
+            return 99900, dict_err.get(99900)

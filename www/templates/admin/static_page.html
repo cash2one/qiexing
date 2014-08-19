@@ -1,0 +1,74 @@
+{% extends "admin/home.html" %}
+{% load custom_tags %}
+{% load custom_filters %}
+{% block title %}首页封面管理{% endblock %}
+
+{% block css %}
+<style type="text/css">
+</style>
+{% endblock %}
+
+{% block javascript %}
+<script type="text/javascript">
+$(document).ready(function(){
+
+    var footerAbout = createEditor('.footer-about'),
+        about = createEditor('.about'),
+        agreement = createEditor('.agreement'),
+        contact = createEditor('.contact');
+
+
+
+});
+
+</script>
+{% endblock %}
+
+{% block right %}
+<ul class="nav nav-pills pt-15 qx-nav-pills">
+    <li class="active">
+        <a href="#static_page" class="black-blue" data-toggle="pill">静态页面管理</a>
+    </li>
+</ul>
+
+<div class="tab-content">
+    <!-- 客户经理列表 -->
+    <div class="tab-pane fade pt-15 in active" id="static_page">
+        <form class="form-horizontal" role="form" method="post" action="/admin/static_page" enctype="multipart/form-data">
+            <div class="form-group pt-20 pb-20 mb-0 bottom-border bdc-eee">
+                <label class="col-sm-2 control-label">页面底部关于我们</label>
+                <div class="col-sm-10">
+                    <textarea name="footer_about" rows="6" class="form-control footer-about">{{data.footer_about}}</textarea>
+                </div>
+            </div>
+
+            <div class="form-group pt-20 pb-20 mb-0 bottom-border bdc-eee">
+                <label class="col-sm-2 control-label">关于我们</label>
+                <div class="col-sm-10">
+                    <textarea name="about" rows="6" class="form-control about" style="height: 300px;">{{data.about}}</textarea>
+                </div>
+            </div>
+
+            <div class="form-group pt-20 pb-20 mb-0 bottom-border bdc-eee">
+                <label class="col-sm-2 control-label">服务条款</label>
+                <div class="col-sm-10">
+                    <textarea name="agreement" rows="6" class="form-control agreement" style="height: 300px;">{{data.agreement}}</textarea>
+                </div>
+            </div>
+
+            <div class="form-group pt-20 pb-20 mb-0 bottom-border bdc-eee">
+                <label class="col-sm-2 control-label">联系我们</label>
+                <div class="col-sm-10">
+                    <textarea name="contact" rows="6" class="form-control contact" style="height: 300px;">{{data.contact}}</textarea>
+                </div>
+            </div>
+
+            <div class="form-group pt-20 pb-20 mb-0 bottom-border bdc-eee">
+                <button type="submit" class="btn btn-danger">提交你的修改</button>
+            </div>
+            
+        </form>
+    </div>
+</div>
+
+{% endblock right %}

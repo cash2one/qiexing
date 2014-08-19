@@ -5,6 +5,8 @@ from django.conf.urls import patterns, url
 
 urlpatterns = patterns('www.admin.views',
                        url(r'^$', 'home'),
+                       url(r'^static_page/save_static_page$', 'static_page/save_static_page'),
+                       url(r'^static_page$', 'static_page'),
                        )
 
 

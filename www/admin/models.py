@@ -55,3 +55,10 @@ class HomeCover(models.Model):
 
     class Meta:
         ordering = ["-sort_num", "id"]
+
+
+class StaticPage(models.Model):
+    footer_about = models.TextField()
+    about = models.TextField()
+    agreement = models.TextField()
+    contact = models.TextField()
