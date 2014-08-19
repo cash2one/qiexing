@@ -508,7 +508,7 @@ function createEditor(selector){
             allowImageRemote: true,
             // basePath: '/',
             uploadJson: '/save_img',
-            // pasteType : 1,
+            pasteType : 1,
             cssData: 'body{font-family: "Helvetica Neue",Helvetica,"Lucida Grande","Luxi Sans",Arial,"Hiragino Sans GB",STHeiti,"Microsoft YaHei","Wenquanyi Micro Hei","WenQuanYi Micro Hei Mono","WenQuanYi Zen Hei","WenQuanYi Zen Hei Mono",LiGothicMed; font-size: 14px; color: #222;}',
             themesPath: MEDIA_URL + "css/kindeditor/themes/",
             pluginsPath: MEDIA_URL + "js/kindeditor/plugins/",
@@ -516,7 +516,7 @@ function createEditor(selector){
             items : [
                 'fontname', 'fontsize', 'forecolor', 'hilitecolor', 'bold', 'italic', 'underline', 'removeformat', '|', 
                 'justifyleft', 'justifycenter', 'justifyright', 'insertorderedlist', 'insertunorderedlist', '|', 
-                'image', 'link', '|', //'emoticons_zx',
+                'image', 'multiimage', 'link', '|', //'emoticons_zx',
                 'fullscreen'
             ],
             afterCreate : function() { 

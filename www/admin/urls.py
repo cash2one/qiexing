@@ -5,8 +5,6 @@ from django.conf.urls import patterns, url
 
 urlpatterns = patterns('www.admin.views',
                        url(r'^$', 'home'),
-                       url(r'^home_cover/save_home_cover$', 'save_home_cover'),
-                       url(r'^home_cover$', 'home_cover'),
                        )
 
 
@@ -60,4 +58,16 @@ urlpatterns += patterns('www.admin.views_sign',
                         url(r'^sign/sign_in_fail$', 'sign_in_fail'),
                         url(r'^sign/search$', 'search'),
                         url(r'^sign$', 'sign'),
+                        )
+
+
+# 用户
+urlpatterns += patterns('www.admin.views_cover',
+
+                        url(r'^home_cover/add_cover$', 'add_cover'),
+                        url(r'^home_cover/remove_cover$', 'remove_cover'),
+                        url(r'^home_cover/modify_cover$', 'modify_cover'),
+                        url(r'^home_cover/get_cover_by_id$', 'get_cover_by_id'),
+                        url(r'^home_cover/search$', 'search'),
+                        url(r'^home_cover$', 'home_cover'),
                         )

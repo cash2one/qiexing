@@ -49,6 +49,9 @@ class FriendlyLink(models.Model):
 
 class HomeCover(models.Model):
     img = models.CharField(max_length=256)
+    link = models.CharField(max_length=256)
+    sort_num = models.IntegerField(default=0, db_index=True)
+    des = models.CharField(max_length=256, null=True)
 
     class Meta:
-        ordering = ["-id", ]
+        ordering = ["-sort_num", "id"]

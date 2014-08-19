@@ -85,7 +85,7 @@ $(document).ready(function(){
             this.pagination.render(
                 this.collection.pageIndex||1, 
                 this.collection.pageCount, 
-                'search/' + this.collection.name
+                'search/' + this.collection.state + '/' + this.collection.name
             );
         },
 
@@ -157,7 +157,7 @@ $(document).ready(function(){
 
         // 查询
         search: function(state, name, pageIndex){
-            signs.search(state, name, pageIndex||1);
+            signs.search(state||0, name||'', pageIndex||1);
         }
         
     });

@@ -82,5 +82,8 @@ PERMISSIONS = [
 
     {'code': 'cover_manage', 'name': u'首页封面管理', 'parent': None},
     {'code': 'save_home_cover', 'name': u'修改首页封面', 'parent': 'cover_manage'},
+    {'code': 'query_home_cover', 'name': u'查询首页封面', 'parent': 'cover_manage'},
+    {'code': 'remove_home_cover', 'name': u'删除首页封面', 'parent': 'cover_manage'},
+    {'code': 'add_home_cover', 'name': u'添加首页封面', 'parent': 'cover_manage'},
 
 ]

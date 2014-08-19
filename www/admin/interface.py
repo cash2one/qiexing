@@ -172,21 +172,58 @@ class CoverBase(object):
     def __init__(self):
         pass
 
-    def save_home_cover(self, imgs):
-        if not imgs:
+    def get_home_cover(self):
+        return HomeCover.objects.all()
+
+    def add_cover(self, img, link, sort_num, des):
+        if None in (img, link, sort_num, des):
             return 99800, dict_err.get(99800)
 
         try:
-            HomeCover.objects.all().delete()
+            obj = HomeCover.objects.create(img=img, link=link, sort_num=sort_num, des=des)
+        except Exception, e:
+            debug.get_debug_detail(e)
+            return 99900, dict_err.get(99900)
 
-            for img in imgs:
-                HomeCover.objects.create(img=img)
+        return 0, obj.id
+
+    def get_cover_by_id(self, cover_id):
+        if not cover_id:
+            return 99800, dict_err.get(99800)
+
+        return HomeCover.objects.get(id=cover_id)
+
+    def modify_cover(self, cover_id, img, link, sort_num, des):
+        if None in (cover_id, link, sort_num, des):
+            return 99800, dict_err.get(99800)
+
+        try:
+            obj = self.get_cover_by_id(cover_id)
+
+            if img:
+                obj.img = img
+
+            obj.link = link
+            obj.sort_num = sort_num
+            obj.des = des
+            obj.save()
+
+        except Exception, e:
+            debug.get_debug_detail(e)
+            return 99900, dict_err.get(99900)
+
+        return 0, obj.id
+
+    def remove_cover(self, cover_id):
+        if not cover_id:
+            return 99800, dict_err.get(99800)
+
+        try:
+            obj = self.get_cover_by_id(cover_id)
+            obj.delete()
 
         except Exception, e:
             debug.get_debug_detail(e)
             return 99900, dict_err.get(99900)
 
         return 0, dict_err.get(0)
-
-    def get_home_cover(self):
-        return [x.img.replace('!600m0', '') for x in HomeCover.objects.all()]

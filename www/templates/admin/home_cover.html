@@ -11,21 +11,245 @@
 {% block javascript %}
 <script type="text/javascript">
 $(document).ready(function(){
-    var editor = createEditor('#cover_editor');
 
-    $('.save').bind('click', function(){
-        ajaxSend(
-            "/admin/home_cover/save_home_cover", 
-            {'cover': editor.html()},
-            function(data){
-                if(data.errcode === 0){
-                    $.QXNotice.SuccessTopNotice('操作成功');
-                } else {
-                    $.QXNotice.ErrorTopNotice(data.errmsg);
-                }
-            }
-        );
+    var Cover = Backbone.Model.extend({
+
+        // 默认值
+        defaults: {
+            'num': ''
+        }
+
     });
+
+    var Covers = Backbone.Collection.extend({
+        model: Cover,
+
+        _modelMaps: {
+            'num': 'num',
+            'coverId': 'cover_id',
+            'des': 'des',
+            'img': 'img',
+            'sort': 'sort',
+            'link': 'link'
+        },
+
+        // 查询
+        search: function(){
+            var me = this;
+
+            ajaxSend(
+                "/admin/home_cover/search", 
+                {}, 
+                function(data){
+
+                    me.reset($.QXUtils.dictMapParse(data.data, me._modelMaps))
+                }
+            );
+        },
+
+        // 获取一个提问的model
+        getOne: function(coverId, callback){
+            var me = this;
+
+            ajaxSend(
+                "/admin/home_cover/get_cover_by_id", 
+                {'cover_id': coverId},
+                function(data){
+                    if(callback){
+                        callback($.QXUtils.dictMap(data, me._modelMaps));
+                    }
+                }
+            );
+        },
+
+        // 删除
+        removeCover: function(coverId, callback){
+            var me = this;
+
+            ajaxSend(
+                "/admin/home_cover/remove_cover", 
+                {'cover_id': coverId},
+                function(data){
+                    if(callback){
+                        callback(data);
+                    }
+                }
+            );
+        }
+
+    });
+
+
+    var ListView = Backbone.View.extend({
+        el: '#cover_list',
+
+        template: _.template($('#cover_template').html()),
+
+        initialize: function(){
+            this.listenTo(this.collection, 'reset', this.render);
+        },
+
+        events: {
+            'click .pointer': 'modifyCover'
+        },
+
+        // 渲染函数
+        render: function(){
+            var data = this.collection.toJSON();
+
+            this.showPanel();
+            this.$('tbody').html(this.template({'covers': data}));
+            
+        },
+
+        // 显示面板
+        showPanel: function(){
+            $('.qx-nav-pills a[href="#cover_list"]').tab('show');
+        },
+
+        modifyCover: function(sender){
+            var target = $(sender.currentTarget),
+                coverId = target.data('cover_id');
+
+            router.navigate('/modify/' + coverId, {trigger: true});
+        }
+
+    });
+
+
+    var ModifyView = Backbone.View.extend({
+        
+        el: '#modify_cover',
+
+        template: _.template($('#modify_cover_template').html()),
+
+        events: {
+            'click .remove': 'remove'
+        },
+
+        // 显示面板
+        showPanel: function(){
+            $('.qx-nav-pills a[href="#modify_cover"]').tab('show');
+        },
+
+        // 渲染
+        render: function(data){
+            this.$el.html(this.template(data));
+        },
+
+        // 删除
+        remove: function(){
+            var coverId = this.$('form').data('cover_id'),
+                me = this;
+
+            if(confirm('确认要删除此封面吗?')){
+                me.collection.removeCover(coverId, function(data){
+                    if(data.errcode === 0){
+                        router.navigate('', {trigger: true});
+                    } else {
+                        $.QXNotice.ErrorTopNotice(data.errmsg);
+                    }
+                });
+            }
+                
+        },
+
+        modifyCover: function(coverId){
+            var me = this;
+
+            this.collection.getOne(coverId, function(data){
+                if(data){
+                    me.render(data);
+                    me.showPanel();
+                } else {
+                    setTimeout(function(){history.go(-1);}, 3000);
+                    $.QXNotice.ErrorTopNotice('没有找到对应的封面!');
+                }
+            });
+        }
+
+    });
+
+
+    var AddView = Backbone.View.extend({
+        el: 'body',
+
+        template: _.template($('#add_cover_template').html()),
+
+        
+        showPanel: function(){
+            var me = this;
+
+            me.render();
+        },
+
+        render: function(){
+            var me = this;
+
+            $('#add_cover_modal').remove();
+            
+            $('body').append(this.template());
+
+            // 绑定事件
+            $('#add_cover_modal .cancel').bind('click', function(){
+                history.go(-1);
+            });
+
+            // 绑定事件
+            $('#add_cover_modal .ok').bind('click', function(){
+                me.addCover();
+            });
+            
+            $('#add_cover_modal').modal({'show': true, 'backdrop': 'static'});
+
+        },
+
+        addCover: function(){
+            this.$('form').submit();
+        }
+
+    });
+
+
+    // router
+    var Router = Backbone.Router.extend({
+
+        routes: {
+            "":                 "search",
+            "modify/:coverId":  "modify",
+            "add":              "add"
+        },
+
+        // 查询
+        search: function(){
+            console.log(11111)
+            covers.search();
+        },
+
+        // 显示修改界面
+        modify: function(coverId){
+            modifyView.modifyCover(coverId);
+        },
+
+        add: function(){
+            addView.showPanel();
+        }
+
+    });
+    
+    // 初始化
+    var covers = new Covers(),
+        listView = new ListView({'collection': covers}),
+        modifyView = new ModifyView({'collection': covers}),
+        addView = new AddView(),
+        router = new Router();
+ 
+    Backbone.history.start();
+
+    if(window.location.href.indexOf('?') > -1){
+        $.QXNotice.ErrorTopNotice(decodeURI(window.location.search).substring(1));
+    }
+
 });
 
 </script>
@@ -34,23 +258,139 @@ $(document).ready(function(){
 {% block right %}
 <ul class="nav nav-pills pt-15 qx-nav-pills">
     <li class="active">
-        <a href="#modify_home_cover" class="black-blue" data-toggle="pill">首页封面</a>
+        <a href="#cover_list" class="black-blue" data-toggle="pill">首页封面</a>
+    </li>
+    <li>
+        <a href="#modify_cover" class="black-blue" data-toggle="pill">修改首页封面</a>
+    </li>
+    <li class="pull-right">
+        <a href="#add" class="black-blue" >添加首页封面</a>
     </li>
 </ul>
 
 <div class="tab-content">
-    
-    <div class="tab-pane fade in active pt-15 pb-15" id="modify_home_cover">
-        <div class="fb pb-5">图片尺寸为 宽1140  高400</div>
-        <textarea name="cover" rows="6" id="cover_editor" class="form-control" style="height: 300px;">
-            {% for x in covers %}
-            <p><img src="{{x}}"></p>
-            {% endfor %}
-        </textarea>
-        <div class="pt-15">
-            <button type="button" class="btn btn-danger save">保存</button>
+    <!-- 客户经理列表 -->
+    <div class="tab-pane fade pt-15 in active" id="cover_list">
+        <table class="table table-hover">
+            <thead>
+                <tr>
+                    <th>#</th>
+                    <th>封面</th>
+                    <th>封面链接地址</th>
+                    <th>封面描述</th>
+                    <th>排序</th>
+                </tr>
+            </thead>
+            <tbody>
+                
+            </tbody>
+        </table>
+
+        <div class="text-center">
+            <ul class="pagination pagination-sm qx-pagination">
+                
+            </ul>
         </div>
+    </div>
+
+    <!-- 修改客户经理信息 -->
+    <div class="tab-pane fade" id="modify_cover">
+        
     </div>
 </div>
 
+<script type="text/template" id="cover_template">
+    <% _.each(covers, function(cover){ %>
+        <tr class="pointer" data-cover_id="<%= cover.coverId %>">
+            <td><%= cover.num %></td>
+            <td><img src="<%= cover.img %>" style="width: 200px;" /></td>
+            <td><%= cover.link %></td>
+            <td><%= cover.des %></td>
+            <td><%= cover.sort %></td>
+        </tr>
+    <% }) %>
+</script>
+
+<script type="text/template" id="modify_cover_template">
+    <form class="form-horizontal" data-cover_id="<%= coverId %>" role="form" method="post" action="/admin/home_cover/modify_cover" enctype="multipart/form-data">
+        <input type="hidden" name="cover_id" value="<%= coverId %>" />
+        <div class="form-group pt-20 pb-20 mb-0 bottom-border bdc-eee">
+            <label class="col-sm-2 control-label">封面图片</label>
+            <div class="col-sm-10">
+                <img src="<%= img %>" class="w">
+                <input name="img" type="file" />
+            </div>
+        </div>
+        <div class="form-group pt-20 pb-20 mb-0 bottom-border bdc-eee">
+            <label class="col-sm-2 control-label">封面链接地址</label>
+            <div class="col-sm-6">
+                <input type="text" class="form-control" name="link" value='<%= link %>'>
+            </div>
+        </div>
+        <div class="form-group pt-20 pb-20 mb-0 bottom-border bdc-eee">
+            <label class="col-sm-2 control-label">封面描述</label>
+            <div class="col-sm-6">
+                <textarea name="des" rows="6" class="form-control"><%= des %></textarea>
+            </div>
+        </div>
+        <div class="form-group pt-20 pb-20 mb-0 bottom-border bdc-eee">
+            <label class="col-sm-2 control-label">排序</label>
+            <div class="col-sm-2">
+                <input type="text" name="sort" class="form-control" value='<%= sort %>'>
+            </div>
+        </div>
+        <div class="form-group pt-20 pb-20 mb-0 bottom-border bdc-eee">
+            <div class="col-sm-12">
+                <button type="submit" class="btn btn-primary save">提交你的修改</button>
+                <button type="button" class="btn btn-danger remove">删除此封面</button>
+            </div>
+        </div>
+    </form>
+</script>
+
+<script type="text/template" id="add_cover_template">
+<div class="modal fade" id="add_cover_modal" tabindex="-1" role="dialog">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header pb-5">
+                <!-- <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button> -->
+                <h4 class="modal-title">添加首页封面</h4>
+            </div>
+            <div class="modal-body">
+               <form class="form-horizontal" role="form" method="post" action="/admin/home_cover/add_cover" enctype="multipart/form-data">
+                    
+                    <div class="form-group pt-20 pb-20 mb-0 bottom-border bdc-eee">
+                        <label class="col-sm-3 control-label">封面图片</label>
+                        <div class="col-sm-3">
+                            <input name="img" type="file" />
+                        </div>
+                    </div>
+                    <div class="form-group pt-20 pb-20 mb-0 bottom-border bdc-eee">
+                        <label class="col-sm-3 control-label">封面链接地址</label>
+                        <div class="col-sm-6">
+                            <input type="text" class="form-control" name="link" value=''>
+                        </div>
+                    </div>
+                    <div class="form-group pt-20 pb-20 mb-0 bottom-border bdc-eee">
+                        <label class="col-sm-3 control-label">封面描述</label>
+                        <div class="col-sm-6">
+                            <textarea name="des" rows="6" class="form-control"></textarea>
+                        </div>
+                    </div>
+                    <div class="form-group pt-20 pb-20 mb-0 bottom-border bdc-eee">
+                        <label class="col-sm-3 control-label">排序</label>
+                        <div class="col-sm-2">
+                            <input type="text" name="sort" class="form-control" value='0'>
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default cancel" data-dismiss="modal">取消</button>
+                <button type="button" class="btn btn-danger ok">确定</button>
+            </div>
+        </div>
+    </div>
+</div>
+</script>
 {% endblock right %}

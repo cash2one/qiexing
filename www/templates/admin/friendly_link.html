@@ -149,7 +149,7 @@ $(document).ready(function(){
             this.pagination.render(
                 this.collection.pageIndex||1, 
                 this.collection.pageCount, 
-                'search/' + this.collection.name + '/' + this.collection.city
+                'search/' + this.collection.name 
             );
         },
 
@@ -159,10 +159,9 @@ $(document).ready(function(){
         },
 
         searchFriendlyLink: function(){
-            var name = this.$('.key-word-name').val(),
-                city = this.$('.key-word-city').val();
+            var name = this.$('.key-word').val();
 
-            router.navigate(String.format('/search/{0}/{1}/1', name, city), {trigger: true});
+            router.navigate(String.format('/search/{0}/1', name), {trigger: true});
         },
 
         modifyFriendlyLink: function(sender){
@@ -301,13 +300,13 @@ $(document).ready(function(){
         routes: {
             "":                                     "search",
             "modify/:linkId":                       "modify",
-            "search/(:name)/(:city)/:pageIndex":    "search",
+            "search/(:name)/:pageIndex":    "search",
             "add":                                  "add"
         },
 
         // 查询
-        search: function(name, city, pageIndex){
-            friendlyLinks.search(name||'', city||'', pageIndex||1);
+        search: function(name, pageIndex){
+            friendlyLinks.search(name||'', pageIndex||1);
         },
 
         // 显示修改界面
@@ -351,14 +350,9 @@ $(document).ready(function(){
 <div class="tab-content">
     <!-- 客户经理列表 -->
     <div class="tab-pane fade pt-15 in active" id="friendly_link_list">
-        <div class="pl-0 pr-0 pb-10 col-md-2">
+        <div class="pl-0 pr-0 pb-10 col-md-3">
             <div class="input-group input-group-sm">
-                <input type="text" class="form-control key-word-name" placeholder="输入链接名称..." />
-            </div>
-        </div>
-        <div class="pl-0 pr-0 pb-10 col-md-2">
-            <div class="input-group input-group-sm">
-                <input type="text" class="form-control border-radius-0 key-word-city" placeholder="输入城市名称..." />
+                <input type="text" class="form-control key-word" placeholder="输入链接名称..." />
                 <span class="input-group-btn">
                     <button class="btn btn-default search" type="button">查询</button>
                 </span>

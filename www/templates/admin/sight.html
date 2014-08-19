@@ -180,7 +180,6 @@ $(document).ready(function(){
             this.collection.getOne(sightId, function(data){
                 if(data){
                     me.render(data);
-                    console.log(data.provinceName, data.province)
                     me.initProvinceTextBox(data.provinceName, data.province);
                     createEditor('#dec_editor_modify');
                     createEditor('#cover_editor_modify');
