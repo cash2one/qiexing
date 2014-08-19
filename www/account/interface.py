@@ -404,6 +404,12 @@ class UserBase(object):
             format_user.last_active = format_user.create_time
             format_user.last_active_ip = format_user.ip
 
+        # 注册来源
+        if format_user.source > 0:
+            format_user.source_display = ExternalToken.objects.filter(user_id=user_id)[0].get_source_display()
+        else:
+            format_user.source_display = u"直接注册"
+
         return format_user
 
     def format_user_with_count_info(self, user):

@@ -4,13 +4,13 @@
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en-us">
     <head>
         <meta charset="utf-8" />
-        <title>{% block title_all %}{% block title %}{% endblock title %}{% block title_tail %} - 且行{% endblock title_tail %}{% endblock title_all %}</title>
+        <title>{% block title_all %}{% block title %}{% endblock title %}{% block title_tail %} - 且行户外{% endblock title_tail %}{% endblock title_all %}</title>
         <meta name="baidu-site-verification" content="zCCwSwzaUH" />
         <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
         <meta name="renderer" content="webkit" />
         <meta http-equiv="X-UA-Compatible" content="IE=Edge,chrome=1" >
-        <meta name="keywords" content="{% block keywords %}且行,旅行{% endblock keywords %}" />
-        <meta name="description" content="{% block description %}且行网{% endblock description %}" />
+        <meta name="keywords" content="{% block keywords %}且行户外,旅行{% endblock keywords %}" />
+        <meta name="description" content="{% block description %}且行户外{% endblock description %}" />
         <link rel="shortcut icon" href="{{MEDIA_URL}}img/favicon.ico" />
 
         <link rel="stylesheet" type="text/css" href="{{MEDIA_URL}}css/bootstrap/bootstrap.min.css" />
@@ -41,14 +41,14 @@
         <div class="header bgc-333 box-shadow-224">
             <div class="container pt-20 pb-20">
                 <div class="col-md-10">
-                    <span class="f30 co3">且行管理后台</span>
+                    <span class="f30 co3">且行户外管理后台</span>
                 </div>
                 <div class="col-md-2">
                     <img class="pa avatar-35 avatar-circle" src="{{request.user.get_avatar_25}}">
                     <div class="f14 co3 pull-right">{{request.user.nick}}</div><br />
                     <div class="f12 co2 pull-right current-time">2012-12-20 23:59:59</div>
                     <div class="pa gray-a login f12">
-                        <a href="/" class="co2" target="_blank">跳转至且行</a>
+                        <a href="/" class="co2" target="_blank">跳转至且行户外</a>
                         <a href="/logout" class="co2 pl-5">退出</a>
                     </div>
                 </div>

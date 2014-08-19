@@ -145,8 +145,10 @@ class UserCount(models.Model):
 
 
 class ExternalToken(models.Model):
+    source_choices = ((u"qq", u"QQ"), (u"sina", u"新浪微博"))
+
     user_id = models.CharField(max_length=32, db_index=True)
-    source = models.CharField(max_length=16, db_index=True)
+    source = models.CharField(max_length=16, db_index=True, choices=source_choices)
     access_token = models.CharField(max_length=128, db_index=True)
     external_user_id = models.CharField(max_length=64, db_index=True)
     refresh_token = models.CharField(max_length=128, db_index=True)
