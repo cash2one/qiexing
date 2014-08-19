@@ -85,6 +85,9 @@ $(document).ready(function(){
     $('.regist-ok').bind('click', function(){
     	var me = $(this);
     	
+    	if(!$('.regist-form').valid()){
+    		return false;
+    	}
     	ajaxSend(
             "/activity/join_activity", 
             $.QXUtils.formToDict('.regist-form'),
