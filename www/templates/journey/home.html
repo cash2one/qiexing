@@ -12,7 +12,9 @@
     </ol>
     <div class="carousel-inner" role="listbox">
         {% for cover in covers %}
-        <div class="item{% if forloop.first %} active{% endif %}"><img src="{{cover}}"></div>
+        <div class="item{% if forloop.first %} active{% endif %}">
+            <a target="_blank" href="{{cover.link}}"><img src="{{cover.img}}"></a>
+        </div>
         {% endfor %}
     </div>
     <a class="left carousel-control" href="#carousel-example-generic" role="button" data-slide="prev">

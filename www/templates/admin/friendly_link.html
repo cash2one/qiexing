@@ -215,6 +215,10 @@ $(document).ready(function(){
             var linkId = this.$('form').data('link_id'),
                 me = this;
 
+            if(!this.$('form').valid()){
+                return;
+            }
+
             me.collection.modifyFriendlyLink(this.$('form').serialize(), function(data){
                 if(data.errcode === 0){
                     $.QXNotice.SuccessTopNotice('操作成功');
@@ -274,12 +278,15 @@ $(document).ready(function(){
             });
             
             $('#add_friendly_link_modal').modal({'show': true, 'backdrop': 'static'});
-
         },
 
         addFriendlyLink: function(){
             var linkId = this.$('form').data('link_id'),
                 me = this;
+                
+            if(!this.$('form').valid()){
+                return;
+            }
 
             friendlyLinks.addFriendlyLink(me.$('form').serialize(), function(data){
                 if(data.errcode === 0){
@@ -426,13 +433,13 @@ $(document).ready(function(){
         <div class="form-group pt-20 pb-20 mb-0 bottom-border bdc-eee">
             <label class="col-sm-2 control-label">链接名称</label>
             <div class="col-sm-3">
-                <input type="text" class="form-control" name="name" value='<%= name %>'>
+                <input type="text" required class="form-control" name="name" value='<%= name %>'>
             </div>
         </div>
         <div class="form-group pt-20 pb-20 mb-0 bottom-border bdc-eee">
             <label class="col-sm-2 control-label">链接地址</label>
             <div class="col-sm-6">
-                <input type="text" class="form-control" placeholder="http://www.site.com" name="href" value='<%= href %>'>
+                <input type="text" required class="form-control" placeholder="http://www.site.com" name="href" value='<%= href %>'>
             </div>
         </div>
         <div class="form-group pt-20 pb-20 mb-0 bottom-border bdc-eee">
@@ -444,7 +451,7 @@ $(document).ready(function(){
         <div class="form-group pt-20 pb-20 mb-0 bottom-border bdc-eee">
             <label class="col-sm-2 control-label">排序</label>
             <div class="col-sm-1">
-                <input type="text" name="sort" class="form-control" value='<%= sort %>'>
+                <input type="text" name="sort" required class="form-control" value='<%= sort %>'>
             </div>
         </div>
         <div class="form-group pt-20 pb-20 mb-0 bottom-border bdc-eee">
@@ -489,13 +496,13 @@ $(document).ready(function(){
                     <div class="form-group pt-20 pb-20 mb-0 bottom-border bdc-eee">
                         <label class="col-sm-3 control-label">链接名称</label>
                         <div class="col-sm-6">
-                            <input type="text" class="form-control" name="name" value=''>
+                            <input type="text" required class="form-control" name="name" value=''>
                         </div>
                     </div>
                     <div class="form-group pt-20 pb-20 mb-0 bottom-border bdc-eee">
                         <label class="col-sm-3 control-label">链接地址</label>
                         <div class="col-sm-6">
-                            <input type="text" placeholder="http://www.site.com" class="form-control" name="href" value=''>
+                            <input type="text" required placeholder="http://www.site.com" class="form-control" name="href" value=''>
                         </div>
                     </div>
                     <div class="form-group pt-20 pb-20 mb-0 bottom-border bdc-eee">
@@ -507,7 +514,7 @@ $(document).ready(function(){
                     <div class="form-group pt-20 pb-20 mb-0 bottom-border bdc-eee">
                         <label class="col-sm-3 control-label">排序</label>
                         <div class="col-sm-2">
-                            <input type="text" name="sort" class="form-control" value='0'>
+                            <input type="text" required name="sort" class="form-control" value='0'>
                         </div>
                     </div>
                 </form>

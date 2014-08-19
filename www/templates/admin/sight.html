@@ -181,9 +181,29 @@ $(document).ready(function(){
                 if(data){
                     me.render(data);
                     me.initProvinceTextBox(data.provinceName, data.province);
-                    createEditor('#dec_editor_modify');
-                    createEditor('#cover_editor_modify');
+                    var desEditor= createEditor('#dec_editor_modify');
+                    var coverEditor = createEditor('#cover_editor_modify');
                     me.showPanel();
+
+                    this.$('form').validate({
+                        submitHandler: function(form){
+
+                            if(!/<img .*?src=[\"\'](.+?)[\"\']/.test(coverEditor.html())){
+                                $(coverEditor.srcElement[0]).after('<label class="error">请插入封面!</label>');
+                            }
+
+                            // 去掉空格 去掉html标签之后的文本
+                            var content = $.QXUtils.clearEscapeCharacters($.QXUtils.clearHtmlTags(desEditor.html()));
+
+                            // 大于2个字才提交
+                            if($.trim(content).length >= 10){
+                                form.submit();
+                            } else {
+                                $(desEditor.srcElement[0]).after('<label class="error">至少需要输入10个字</label>');
+                            }
+                        }
+                    });
+
                 } else {
                     setTimeout(function(){history.go(-1);}, 3000);
                     $.QXNotice.ErrorTopNotice('没有找到对应的景点!');
@@ -264,8 +284,27 @@ $(document).ready(function(){
             $('#add_sight_modal').modal({'show': true, 'backdrop': 'static'});
 
             this.initProvinceTextBox();
-            createEditor('#dec_editor_add');
-            createEditor('#cover_editor_add');
+            var desEditor = createEditor('#dec_editor_add');
+            var coverEditor = createEditor('#cover_editor_add');
+
+            this.$('form').validate({
+                submitHandler: function(form){
+
+                    if(!/<img .*?src=[\"\'](.+?)[\"\']/.test(coverEditor.html())){
+                        $(coverEditor.srcElement[0]).after('<label class="error">请插入封面!</label>');
+                    }
+
+                    // 去掉空格 去掉html标签之后的文本
+                    var content = $.QXUtils.clearEscapeCharacters($.QXUtils.clearHtmlTags(desEditor.html()));
+
+                    // 大于2个字才提交
+                    if($.trim(content).length >= 10){
+                        form.submit();
+                    } else {
+                        $(desEditor.srcElement[0]).after('<label class="error">至少需要输入10个字</label>');
+                    }
+                }
+            });
         },
 
         addSight: function(){
@@ -399,13 +438,13 @@ $(document).ready(function(){
         <div class="form-group pt-20 pb-20 mb-0 border-bottom bdc-eee">
             <label class="col-sm-2 control-label">名称</label>
             <div class="col-sm-6">
-                <input type="text" class="form-control" name="name" value='<%= name %>'>
+                <input type="text" required class="form-control" name="name" value='<%= name %>'>
             </div>
         </div>
         <div class="form-group pt-20 pb-20 mb-0 border-bottom bdc-eee">
             <label class="col-sm-2 control-label">所属省份</label>
             <div class="col-sm-6">
-                <input type="text" class="form-control" name="province" value='' id="province_modify">
+                <input type="text" required class="form-control" name="province" value='' id="province_modify">
             </div>
         </div>
         <div class="form-group pt-20 pb-20 mb-0 border-bottom bdc-eee">
@@ -466,13 +505,13 @@ $(document).ready(function(){
 	                <div class="form-group pt-20 pb-20 mb-0 border-bottom bdc-eee">
 			            <label class="col-sm-2 control-label">名称</label>
 			            <div class="col-sm-6">
-			                <input type="text" class="form-control" name="name" value=''>
+			                <input type="text" required class="form-control" name="name" value=''>
 			            </div>
 			        </div>
 			        <div class="form-group pt-20 pb-20 mb-0 border-bottom bdc-eee">
 			            <label class="col-sm-2 control-label">所属省份</label>
 			            <div class="col-sm-6">
-			                <input type="text" class="form-control" name="province" value='' id="province_add">
+			                <input type="text" required class="form-control" name="province" value='' id="province_add">
 			            </div>
 			        </div>
                     <div class="form-group pt-20 pb-20 mb-0 border-bottom bdc-eee">

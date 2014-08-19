@@ -5,6 +5,9 @@ body {
 	color: #222;
 }
 
+.no-underline{text-decoration: none;}
+.no-underline:hover{text-decoration: none;}
+
 .hidden{visibility:hidden}
 .auto-hide{display: none;}
 .none{display:none}

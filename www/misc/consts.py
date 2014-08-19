@@ -34,7 +34,7 @@ G_PROVINCE = {
     u"青海": [19, u"qinghai"],
     u"甘肃": [20, u"gansu"],
     u"新疆": [21, u"xinjiang"],
-    u"陕西": [22, u"shanxi"],
+    u"陕西": [22, u"shanxis"],
     u"河南": [23, u"henan"],
     u"山西": [24, u"shanxi"],
     u"山东": [25, u"shandong"],

@@ -24,7 +24,7 @@ $(document).ready(function(){
 	{% block right %}
 
 	{% if request.user.is_staff %}
-	<a href="/activity/create_activity">
+	<a href="/activity/create_activity" class="no-underline">
 		<button type="button" class="btn btn-danger btn-lg btn-block create-activity">+ 发 起 活 动</button>
 	</a>
 	{% endif %}

@@ -175,8 +175,8 @@ class CoverBase(object):
     def get_home_cover(self):
         return HomeCover.objects.all()
 
-    def add_cover(self, img, link, sort_num, des):
-        if None in (img, link, sort_num, des):
+    def add_cover(self, img, link, sort_num, des=""):
+        if None in (img, link, sort_num):
             return 99800, dict_err.get(99800)
 
         try:
@@ -193,8 +193,8 @@ class CoverBase(object):
 
         return HomeCover.objects.get(id=cover_id)
 
-    def modify_cover(self, cover_id, img, link, sort_num, des):
-        if None in (cover_id, link, sort_num, des):
+    def modify_cover(self, cover_id, img, link, sort_num, des=""):
+        if None in (cover_id, link, sort_num):
             return 99800, dict_err.get(99800)
 
         try:

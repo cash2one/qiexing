@@ -43,27 +43,9 @@
                     st.animate({fill: "#f36119", stroke: "#eee"}, 300);
                 }
 
-                // 添加手形
-                st[0].style.cursor = "pointer";
-
-                st[0].onmouseover = function () {
-                    st.animate({fill: st.color, stroke: "#eee"}, 300);
-                    //china[state]['text'].toFront();
-                    R.safari();
-                };
-                st[0].onmouseout = function () {
-                    if(st.active){
-                        return;
-                    }
-                    st.animate({fill: "#97d6f5", stroke: "#eee"}, 300);
-                    //china[state]['text'].toFront();
-                    R.safari();
-                };
-                st[0].onclick = function(){
-                    // console.log(china, china[state]['name'])
-
+                var show = function(target, x, y){
                     var html = [],
-                        temp = _.filter(SIGHTS, function(i){return i.name == china[state]['name']});
+                        temp = _.filter(SIGHTS, function(i){return i.name == target});
 
                     if(temp.length > 0){
                         _.map(
@@ -76,9 +58,36 @@
                         html.push('<span class="pl-5">暂无景点</span>')
                     }
                     
-                    $('.info .province').html(china[state]['name']);
+                    $('.info .province').html(target);
                     $('.info ul').html(html.join(''));
-                    $('.info').fadeIn('fast');
+                    $('.info').css({'left': x, 'top': y}).stop(1,1).fadeIn('fast');
+                };
+
+                // 添加手形
+                st[0].style.cursor = "pointer";
+
+                st[0].onmouseover = function () {
+                    st.animate({fill: st.color, stroke: "#eee"}, 300);
+                    //china[state]['text'].toFront();
+                    
+                    R.safari();
+
+                    //show(china[state]['name']);
+                };
+                st[0].onmouseout = function () {
+                    if(st.active){
+                        return;
+                    }
+                    st.animate({fill: "#97d6f5", stroke: "#eee"}, 300);
+                    //china[state]['text'].toFront();
+                    R.safari();
+
+                    //$('.info').stop(1,1).fadeOut('fast');
+                };
+                st[0].onclick = function(e){
+                    // console.log(china, china[state]['name'])
+                    console.log(e)
+                    show(china[state]['name'], e.x-150, e.y-200);
                 }
                 
              })(china[state]['path'], state);
@@ -86,6 +95,10 @@
 
 
         $('.close').bind("click", function(){
+            $('.info').fadeOut('fast');
+        });
+
+        $('.info').bind('mouseleave', function(){
             $('.info').fadeOut('fast');
         })
         

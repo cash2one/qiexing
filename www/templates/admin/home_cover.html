@@ -135,6 +135,8 @@ $(document).ready(function(){
         // 渲染
         render: function(data){
             this.$el.html(this.template(data));
+
+            this.$('form').validate();
         },
 
         // 删除
@@ -202,6 +204,7 @@ $(document).ready(function(){
             
             $('#add_cover_modal').modal({'show': true, 'backdrop': 'static'});
 
+            me.$('form').validate();
         },
 
         addCover: function(){
@@ -277,7 +280,6 @@ $(document).ready(function(){
                     <th>#</th>
                     <th>封面</th>
                     <th>封面链接地址</th>
-                    <th>封面描述</th>
                     <th>排序</th>
                 </tr>
             </thead>
@@ -305,7 +307,6 @@ $(document).ready(function(){
             <td><%= cover.num %></td>
             <td><img src="<%= cover.img %>" style="width: 200px;" /></td>
             <td><%= cover.link %></td>
-            <td><%= cover.des %></td>
             <td><%= cover.sort %></td>
         </tr>
     <% }) %>
@@ -324,10 +325,10 @@ $(document).ready(function(){
         <div class="form-group pt-20 pb-20 mb-0 bottom-border bdc-eee">
             <label class="col-sm-2 control-label">封面链接地址</label>
             <div class="col-sm-6">
-                <input type="text" class="form-control" name="link" value='<%= link %>'>
+                <input type="text" class="form-control" required minlength="5" maxlength="128" name="link" value='<%= link %>'>
             </div>
         </div>
-        <div class="form-group pt-20 pb-20 mb-0 bottom-border bdc-eee">
+        <div class="form-group pt-20 pb-20 mb-0 bottom-border bdc-eee none">
             <label class="col-sm-2 control-label">封面描述</label>
             <div class="col-sm-6">
                 <textarea name="des" rows="6" class="form-control"><%= des %></textarea>
@@ -336,7 +337,7 @@ $(document).ready(function(){
         <div class="form-group pt-20 pb-20 mb-0 bottom-border bdc-eee">
             <label class="col-sm-2 control-label">排序</label>
             <div class="col-sm-2">
-                <input type="text" name="sort" class="form-control" value='<%= sort %>'>
+                <input type="text" name="sort" required minlength="1" maxlength="5" class="form-control" value='<%= sort %>'>
             </div>
         </div>
         <div class="form-group pt-20 pb-20 mb-0 bottom-border bdc-eee">
@@ -362,16 +363,16 @@ $(document).ready(function(){
                     <div class="form-group pt-20 pb-20 mb-0 bottom-border bdc-eee">
                         <label class="col-sm-3 control-label">封面图片</label>
                         <div class="col-sm-3">
-                            <input name="img" type="file" />
+                            <input name="img" required type="file" />
                         </div>
                     </div>
                     <div class="form-group pt-20 pb-20 mb-0 bottom-border bdc-eee">
                         <label class="col-sm-3 control-label">封面链接地址</label>
                         <div class="col-sm-6">
-                            <input type="text" class="form-control" name="link" value=''>
+                            <input type="text" required minlength="5" maxlength="128" class="form-control" name="link" value=''>
                         </div>
                     </div>
-                    <div class="form-group pt-20 pb-20 mb-0 bottom-border bdc-eee">
+                    <div class="form-group pt-20 pb-20 mb-0 bottom-border bdc-eee none">
                         <label class="col-sm-3 control-label">封面描述</label>
                         <div class="col-sm-6">
                             <textarea name="des" rows="6" class="form-control"></textarea>
@@ -380,7 +381,7 @@ $(document).ready(function(){
                     <div class="form-group pt-20 pb-20 mb-0 bottom-border bdc-eee">
                         <label class="col-sm-3 control-label">排序</label>
                         <div class="col-sm-2">
-                            <input type="text" name="sort" class="form-control" value='0'>
+                            <input type="text" required minlength="1" maxlength="5" name="sort" class="form-control" value='0'>
                         </div>
                     </div>
                 </form>
