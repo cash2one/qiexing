@@ -161,9 +161,6 @@ $(document).ready(function(){
 <div class="row pl-15 pr-15 pt-25">
 	<a href="{{journey.user.get_url}}"><img class="img-rounded avatar-55 pa" src="{{journey.user.get_avatar_65}}" alt="{{journey.user.nick}}"></a>
 	<div class="pl-75 pr">
-		{% if journey.sort_num > 0 %}
-		<img src="/static/img/jinghua1.png" class="pa" style="right: 10px;">
-		{% endif %}
 		<div class="f16 fb title">{{journey.title}}</div>
 		<div class="pt-10">
 			<a href="{{journey.user.get_url}}" class="f12">{{journey.user.nick}}</a>
