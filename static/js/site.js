@@ -507,7 +507,7 @@ function createEditor(selector){
             allowImageUpload : true,
             allowImageRemote: true,
             // basePath: '/',
-            uploadJson: '/save_img',
+            uploadJson: MAIN_DOMAIN+'/save_img',
             pasteType : 1,
             cssData: 'body{font-family: "Helvetica Neue",Helvetica,"Lucida Grande","Luxi Sans",Arial,"Hiragino Sans GB",STHeiti,"Microsoft YaHei","Wenquanyi Micro Hei","WenQuanYi Micro Hei Mono","WenQuanYi Zen Hei","WenQuanYi Zen Hei Mono",LiGothicMed; font-size: 14px; color: #222;}',
             themesPath: MEDIA_URL + "css/kindeditor/themes/",
