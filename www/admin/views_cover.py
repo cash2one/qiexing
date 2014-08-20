@@ -83,7 +83,7 @@ def get_cover_by_id(request):
     )
 
 
-@verify_permission('modify_home_cover')
+@verify_permission('save_home_cover')
 def modify_cover(request):
 
     cover_id = request.REQUEST.get('cover_id')
