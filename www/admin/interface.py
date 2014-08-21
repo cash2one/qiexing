@@ -102,7 +102,7 @@ class FriendlyLinkBase(object):
             return 99900, dict_err.get(99900)
         return 0, obj.id
 
-    @cache_required(cache_key='all_friendly_link', expire=0, cache_config=cache.CACHE_STATIC)
+    @cache_required(cache_key='all_friendly_link_qx', expire=0, cache_config=cache.CACHE_STATIC)
     def get_all_friendly_link(self, state=True, must_update_cache=False):
         objects = FriendlyLink.objects.all()
         if state != None:
