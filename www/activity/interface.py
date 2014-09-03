@@ -242,7 +242,7 @@ class ActivityPersonBase(object):
             user = UserBase().get_user_by_id(user_id)
 
             if state > 0:
-                activity.person_count += 1
+                activity.person_count += partner_count
                 activity.save()
             else:
                 UnreadCountBase().add_system_message(
@@ -270,7 +270,7 @@ class ActivityPersonBase(object):
 
             # 审核通过
             if state == 1 and ap.state == 0:
-                activity.person_count += 1
+                activity.person_count += ap.partner_count
                 activity.save()
                 UnreadCountBase().add_system_message(
                     ap.user_id,
@@ -279,7 +279,7 @@ class ActivityPersonBase(object):
 
             # 取消报名
             if state == 0 and ap.state == 1:
-                activity.person_count -= 1
+                activity.person_count -= ap.partner_count
                 activity.save()
 
             # 审核失败

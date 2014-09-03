@@ -85,8 +85,8 @@ def create_validate_code(size=(120, 30),
         font = ImageFont.truetype(font_type, font_size)
         font_width, font_height = font.getsize(strs)
 
-        import logging
-        logging.error("%s,%s,%s,%s" % (width, height, font_width, font_height))
+        # import logging
+        # logging.error("%s,%s,%s,%s" % (width, height, font_width, font_height))
 
         draw.text(((width - font_width) / 3, (height - font_height) / 3),
                   strs, font=font, fill=fg_color)
