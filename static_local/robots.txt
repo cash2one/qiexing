@@ -6,6 +6,8 @@ Disallow: /account/*
 Disallow: /n/*
 Disallow: /admin/*
 Disallow: *set_top*
+Disallow: *cancel_top*
+Disallow: *remove*
 Disallow: /500
 Disallow: /search
 Disallow: /logout
