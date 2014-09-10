@@ -165,6 +165,22 @@ $(document).ready(function(){
             } 
          );
  	});
+ 	
+ 	// 分享操作
+ 	$('.share-qq').bind('click', function(){
+		var url = window.location.origin + window.location.pathname,
+			title = $('.activity-title').text();
+
+		$.QXShare.qq(url, title, title);
+	});
+
+	$('.share-sina').bind('click', function(){
+		var url = window.location.origin + window.location.pathname,
+			title = $('.activity-title').text(),
+			img = $('.activity-cover').attr('src');
+
+		$.QXShare.sinaWeibo(url, title, img);
+	});
 
 });
 </script>
@@ -173,9 +189,9 @@ $(document).ready(function(){
 {% block left %}
 <div class="row pt-25 pr">
 	<div class="col-md-6">
-		<img class="w350 h200 pl-3 pr-3 pt-3 pb-3" src="{{activity.activity_cover}}" alt="{{activity.title}}"></div>
+		<img class="w350 h200 pl-3 pr-3 pt-3 pb-3 activity-cover" src="{{activity.activity_cover}}" alt="{{activity.title}}"></div>
 	<div class="col-md-6">
-		<h4 class="mt-5 fb">{{activity.title}}</h4>
+		<h4 class="mt-5 fb activity-title">{{activity.title}}</h4>
 		<div class="pt-10">
 			<span class="fb pr-10">活动发起人:</span>
 			<a href="{{activity.user.get_url}}">{{activity.user.nick}}</a>
@@ -324,7 +340,14 @@ $(document).ready(function(){
 	<!-- 活动详情 -->
 	<div class="tab-pane fade pt-15 in active" id="activity_detail">
 		<div class="activity-content line-height-25">{{activity.content|safe}}</div>
-
+        <div class="pt-15 text-right">
+            <a class="border-block-blue ml-5 pl-5 pr-5 pt-2 pb-2 share-qq" href="javascript: void(0);">
+                分享到QQ
+            </a>
+            <a class="border-block-red ml-5 pl-5 pr-5 pt-2 pb-2 share-sina" href="javascript: void(0);">
+                分享到微博
+            </a>
+        </div>
 		<!-- 回复区 -->
 		{{answers_list_params|answers_list:request}}
 	</div>
