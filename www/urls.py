@@ -25,6 +25,7 @@ urlpatterns = patterns('',
                        url(r'^message/', include('www.message.urls')),
                        url(r'^admin/', include('www.admin.urls')),
 
+                       url(r'^n/(?P<nick>.*)$', 'www.account.views.get_user_by_nick'),
                        url(r'^p/(?P<user_id>\w+)?$', 'www.account.views.user_journey'),
                        url(r'^p/(?P<user_id>\w+)/user_answer$', 'www.account.views.user_answer'),
 
