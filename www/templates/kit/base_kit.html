@@ -23,11 +23,12 @@ $(document).ready(function(){
 
 <div class="col-md-4 pl-70 pt-15">
     {% block right %}
+    {% if request.user.is_staff %}
     <a href="/kit/write_kit" class="no-underline">
-        <button type="button" class="btn btn-danger btn-lg btn-block write-kit">+ 发 布 装 备</button>
+        <button type="button" class="btn btn-danger btn-lg btn-block write-kit">+ 发 布 装 备{{request.user.is_staff}}</button>
     </a>
     <div class="blank20"></div>
-
+    {% endif %}
     <div>
         且行—出行二群<a target="_blank" href="http://shang.qq.com/wpa/qunwpa?idkey=7c99b4c56aad9cbece02ab918183672c35b6692599c77901228840a5273bd68c">
             <img border="0" src="http://pub.idqqimg.com/wpa/images/group.png" alt="且行—出行二群" title="且行—出行二群">
