@@ -10,7 +10,7 @@ from www.misc import consts
 from www.message.interface import UnreadCountBase
 from www.account.interface import UserBase
 from www.account.interface import UserCountBase
-from www.kit.models import Kit, Like
+from www.kit.models import Kit
 
 
 dict_err = {
@@ -163,7 +163,7 @@ class KitBase(object):
             kit.save()
 
             # 更新用户话题数信息
-            UserCountBase().update_user_count(user_id=kit.user_id, code='user_kit_count', operate='minus')
+            # UserCountBase().update_user_count(user_id=kit.user_id, code='user_kit_count', operate='minus')
 
             transaction.commit(using=KIT_DB)
             return 0, dict_err.get(0)
@@ -299,81 +299,3 @@ class KitBase(object):
         kit.save()
 
         return 0, dict_err.get(0)
-
-
-class LikeBase(object):
-
-    '''
-    @note: “喜欢”模块封装
-    '''
-
-    def format_likes(self, likes):
-        for like in likes:
-            like.from_user = UserBase().get_user_by_id(like.from_user_id)
-        return likes
-
-    @kit_required
-    @transaction.commit_manually(KIT_DB)
-    def like_it(self, kit, from_user_id, ip):
-        '''
-        @note: 喜欢操作封装
-        '''
-        try:
-            assert all((kit, from_user_id, ip))
-            is_anonymous = False
-            if from_user_id:
-                if Like.objects.filter(from_user_id=from_user_id, kit=kit):
-                    transaction.rollback(KIT_DB)
-                    return 20104, dict_err.get(20104)
-            else:
-                from_user_id = ''
-                is_anonymous = False
-                if Like.objects.filter(ip=ip, kit=kit):
-                    transaction.rollback(KIT_DB)
-                    return 20104, dict_err.get(20104)
-
-            # 不支持自赞
-            to_user_id = kit.user_id
-            if from_user_id == to_user_id:
-                transaction.rollback(KIT_DB)
-                return 20105, dict_err.get(20105)
-
-            Like.objects.create(kit=kit, is_anonymous=is_anonymous, from_user_id=from_user_id, to_user_id=to_user_id, ip=ip)
-            kit.like_count += 1
-            kit.save()
-
-            # 更新被赞次数
-            UserCountBase().update_user_count(user_id=to_user_id, code='user_liked_count')
-
-            # 更新未读消息
-            UnreadCountBase().update_unread_count(to_user_id, code='received_like')
-
-            # 更新summary
-            KitBase().get_kit_summary_by_id(kit, must_update_cache=True)
-
-            transaction.commit(KIT_DB)
-            return 0, dict_err.get(0)
-        except Exception, e:
-            debug.get_debug_detail(e)
-            transaction.rollback(KIT_DB)
-            return 99900, dict_err.get(99900)
-
-    def get_likes_by_kit(self, kit, user_id=None, ip=None):
-        '''
-        @note: 获取某个提问下的问题的所有喜欢，用于前端判断当前登录用户是否喜欢了该回答，匿名用户采用ip判断
-        '''
-        ps = dict(kit=kit)
-        if user_id:
-            ps.update(dict(from_user_id=user_id))
-        if ip:
-            ps.update(dict(ip=ip, is_anonymous=True))
-        return Like.objects.filter(**ps)
-
-    def get_to_user_likes(self, user_id):
-        return Like.objects.select_related('kit').filter(to_user_id=user_id, is_anonymous=False)
-
-    def get_likes_by_answer(self, answer):
-        return Like.objects.select_related('answer').filter(answer=answer, is_anonymous=False)
-
-    def get_user_liked_count(self, user_id):
-        return self.get_to_user_likes(user_id).count()

@@ -11,7 +11,6 @@ from www.misc.decorators import member_required, staff_required, common_ajax_res
 from www.admin.interface import CoverBase
 
 jb = interface.KitBase()
-lb = interface.LikeBase()
 
 
 def kit_list(request, template_name='kit/kit_list.html'):
@@ -96,13 +95,6 @@ def modify_kit(request, kit_id):
 
 
 # ===================================================ajax部分=================================================================#
-
-
-@member_required
-@common_ajax_response
-def like_kit(request):
-    kit_id = request.POST.get('kit_id', '').strip()
-    return lb.like_it(kit_id, request.user.id, ip=utils.get_clientip(request))
 
 
 @member_required
