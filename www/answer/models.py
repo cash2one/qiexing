@@ -4,7 +4,7 @@ from django.db import models
 
 
 class Answer(models.Model):
-    obj_type_choices = ((0, u"游记"), (1, u"活动"))
+    obj_type_choices = ((0, u"游记"), (1, u"活动"), (2, u"装备"))
 
     from_user_id = models.CharField(verbose_name=u'回答者', max_length=32, db_index=True)
     to_user_id = models.CharField(verbose_name=u'被回答者', max_length=32, db_index=True)

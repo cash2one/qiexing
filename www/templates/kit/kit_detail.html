@@ -1,0 +1,204 @@
+{% extends "kit/base_kit.html" %}
+{% load custom_tags %}
+{% load custom_filters %}
+{% block title %}{{kit.title}}{% endblock title %}
+
+{% block css %}
+<style type="text/css">
+.content p{
+	margin: 0px;
+}
+</style>
+{% endblock %}
+
+{% block javascript %}
+<script type="text/javascript">
+$(document).ready(function(){
+	$('.share-qq').bind('click', function(){
+		var url = window.location.origin + window.location.pathname,
+			title = $('.title').html();
+
+		$.QXShare.qq(url, title, title);
+	});
+
+	$('.share-sina').bind('click', function(){
+		var url = window.location.origin + window.location.pathname,
+			title = $('.title').html();
+
+		$.QXShare.sinaWeibo(url, title, '');
+	});
+
+	var kitEditor = createEditor('#kit_editor');
+
+	// 删除装备信息事件
+	$('.delete-kit').bind('click', function(){
+		var target = $(this);
+
+		if(confirm('确定要删除此装备信息吗？')){
+
+			// 设置ajax元素id,防止多次点击
+        	g_ajax_processing_obj_id = target.setUUID().attr('id');
+
+			ajaxSend(
+	            "/kit/remove_kit", 
+	            {'kit_id': target.data('kit_id')}, 
+	            function(data){
+	                if(data['errcode'] != '0'){
+	                    $.QXNotice.InfoTopNotice(data['errmsg']);
+	                    return;
+	                }
+
+	                // 操作成功执行动画
+	                $.QXNotice.SuccessTopNotice('删除成功, 页面即将跳转装备列表!');
+	                
+	                window.setTimeout(function(){
+	                	window.location.href = "/kit";
+	                }, 3000)
+	            }
+	        );
+
+		}
+		
+	});
+
+
+	// 验证
+	$('#edit_kit_modal form').validate({
+        submitHandler: function(form){
+            
+            // 去掉空格 去掉html标签之后的文本
+            var content = $.QXUtils.clearEscapeCharacters($.QXUtils.clearHtmlTags(kitEditor.html()));
+
+            // 大于2个字才提交
+            if($.trim(content).length >= 10){
+                form.submit();
+            } else {
+                $(kitEditor.srcElement[0]).after('<label class="error">至少需要输入10个字</label>');
+            }
+        }
+    });
+
+
+	$('.set-top').bind('click', function(){
+ 		var me = $(this),
+ 			kit_id = me.data('kit_id');
+
+		g_ajax_processing_obj_id = me.setUUID().attr('id');
+
+ 		ajaxSend(
+            "/kit/set_top",
+            {'kit_id': kit_id},
+            function(data){
+            	if(data.errcode === 0){
+                    $.QXNotice.SuccessTopNotice('操作成功! 3秒后页面跳转');
+
+	                window.setTimeout(function(){
+	                	window.location.href = "/kit/{{kit.id}}";
+	                }, 3000);
+
+                } else {
+                    $.QXNotice.ErrorTopNotice(data.errmsg);
+                }
+            } 
+         );
+ 	});
+
+ 	$('.cancel-top').bind('click', function(){
+ 		var me = $(this),
+ 			kit_id = me.data('kit_id');
+
+		g_ajax_processing_obj_id = me.setUUID().attr('id');
+
+ 		ajaxSend(
+            "/kit/cancel_top",
+            {'kit_id': kit_id},
+            function(data){
+            	if(data.errcode === 0){
+                    $.QXNotice.SuccessTopNotice('操作成功! 3秒后页面跳转');
+
+	                window.setTimeout(function(){
+	                	window.location.href = "/kit/{{kit.id}}";
+	                }, 3000);
+
+                } else {
+                    $.QXNotice.ErrorTopNotice(data.errmsg);
+                }
+            } 
+         );
+ 	});
+	
+});
+</script>
+{% endblock %}
+
+{% block left %}
+<div class="row pl-15 pr-15 pt-25">
+	<a href="{{kit.user.get_url}}"><img class="img-rounded avatar-55 pa" src="{{kit.user.get_avatar_65}}" alt="{{kit.user.nick}}"></a>
+	<div class="pl-75 pr">
+		<div class="f16 fb title">{{kit.title}}</div>
+		<div class="pt-10">
+			<a href="{{kit.user.get_url}}" class="f12">{{kit.user.nick}}</a>
+			<span class="co2 f12 pl-5">({{kit.user.des|default:"暂无简介"}})</span>
+			<span class="co2 f12 pull-right">发表于 {{kit.create_time}}</span>
+		</div>
+		<div class="content pt-15 line-height-25">{{kit.content|safe}}</div>
+
+		<!-- 弹出层 -->
+		<div class="modal fade" id="edit_kit_modal">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <form role="form" method='post' action='/kit/modify_kit/{{kit.id}}'>
+                        <div class="modal-header">
+                            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                            <h4 class="modal-title">修改装备</h4>
+                        </div>
+                        <div class="modal-body">
+                            <div class="form-group">
+                                <input type="text" class="form-control" name="kit_title" placeholder="装备信息标题" 
+                                    value='{{kit.title}}' required minlength='10' maxlength='128'></div>
+                            <div class="form-group">
+                                <textarea id="kit_editor" name="kit_content" class="form-control" style="height: 260px">{{kit.content}}</textarea>
+                            </div>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+                            <button type="submit" class="btn btn-danger">保存</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+
+		<div class="pt-15 row">
+			<!-- <div class="col-md-4 hide">
+				<button type="button" class="btn btn-danger like" data-kit_id="{{kit.id}}">
+					<span class="f20 fa fa-thumbs-o-up pr-5"></span><span class="like-count">{{kit.like_count}}</span> 人赞过
+				</button>
+			</div> -->
+			<div class="col-md-12 text-right f12 pt-25">
+				{% if request.user.is_staff %}
+					{% if kit.sort_num > 0 %}
+					<a href="javascript:void(0);" class="co5 cancel-top" data-kit_id="{{kit.id}}"><span class="fa fa-star-o pr-3"></span>取消置顶</a>
+					{% else %}
+					<a href="javascript:void(0);" class="co2 set-top" data-kit_id="{{kit.id}}"><span class="fa fa-star-o pr-3"></span>置顶装备</a>
+					{% endif %}
+				{% endif %}
+				{% if request.user.id == kit.user.id or request.user.is_staff %}
+				<a href="javascript:void(0);" class="co2" data-toggle="modal" data-target="#edit_kit_modal" data-backdrop="static"><span class="fa fa-edit pr-3 pl-10 "></span>修改</a>
+				<a href="javascript:void(0);" class="co2 pl-10 delete-kit" data-kit_id="{{kit.id}}"><span class="fa fa-trash-o pr-3"></span>删除</a>
+				{% endif %}
+				<a class="border-block-blue ml-5 pl-5 pr-5 pt-2 pb-2 share-qq" href="javascript: void(0);">
+                    分享到QQ
+                </a>
+                <a class="border-block-red ml-5 pl-5 pr-5 pt-2 pb-2 share-sina" href="javascript: void(0);">
+                    分享到微博
+                </a>
+			</div>
+		</div>
+
+		<!-- 回复区 -->
+		{{answers_list_params|answers_list:request}}
+
+	</div>
+</div>
+{% endblock %}

@@ -33,3 +33,12 @@ def async_add_journey_view_count(journey_id):
     '''
     from www.journey.interface import JourneyBase
     JourneyBase().add_journey_view_count(journey_id)
+
+
+@task(queue='one_by_one_worker', name='one_by_one_worker.add_kit_view_count')
+def async_add_kit_view_count(kit_id):
+    '''
+    @note: 异步更新浏览次数
+    '''
+    from www.kit.interface import KitBase
+    KitBase().add_kit_view_count(kit_id)

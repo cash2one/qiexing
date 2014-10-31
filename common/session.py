@@ -3,7 +3,7 @@
 from django.contrib.sessions.backends.base import SessionBase, CreateError
 from common import cache
 
-KEY_PREFIX = "session_"
+KEY_PREFIX = "session_iqx_"
 
 
 class SessionStore(SessionBase):

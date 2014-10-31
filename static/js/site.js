@@ -487,6 +487,84 @@ if (!String.format) {
     };
 
 
+    /*
+        进度条插件
+    */
+    $.ZXProgress = {
+        version: '1.0.0',
+        author: 'stranger',
+        description: '进度条插件'
+    };
+
+    /*
+        进度条插件
+
+        用例：
+        $.ZXImage.ForeverProgress({width: 500, top: 20, left: 30});
+    */
+    $.ZXProgress.ForeverProgress = function(_options){
+        var options = $.extend(true, {
+                width: 500,
+                top: 0,
+                left: 0,
+                totalSeconds: 3000,
+                per: 300
+            }, _options),
+
+            progressHtml = [
+                '<div class="progress pa" id="forever_progress" style="top: {0}px; width: {1}px; left: {2}px; z-index: 99999;">',
+                    '<div class="progress-bar progress-bar-striped active" role="progressbar" aria-valuenow="1" aria-valuemin="0" aria-valuemax="100" style="width: 0%">',
+                        '<span class="sr-only">0%</span>',
+                    '</div>',
+                '</div>'
+            ].join(""),
+        
+            current = 0,
+            // 循环添加进度
+            progressInterval = window.setInterval(function(){
+                
+                current += (options.totalSeconds / options.per);
+                $('#forever_progress .progress-bar')
+                .css({'width': current  + '%'});
+
+                // 如果到100了  重新开始
+                if(current >= 100){
+                    current = 0;
+                }
+                
+            }, options.per),
+
+            // 删除进度条
+            removeProgress = function(){
+                window.setTimeout(function(){
+                    $('#forever_progress').fadeOut(300, function(){
+                        $(this).remove();
+                    });
+                }, 600);
+            };
+
+        // 添加进度条
+        $('body').append(String.format(progressHtml, options.top, options.width, options.left));
+
+        return {
+            // 完成
+            finish: function(){
+                window.clearInterval(progressInterval);
+
+                $('#forever_progress .progress-bar').css({'width': '100%'});
+
+                removeProgress();
+            },
+            // 清除
+            remove: function(){
+                window.clearInterval(progressInterval);
+
+                removeProgress();
+            }
+        }
+    };
+
+
 })(jQuery);
 
 
@@ -521,6 +599,75 @@ function createEditor(selector){
             ],
             afterCreate : function() { 
                 //this.loadPlugin('autoheight');
+
+                var me = this;
+
+                // 监听 复制事件
+                KindEditor(me.edit.doc).bind('paste', function(e){
+                    
+                    // 添加到事件对象中的访问系统剪贴板的接口
+                    var clipboardData = e.event.clipboardData,
+                        items,
+                        item,
+                        // 上传文件方法
+                        postImage = function(data){
+                            var postData = new FormData(),
+                                target = $(selector).prev(),
+                                offset = target.offset(),
+                                width = target.width();
+                                progress = $.ZXProgress.ForeverProgress({
+                                    width: width,
+                                    top: offset.top + 30,
+                                    left: offset.left,
+                                    totalSeconds: 5000,
+                                    per: 500
+                                });
+
+                            // 设置上传数据
+                            postData.append("imgFile", data);
+
+                            $.ajax({
+                                url: '/save_img',
+                                data: postData,
+                                dataType: 'json',
+                                type: "POST",
+                                contentType: false,
+                                processData: false,
+                                success: function(data){
+                                    if(data.error == 0){
+                                        // 上传成功插入图片
+                                        window.setTimeout(function(){
+                                            me.exec('insertimage', data.url);
+                                        }, 0);
+                                        progress.finish();
+                                    } else {
+                                        progress.remove();
+                                        $.ZXMsg.alert('提示', '图片上传失败');
+                                    }
+                                },
+                                error: function(){
+                                    progress.remove();
+                                }
+                            });
+                            
+                        };
+                        
+                    if(clipboardData){
+                        items = clipboardData.items;
+                        
+                        for(var i=0; i<items.length; i++){
+                            item = items[i];
+
+                            if(item.kind == 'file' && item.type.indexOf('image/') !== -1){
+                                // 上传该图片            
+                                postImage(item.getAsFile());
+                                break;
+                            }
+                        }
+                    }
+
+                    me.sync();
+                });
             }, 
             afterBlur:function(){ 
                 this.sync(); 

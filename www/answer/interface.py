@@ -76,6 +76,7 @@ class AnswerBase(object):
     def get_obj(self, obj_id, obj_type):
         from www.journey.models import Journey
         from www.activity.models import Activity
+        from www.kit.models import Kit
 
         obj_type = str(obj_type)
         try:
@@ -83,9 +84,11 @@ class AnswerBase(object):
                 return Journey.objects.get(id=obj_id)
             elif obj_type == "1":
                 return Activity.objects.get(id=obj_id)
+            elif obj_type == "2":
+                return Kit.objects.get(id=obj_id)
             else:
                 pass
-        except Journey.DoesNotExist, Activity.objects.DoesNotExist:
+        except (Journey.DoesNotExist, Activity.DoesNotExist, Kit.DoesNotExist):
             pass
         raise Exception, u"obj does not exist"
 

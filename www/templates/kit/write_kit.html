@@ -1,0 +1,40 @@
+{% extends "kit/base_kit.html" %}
+
+{% block title %}发布装备{% endblock title %}
+
+{% block javascript %}
+<script type="text/javascript">
+$(document).ready(function(){
+	var editor = createEditor('#write_editor');
+
+	$('form').validate({
+        submitHandler: function(form){
+            
+            // 去掉空格 去掉html标签之后的文本
+            var content = $.QXUtils.clearEscapeCharacters($.QXUtils.clearHtmlTags(editor.html()));
+
+            // 大于2个字才提交
+            if($.trim(content).length >= 10){
+                form.submit();
+            } else {
+                $(editor.srcElement[0]).after('<label class="error">至少需要输入10个字</label>');
+            }
+        }
+    });
+});
+</script>
+{% endblock %}
+
+{% block left %}
+<form class="form-horizontal" role="form" method="post" action="/kit/write_kit">
+	<div class="form-group pt-5">
+        <input type="text" class="form-control" name="kit_title" placeholder="装备标题" value='{{kit_title}}' required minlength='10' maxlength='128'>
+    </div>
+    <div class="form-group pt-5">
+        <textarea id="write_editor"  name="kit_content" class="form-control" style="height: 260px"></textarea>
+    </div>
+    <div class="form-group pull-right">
+        <button type="submit" class="btn btn-danger">发布装备</button>
+    </div>
+</form>
+{% endblock left %}

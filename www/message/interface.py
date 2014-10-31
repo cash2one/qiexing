@@ -31,7 +31,7 @@ class UnreadCountBase(object):
     def __del__(self):
         del self.cache_obj
 
-    @cache_required(cache_key='unread_type_all', expire=0, cache_config=cache.CACHE_STATIC)
+    @cache_required(cache_key='unread_type_all_iqx', expire=0, cache_config=cache.CACHE_STATIC)
     def get_unread_type(self, must_update_cache=False):
         """
         @note: 获取提醒类型数据

@@ -1,0 +1,41 @@
+{% extends "kit/base_kit.html" %}
+{% load custom_tags %}
+{% load custom_filters %}
+{% block title_all %}且行户外|驴行游记|重庆驴友|露营攻略|驴行照片{% endblock title_all %}
+{% block keywords %}且行户外,驴行游记,重庆驴友,露营攻略,驴行照片{% endblock %}
+
+{% block left %}
+<ul class="list-group">
+	{% for kit in kits %}
+	<li class="list-group-item bdc-eee pl-0 border-left-0 border-right-0">
+		<div class="row pl-5 pr-5">
+			<div class="col-md-4">
+				<a href="{{kit.get_url}}"> 
+					<img class="w h155 pl-3 pr-3 pt-3 pb-3" src="{{kit.get_cover}}" alt="{{kit.title}}" />
+				</a>
+			</div>
+			<div class="col-md-8 pr">
+				{% if kit.sort_num > 0 %}
+				<img src="/static/img/jinghua2.png" class="pa" style="right: 10px;">
+				{% endif %}
+				<div>
+					<h4 class="mt-5">
+	                    <a class="black-blue fb" href="{{kit.get_url}}">{{kit.title|str_display:20}}</a>
+	                </h4>
+				</div>
+				<div>
+					<a href="{{kit.user.get_url}}" class="co2 f12">{{kit.user.nick}}</a>
+					<span class="pull-right co2 f12">{{kit.create_time}}</span>
+				</div>
+				<div class="pt-5 line-height-25 f13">{{kit.get_summary|safe}}</div>
+				<div class="f12 co2 pt-5">
+					<span class="fa fa-eye pr-5"></span>{{kit.views_count}} 次浏览
+					<span class="fa fa-comment-o pl-10 pr-5"></span>{{kit.answer_count}} 条回复
+				</div>
+			</div>
+		</div>
+	</li>
+	{% endfor %}
+</ul>
+{{page_params|paging:request}}
+{% endblock left %}
