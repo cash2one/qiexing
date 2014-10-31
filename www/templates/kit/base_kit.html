@@ -25,7 +25,7 @@ $(document).ready(function(){
     {% block right %}
     {% if request.user.is_staff %}
     <a href="/kit/write_kit" class="no-underline">
-        <button type="button" class="btn btn-danger btn-lg btn-block write-kit">+ 发 布 装 备{{request.user.is_staff}}</button>
+        <button type="button" class="btn btn-danger btn-lg btn-block write-kit">+ 发 布 装 备</button>
     </a>
     <div class="blank20"></div>
     {% endif %}
