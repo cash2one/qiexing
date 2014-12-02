@@ -31,6 +31,7 @@ urlpatterns = patterns('',
                        url(r'^p/(?P<user_id>\w+)/user_answer$', 'www.account.views.user_answer'),
 
                        url(r'^s/(?P<template_name>.*)$', 'www.misc.views.static_view'),
+                       url(r'^(?P<txt_file_name>\w+)\.txt$', 'www.misc.views.txt_view'),
                        url(r'^500$', 'www.misc.views.test500'),
                        url(r'^static/(?P<path>.*)$', 'django.views.static.serve', {'document_root': settings.MEDIA_ROOT, 'show_indexes': False}),
                        # url(r'^admin/', include(admin.site.urls)),
