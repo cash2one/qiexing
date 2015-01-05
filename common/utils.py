@@ -91,12 +91,12 @@ def get_next_url(request):
             referrer = list(urlparse(referrer))[2]
             if referrer != request.path:
                 if referrer not in ('/', '/regist', '/reset_password', '/forget_password'):
-                            # referrer的query参数不能丢失
-                            next_url = referrer + '?' + list(urlparse(referrer))[4]
+                    # referrer的query参数不能丢失
+                    next_url = referrer + '?' + list(urlparse(referrer))[4]
     # 部分链接不能跳转
     next_url = next_url or "/"
     for key in ("regist", "create"):
-        if next_url.find(key) == -1:
+        if next_url.find(key) != -1:
             next_url = "/"
     return next_url
 

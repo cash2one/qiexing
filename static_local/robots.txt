@@ -1,5 +1,4 @@
 User-agent: *
-Allow: /
 Disallow: /p/*
 Disallow: /message/*
 Disallow: /account/*
@@ -11,3 +10,4 @@ Disallow: *remove*
 Disallow: /500
 Disallow: /search
 Disallow: /logout
+Allow: /
